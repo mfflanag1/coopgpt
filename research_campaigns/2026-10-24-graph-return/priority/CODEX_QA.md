@@ -1,0 +1,11 @@
+**Verdict: revise.** The candidate preserves the essential uncertainty and can serve as an access-boundary report, but several statements exceed its evidence.
+
+1. **Remove unsupported access predictions.** “A normal browser (passes the interstitial)” was not demonstrated. Likewise, the final Arin comparison does not necessarily “require” Springer access: a legitimate final author manuscript could suffice. Describe both as possible routes with unknown outcomes.
+
+2. **Separate failed retrieval from indexed content.** My independent search exposed substantial indexed Uhan text, including Algorithm 3.1 on manuscript page 6, at a [CiteSeer PDF URL](https://citeseerx.ist.psu.edu/document?doi=10d212c65f6a40ac19ed521e277e47f4ce10dcd0&repid=rep1&type=pdf). Direct opening failed with a cache miss. This supports “complete document not retrieved,” but makes “remaining attempts all hit access blocks rather than content” too broad. Indexed passages remain partial evidence, not a full-original read.
+
+3. **Narrow the exhaustion language.** Replace “every indexed open-access pointer is dead” with “the listed pointers did not deliver a complete document through the tools used.” My ADDI attempt timed out; that does not independently establish the claimed interstitial mechanism or HTTP history. Search indexing does corroborate the [Arin working paper’s title, July 26, 2010 date, and IL 44/10 designation](https://addi.ehu.es/bitstream/10810/6373/1/IL4410.pdf).
+
+4. **Label the inherited comparison explicitly.** The model distinction is supported by the [Uhan publisher preview](https://www.sciencedirect.com/science/article/abs/pii/S016763771300165X). The statement that nothing suggests a funding-ratio bound should remain explicitly limited to inspected excerpts; it cannot exclude such a theorem elsewhere.
+
+The central disposition is appropriate: **Uhan’s complete theorem comparison and Arin’s final-version delta remain unchecked; neither quantitative subsumption nor novelty clearance follows.** The task permits a documented access boundary, so failure to obtain full texts alone is not grounds for rejection. No edits, outreach, or delegation were performed.

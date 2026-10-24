@@ -1,0 +1,182 @@
+P4 PROTECTED-LEAF MAXIMUM-FLOW SELECTOR
+24 October 2026. New bounded graph-return gate candidate; independent review
+pending. This is a P4 theorem and its exact blow-up/disjoint-union transfer,
+NOT an upper bound below 2 for all resource graphs. No priority claim is made.
+
+THEOREM.
+On the unit-profit path B--A--D--C, there is a nonnegative payment rule for
+arbitrary fixed actual owners holding arbitrary nonnegative mixed resource
+bundles, at every real report profile, satisfying every-coalition coverage
+and full coalition outside-production protection (OUT), with total payment
+at most (1+1/sqrt(2))*F(c). The rule is given explicitly below. The same bound
+holds for complete blow-ups of this path and disjoint unions of these graphs.
+
+1. DEFINITIONS AND FEASIBILITY.
+Write capacities (A,B,C,D), alpha=1/sqrt(2), beta=alpha^2=1/2. Define
+ V = min(A+C, alpha(B+D), A+alpha D),
+ V'= min(B+D, alpha(A+C), D+alpha A).
+These are maximum-flow values in the two orientations of the asymmetric
+bipartite double cover: each left vertex has its original capacity and each
+right vertex has alpha times that capacity. The two orientation components
+are {A_L,C_L}->{B_R,D_R} and {B_L,D_L}->{A_R,C_R}.
+For the first component, all possible maximum-flow left-use vectors satisfy
+ w_A+w_C=V,
+ max(0,V-A) <= w_C <= min(C,alpha D,V).
+For the second, analogously
+ w_B+w_D=V',
+ max(0,V'-D) <= w_B <= min(B,alpha A,V').
+The intervals are nonempty by the max-flow formula. Choose
+ w_C=clamp(beta C; max(0,V-A), min(C,alpha D,V)),  w_A=V-w_C,
+ w_B=clamp(beta B; max(0,V'-D), min(B,alpha A,V')), w_D=V'-w_B.
+Here clamp(x;l,h)=min(h,max(l,x)). Thus the selected left-use vector is
+continuous, nonnegative, homogeneous, and satisfies 0<=w_v<=c_v.
+
+Equivalent useful formulas are
+ w_A=min(A,alpha B+(alpha D-beta C)_+),
+ w_D=min(D,alpha C+(alpha A-beta B)_+),
+ w_C=min(C,alpha D,max(beta C,alpha(B+D)-A)),
+ w_B=min(B,alpha A,max(beta B,alpha(A+C)-D)).
+To verify, split the first orientation according as alpha D<=beta C; otherwise
+compare alpha(B+D)-A with beta C and min(C,alpha D). This also verifies the
+formula at ties by continuity. The other orientation is symmetric.
+
+At c_v>0 let p_v=w_v/c_v; at c_v=0 set p_v=0. Pay actual owner i
+ y_i(b)=sum_v b_iv p_v(sum_j b_j).
+The choice of the price at a zero-capacity coordinate has no effect on any
+payment. Prices and payments are nonnegative and prices lie in [0,1].
+
+2. FUNDING.
+The selected vector is realized by a feasible maximum double-cover flow.
+Collapse its two directed copies of each original edge. At each vertex, the
+resulting incident use is at most c_v+alpha c_v. Dividing all collapsed edge
+flows by 1+alpha is therefore a feasible original fractional edge packing.
+Consequently
+ sum_i y_i=sum_v w_v=V+V' <= (1+alpha) F(c).
+No integrality assumption enters this bound.
+
+3. DIFFERENTIAL CERTIFICATE.
+For a coalition with current aggregate holding a, write theta_v=a_v/c_v in
+[0,1] at a strictly positive aggregate profile c. Its payment is
+ H(c,a)=sum_v a_v p_v(c).
+Under a restoration of a resource, outsiders stay fixed, so the restoration
+coefficient is
+ g_v=p_v+sum_j a_j partial_v p_j.
+It suffices to show g_v>=0 for each vertex and g_u+g_v>=1 on every original
+edge, at every smooth cell and every theta in [0,1]^4. Indeed these conditions
+say g is a nonnegative vertex cover, whence g dot d>=F(d). The accepted full
+OUT differential certificate then integrates the inequality over any actual
+coalition restoration. Section 5 below verifies its boundary hypotheses.
+
+Let u=A-alpha B and v=D-alpha C. The formulas split into the following cells.
+
+4A. u<=0 OR v<=0.
+If u<=0, then
+ w_A=A, w_B=alpha A,
+ w_C=min(C,alpha D), w_D=min(D,alpha C).
+Thus A--B is the asymmetric single-edge rule on the branch A<=alpha B,
+and C--D is the full asymmetric single-edge rule. For the first pair
+ g_A=1+alpha theta_B>=1,
+ g_B=(alpha A/B)(1-theta_B)>=0.
+The other pair has nonnegative coefficients and its edge sum is at least 1,
+as follows from the single-edge calculation below. The cross edge A--D is
+safe because g_A>=1 and g_D>=0. The case v<=0 is symmetric.
+
+Single-edge calculation: if X>=Y and t=Y/X, then
+ w_X=alpha Y, w_Y=min(Y,alpha X).
+For t<=alpha, the coefficient sum is at least 1 and both coefficients are
+nonnegative. For t>=alpha,
+ g_X=alpha t(1-theta_X)+alpha theta_Y,
+ g_Y=(alpha/t)(1-theta_Y)+alpha theta_X,
+and their minimum sum is alpha(1+t)>=alpha(1+alpha)>1.
+This uses alpha=1/sqrt(2); in general the threshold is alpha(1+alpha)>=1.
+
+4B. u>0 AND v>0: COMMON FORMULAS.
+The selected use becomes
+ w_A=alpha B+min(u,alpha v),
+ w_D=alpha C+min(v,alpha u),
+ w_B=min(B,beta B+(alpha u-v)_+),
+ w_C=min(C,beta C+(alpha v-u)_+).
+Because alpha<1, at most one of alpha u-v and alpha v-u is positive.
+
+4C. MIDDLE CONE alpha v<=u AND alpha u<=v.
+Here w_B=beta B, w_C=beta C,
+ w_A=alpha(B+D)-beta C, w_D=alpha(A+C)-beta B.
+Moreover p_A>=beta and p_D>=beta. For example u<=v/alpha gives
+ alpha B+alpha v >= beta(alpha B+u)=beta A;
+the other inequality is symmetric. The restoration coefficients are
+ g_A=p_A(1-theta_A)+alpha theta_D,
+ g_D=p_D(1-theta_D)+alpha theta_A,
+ g_B=beta+alpha theta_A-beta theta_D,
+ g_C=beta+alpha theta_D-beta theta_A.
+They are nonnegative. The A--B and D--C edge minima are respectively
+ beta+min(p_A,alpha) and beta+min(p_D,alpha), both >=2beta=1.
+The A--D minimum is min(p_A,alpha)+min(p_D,alpha)>=2beta=1.
+
+4D. OUTER CONE u<=alpha v (the other outer cone is symmetric).
+Here
+ w_A=A, w_B=beta B,
+ w_D=alpha(A+C)-beta B,
+ w_C=min(C,alpha(B+D)-A).
+If w_C<C, then p_C>=beta. Also p_D>=beta: the unsaturated condition gives
+ alpha v-u <= (1-beta)C, hence
+ beta v <= alpha u+alpha(1-beta)C
+because beta=alpha^2. Adding beta alpha C yields
+ beta D <= alpha u+alpha C=w_D.
+The coefficients are
+ g_A=1-theta_C+alpha theta_D,
+ g_B=beta+alpha theta_C-beta theta_D,
+ g_C=p_C(1-theta_C)+alpha theta_D,
+ g_D=p_D(1-theta_D)+alpha theta_C.
+They are nonnegative. For the three edges, the respective minima are
+ A--B: alpha+beta >=1,
+ C--D: min(p_C,alpha)+min(p_D,alpha) >=2beta=1,
+ A--D: alpha+min(p_D,alpha) >=alpha+beta>=1.
+For the first displayed minimum, direct minimization yields alpha+beta
+because alpha-beta>=0; it may be larger on lower-dimensional tie cells.
+
+If instead w_C=C, then
+ g_A=1+alpha theta_D,
+ g_C=1+alpha theta_D,
+ g_B=beta(1-theta_D),
+ g_D=p_D(1-theta_D).
+All coordinates are nonnegative. A--B has sum at least 1, and both A--D and
+C--D have sum at least 1. Thus every smooth cell satisfies the certificate.
+
+5. TIES, ZERO CAPACITIES, ACTUAL OWNERS, AND COVERAGE.
+The use vector w is defined by finitely many min/max operations on linear
+forms, so is globally continuous and piecewise linear. On strictly positive
+capacities p=w/c is locally Lipschitz. For every nonnegative outsider bundle
+o and coalition holding a, define H(o,a)=sum_v a_v p_v(o+a).
+This payment map is globally continuous: a term whose aggregate coordinate
+tends to zero is bounded between 0 and a_v and therefore tends to zero;
+each positive-coordinate term is continuous by continuity of w. Also
+H(o,0)=0. These are exactly the global boundary hypotheses needed by the
+accepted differential certificate. The finitely many cell boundaries do not
+invalidate integration; either use its mollification proof or apply its
+locally Lipschitz version followed by the boundary limit. Therefore for every
+fixed outsider o and every real 0<=a'<=a,
+ H(o,a)-H(o,a') >= F(a-a').
+This is full OUT for the original, fixed actual owners, since each coalition's
+aggregate payment is H(o,a) and aggregate withholding is a-a'. Mixed ownership
+is arbitrary, and unchanged coalition members remain included. No owner is
+reassigned between profiles. Taking a'=0 also proves every-coalition coverage.
+
+6. EXACT GRAPH TRANSFERS AND LIMITS.
+Replace each of A,B,C,D by a nonempty independent vertex group, include every
+edge between B--A, A--D, D--C groups, and no other edges. Aggregate capacities
+within each group. The production value equals the P4 value: any original
+packing gives an aggregate packing, and any aggregate plan can distribute
+each group's incident use among its vertices and connect the assigned uses
+across each complete bipartite group pair. Applying the four aggregate prices
+to every original resource in its group therefore preserves payments, OUT,
+coverage, and funding for the same fixed mixed owners. Isolated resources can
+be paid zero. For disjoint unions, sum the component payments; production and
+withheld production are additive, so the same uniform constant applies even
+when owners hold resources in several components.
+
+The construction does not cover arbitrary resource graphs, arbitrary edge
+profits, or non-complete connections between the four groups. It does not
+prove optimality on P4. It does provide an all-real coupled-component price
+construction below 2 on a class containing induced P4, outside the accepted
+positive binary-min exact-decomposition class. The canonical general-graph
+frontier remains [1+c_*,2].

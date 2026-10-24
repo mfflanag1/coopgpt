@@ -1,0 +1,74 @@
+ASYMMETRIC DOUBLE COVER: FUNDING IDENTITY AND BALANCED-SELECTOR FAILURE
+24 October 2026; bounded graph OUT gate. This is a scoped architecture diagnosis,
+not a lower bound for arbitrary mechanisms or for every double-cover selector.
+
+Let 0<alpha<=1. Replace each original vertex v by a left copy of capacity c_v
+and a right copy of capacity alpha*c_v, and each original edge uv by both
+u_L v_R and v_L u_R. Select a maximum bipartite flow, let w_v be its left use,
+and propose aggregate prices p_v=w_v/c_v. At zero c_v use the payment limit
+rather than an arbitrary quotient. No general OUT claim is established here.
+
+UNIVERSAL FUNDING IDENTITY.
+Every feasible directed flow, after collapsing the two orientations of each
+edge and dividing by 1+alpha, is a feasible original fractional edge packing:
+its incident use at v is at most c_v+alpha*c_v. Therefore
+  sum_v w_v <= (1+alpha) F_G(c).
+This holds without a selection rule and does not establish coalition coverage.
+
+SINGLE EDGE.
+For A>=B>0 the two directed edges force
+ w_A=alpha B, w_B=min(B,alpha A).
+The prices are p_A=alpha t, p_B=min(1,alpha/t), t=B/A.
+For t<=alpha, a coalition with fractions theta_A,theta_B has restoration
+coefficients
+ g_A=alpha t(1-theta_A), g_B=1+alpha theta_A.
+Thus g_A,g_B>=0 and g_A+g_B>=1. For alpha<=t<=1,
+ g_A=alpha t(1-theta_A)+alpha theta_B,
+ g_B=(alpha/t)(1-theta_B)+alpha theta_A.
+The edge-sum minimum over the holding cube is alpha(1+t), attained at
+(theta_A,theta_B)=(0,1). Thus this rule is full-OUT on a single edge exactly
+when alpha(1+alpha)>=1. The price functions and payments are continuous
+across t=alpha and t=1; bounded prices give payment continuity at zero.
+Consequently alpha=(sqrt(5)-1)/2 gives single-edge funding <= golden ratio.
+This observation alone does not improve the known sharp scalar OUT rule.
+
+BALANCED-SELECTOR COUNTEREXAMPLE ON P4.
+Vertices are L1,H1,L2,H2; edges L1-H1,L2-H2,L1-H2.
+Capacities are A1=1/t1,B1=1,A2=1/t2,B2=1, where
+ alpha<t2<t1<1.
+Select among maximum double-cover flows the left-use vector minimizing
+ sum_v w_v^2/c_v (equivalently any strictly convex balanced utilization cost
+ with the same derivative as a strictly increasing function of w_v/c_v).
+All right capacities can be saturated. Every maximum flow can be written
+ w_L1=alpha B1+s, w_L2=alpha B2-s,
+ w_H1=alpha A1-t, w_H2=alpha A2+t,
+with s,t>=0 subject to the left capacities and the other flow bounds.
+At s=0 the left utilization at L1 is alpha*t1, strictly greater than that
+at L2, alpha*t2. Increasing s therefore strictly increases the convex
+objective. At t=0 the utilization at H2 is alpha/t2, strictly greater than
+that at H1, alpha/t1; increasing t likewise increases the objective.
+All four left capacities are slack since t1,t2>alpha. Thus the unique selected
+left-use vector has s=t=0, giving p_Lj=alpha Bj/Aj and p_Hj=alpha Aj/Bj.
+
+Use three fixed owners: owner S holds all L1 and all H2, one outsider holds
+all H1, and another outsider holds all L2. Let S withhold epsilon>0 from both
+its resources. For sufficiently small epsilon the strict inequalities and
+left-capacity slack persist, and the selected vector remains s=t=0. Its
+payment before and after is identically alpha B1+alpha A2. Yet its withheld
+bundle can operate the cross edge L1-H2 at level epsilon, so F(d)=epsilon.
+Thus full OUT fails. This also fails singleton OUT because S is one mixed
+owner; there is no ownership reassignment in the comparison.
+
+The failure applies to all alpha<1 (choose alpha<t2<t1<1), and the chamber
+has positive capacities and a unique smooth left-use vector. It is not a
+boundary irregularity. For alpha=1 the indicated chamber is empty, so no
+contradiction with the accepted utilization OUT2 rule occurs.
+
+REMAINING SELECTOR QUESTION.
+For arbitrary maximum-flow selection in the same chamber, OUT at the holding
+corner containing all L1 and all H2 requires
+  (partial_A1+partial_B2)(s+t)>=1.
+The balanced choice s=t=0 violates it. A genuinely coupled selector could
+satisfy it, so this calculation does NOT exclude the entire double-cover
+architecture. Such a selector still needs all holding-cube inequalities,
+coalition coverage, and compatible continuous boundary transitions.

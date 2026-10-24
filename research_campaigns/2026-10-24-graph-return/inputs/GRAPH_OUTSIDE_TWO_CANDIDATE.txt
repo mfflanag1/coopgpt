@@ -1,0 +1,128 @@
+RESOURCE UTILIZATION PAYMENTS: FULL COALITION OUTSIDE PRODUCTION ON GRAPHS
+17 October 2026. Internally audited; historical novelty unconfirmed.
+Fable011749-85c4de55 and root exact checks are recorded in adjudication08.
+
+MODEL AND CLAIM
+Use the finite unit-profit fractional resource graph and Huber optimizer p(c)
+from composition/HUBER_PRICE_THREE_HALVES_v2.txt. Actual owners are fixed and
+can hold arbitrary mixed nonnegative bundles. Define
+ q_v(c)=min(2p_v(c),1),        Y_i(b)=sum_v b_iv q_v(c), c=sum_i b_i.
+Then total payments equal 2F(c), every coalition is covered, and for every
+coalition S withholding aggregate d from its reported aggregate a,
+ a.q(c)-(a-d).q(c-d) >= F(d).                         (OUT)
+Moreover Y_i >= F(c)-F(c-b_i), the full-owner deletion marginal.
+Thus this is a factor2 rule with full coalition outside production AND every
+full-owner marginal floor, on all profiles and arbitrary graph/owner counts.
+
+The same claims transfer through the established antidiagonal resource-copy
+lift to arbitrary rational public edge profits. A common all-profile compact
+limit of aggregate price fields gives existence for real public profits.
+Factor2 is sharp for this combined contract already on a single edge with
+pure separated owners: the previously proved one-protected-owner floor lower
+is 2-1/m for m energy owners and one hardware owner. No claim of optimality
+for the floor-free OUT graph problem is made; its current interval is
+[1.5430633898...,2].
+
+1. FUNDING AND COVERAGE
+For positive aggregate capacities the Huber KKT matching lambda satisfies
+ sum_{e incident v}lambda_e = c_v min(2p_v,1)=c_v q_v.
+The audited rounded-price certificate proves lambda is a MAXIMUM fractional
+matching, so sum_v c_v q_v=2 sum_e lambda_e=2F(c).
+Because q_v>=p_v, q is a feasible fractional vertex cover, proving coalition
+coverage. Zero-capacity coordinates contribute zero, and the same identities
+hold on the positive induced graph.
+
+2. COALITION OUTSIDE-PRODUCTION DERIVATIVE
+Fix a coalition's retained bundle a0>=0, its withheld bundle d>=0, and outside
+aggregate o>=0. Trace the increasing segment a(t)=a0+t d and c(t)=o+a(t),
+0<=t<=1. First suppose all aggregate coordinates are positive. The Huber
+optimizer is continuous and piecewise rational along this segment, with
+finitely many tight-component patterns as proved in the source theorem.
+The same is true of q. It is enough to prove the payment derivative at least
+F(d) on each fixed-pattern interval.
+
+On a strict-low/high tight component let A and B be total low/high capacity,
+with A>B>0. The Huber formula gives q_low=B/A and q_high=1. Let a and b be
+the coalition's current low/high holdings; let l and h be the low/high sums
+of d. Its component payment is a B/A+b, hence its segment derivative is
+ l B/A + a(h A-B l)/A²+h
+   = (B/A)(1-a/A) l +(1+a/A)h >= h,                 (1)
+since 0<=a<=A. On a component with Huber prices1/2, q is identically1, so
+the derivative is the sum of d on that component. A graph-isolated vertex
+has q=0 and derivative0.
+
+Define z_v=0 at strict-low vertices, z_v=1 at strict-high vertices, and
+z_v=1/2 at half-price vertices (isolates receive0). This is a feasible unit
+vertex cover: any neighbor of a strict-low vertex is strict-high; other
+edges have a high endpoint or two half-price endpoints. Summing(1) and
+the half-price contributions proves
+ d/dt [a(t).q(c(t))] >= sum_high d_v+sum_half d_v
+                       >= z.d >= F(d).
+The final inequality is weak duality applied to the WITHHELD capacity d;
+it does not require withheld production to use only currently tight edges.
+This last point handles edges joining different tight components.
+Integrating and using continuity across the finitely many pattern changes
+proves(OUT).
+
+3. BOUNDARY PROFILES
+For epsilon>0 evaluate q at c(t)+epsilon*1 but weight payments by the actual
+coalition holdings a(t). Every calculation above remains valid: actual low
+holdings a are at most the regularized low total A; the directional totals
+l,h are unchanged; the rounded cover still covers the full original graph.
+Thus each regularized payment difference is at least F(d). As epsilon tends
+to zero, uniqueness of the Huber minimizer on positive-capacity coordinates
+implies convergence of those prices to the specified induced-graph rule.
+All zero-capacity coordinates have zero actual holdings, and q is bounded
+between0 and1. Both endpoint payments therefore converge to the actual rule,
+proving(OUT) on every face. This is a proof device, not an added resource or
+owner in the mechanism.
+
+4. FULL-OWNER MARGINAL FLOORS
+Let lambda be the maximum fractional matching from the Huber KKT certificate.
+For a given owner's bundle b<=c, put t_v=b_v/c_v when c_v>0, and0 otherwise.
+Define a feasible residual plan
+ lambda'_uv=lambda_uv * [1-max(t_u,t_v)].
+At vertex v its incident residual use is at most
+ (1-t_v)sum_{e incident v}lambda_e <=(1-t_v)c_v=c_v-b_v.
+Thus F(c-b)>=sum_e lambda'_e. The lost production is bounded by
+ F(c)-sum_e lambda'_e
+   =sum_uv lambda_uv max(t_u,t_v)
+   <=sum_uv lambda_uv(t_u+t_v)
+   =sum_v t_v c_v q_v = b.q(c)=Y_i.
+Hence Y_i>=F(c)-F(c-b). This also gives the floor for any specified subset
+of the owner's resources, by production monotonicity.
+
+5. WEIGHTED TRANSFER
+For rational edge weights use F_w(x)=F_H(Bx)/Q for EVERY capacity x, with
+public B>=0 and the SAME actual owners receiving all their own resource
+copies. Under a coalition withholding d, copied outside worth is exactly
+F_H(Bd)/Q=F_w(d), so dividing the lifted OUT inequality preserves its full
+outside-worth term, not merely payment monotonicity. Deleting an entire
+owner likewise commutes with B, so all marginal floors transfer exactly.
+Total payments are exactly2F_w(c).
+
+For nonnegative real weights approximate by fixed rational public weights.
+The lifted aggregate effective prices are uniformly bounded by the maximum
+public weight plus1, since every copy q lies in[0,1]. Use ONE convergent
+subnet of whole price fields in the compact product over all aggregate
+profiles, as in UNIVERSAL_WEIGHTED_THREE_HALVES_v2.txt. Each coverage, budget,
+OUT and marginal-floor inequality involves finitely many field coordinates
+and a production value continuous in the weights. All pass simultaneously
+to the limit. For OUT, instantiate each aggregate field comparison with two
+actual owners holding a and c-a, and let the first withhold d<=a. This gives
+every required finite-coordinate inequality before taking the common limit.
+This gives existence, not an exact finite irrational algorithm.
+
+ECONOMIC SCOPE
+The arbitrary access graph for hardware and energy, with public net profits
+(value-cost)_+, is a bipartite instance. Thus no complete-access assumption
+is needed for this factor2 contract. Divisibility, public net profits and
+binding capacity underreports remain essential model assumptions. Private
+costs, latency feasibility, actual outside market access, and empirical gains
+require separate modeling/data. No measurement claim is made here.
+
+REVIEW OBLIGATION
+Independently check derivative signs, cross-component edges, pattern changes,
+zero-profile limits, the exact full-owner marginal floor, and the weighted
+same-owner transfer. The balanced-utilization allocation and graph unfolding
+may be established ingredients; historical priority must be checked separately.

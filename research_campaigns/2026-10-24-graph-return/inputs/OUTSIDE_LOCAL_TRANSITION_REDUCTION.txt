@@ -1,0 +1,57 @@
+FULL OUT FROM SINGLE-ACTIVITY RESTORATIONS
+2026-10-17. Elementary exact reduction; parent verification pending.
+
+Let F(d)=max{w.x:Ax<=d,x>=0} be finite nonnegative linear production. Fix
+actual owners and a coalition. Full coalition OUT is equivalent to the following
+restricted finite comparisons on ALL reports and all coalitions:
+
+ (i) restoring any amount of one resource to members of the coalition cannot
+     lower the coalition's total payment;
+ (ii) restoring any multiple t A_e of one production activity, distributed in
+      any feasible way among coalition members, increases coalition payment
+      by at least t w_e.
+
+Necessity follows immediately: the one-resource bundle has nonnegative outside
+worth, and t A_e can produce t w_e. For sufficiency, take any withheld aggregate
+d. Choose an optimal production plan x using it. Starting from the low report,
+restore the activity bundles A_e x_e one at a time, then restore unused resource
+coordinates. Since Ax<=d, no coordinate ever exceeds its final high report.
+Each resource's restoration can be assigned among its actual coalition owners
+without exceeding their withheld quantities. The coalition remains the same;
+there is no owner splitting, identity change, or removal. Sum the payment gains:
+they telescope to at least sum_e w_e x_e=F(d), exactly the required OUT inequality.
+
+The statement is a property of arbitrary payment mechanisms. Aggregate-price
+form is not required. The restricted comparisons still cover arbitrary
+coalitions and all report profiles; this is not a claim that checking one owner
+or a few selected profiles suffices.
+
+INTEGER GRID COROLLARY FOR BIPARTITE GRAPHS
+
+For a unit-profit bipartite resource graph, integral nonnegative capacities
+admit an integral maximum matching flow. On a full integer box {0,...,M}^V,
+all aggregate-price OUT inequalities are therefore equivalent to only:
+  - one-unit additions to a single resource, with required gain0;
+  - one-unit additions to both endpoints of a graph edge, with required gain1.
+
+Each intermediate aggregate remains in the same integer box. For each local
+transition, the coalition's high holdings range over the box between the added
+bundle and the high aggregate. The payment difference is affine in these
+holdings, so checking its corners verifies every feasible real coalition bundle.
+The same fixed coalition and outside bundle are retained throughout telescoping.
+
+This replaces all pairs of high/low profiles by O((|V|+|E|)M^|V|) local profile
+comparisons, each with at most2^|V| holding corners. It is an exact reduction of
+the finite necessary price LP, not a weaker numerical test. Coverage on an
+integer profile follows from the edge-addition comparison with only the added
+endpoints held by the coalition; budget and nonnegativity remain separate.
+
+For nonbipartite graphs, unit edge steps alone are not equivalent on integer
+capacities: a triangle with one unit at each vertex has fractional worth3/2
+but no integral plan exceeding1. One can use half-unit edge steps on a refined
+grid or add the half-integral odd-cycle activity patterns. No such extension
+is silently assumed in the path scout.
+
+scout_local_graph_outside.py uses the exact bipartite reduction, homogeneity,
+and reflection symmetrization for paths. Its solver output is floating-point
+discovery only; a lower-bound theorem needs an exact dual or analytic proof.
