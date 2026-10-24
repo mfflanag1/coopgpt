@@ -21,7 +21,7 @@
 \title{The cost of coalition withholding:\\resource dimension and coalition size}
 \author{Maxwell Flanagan\\[2pt]\small New York City, United States\\[2pt]
 \small Corresponding author: \texttt{maxwell.flanagan@gmail.com}}
-\date{18 October 2026\\\small Specialist correctness and priority-review draft; not submitted}
+\date{24 October 2026\\\small Specialist correctness and priority-review draft; not submitted}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -40,6 +40,9 @@ A projective construction gives an unrestricted payment-only lower
 $K_3(s)\ge\sqrt{s/6}$, with a sharper explicit certificate asymptotic to
 $\sqrt{2\pi s}/(3\sqrt e)$. It extends to
 $K_r(s)=\Omega_r(s^{(r-2)/(r-1)})$ for every fixed $r\ge3$.
+For unit-profit four-vertex paths, complete path blow-ups and their disjoint
+unions, an explicit coupled flow selector gives full outside protection with
+total-funding factor $1+1/\sqrt2$, independently of owner and resource counts.
 All rules and deviations retain fixed actual owners and their full real report
 boxes. We give complete proofs, distinguish mixed and pure ownership, and
 supply exact finite certificate checks. The arity-three gap to $3s^2$ remains
@@ -82,8 +85,13 @@ institution, and a ladder of one-owner restorations accompanied by unchanged
 protected members. The construction proves a funding obstruction for arbitrary
 payment functions, rather than only for a prescribed family of mechanisms.
 Appendix~\ref{sec:arity} gives the higher-arity and pure-owner versions in the
-same paper. The quantitative comparisons and proof dependencies are summarized
-in the separate specialist brief.
+same paper. Section~\ref{graph:section} adds a constructive counterpart for a restricted
+class of unit-profit resource graphs. Its protected-leaf maximum-flow selector
+satisfies all-coalition outside protection with factor $1+1/\sqrt2$ on complete
+four-vertex-path blow-ups and disjoint unions, with arbitrary mixed ownership.
+This is a scoped graph construction, not an upper bound for arbitrary graphs
+or a claim of optimality on that class. The quantitative comparisons and proof
+dependencies are summarized in the separate specialist brief.
 
 \paragraph{Demand monotonicity and absence-proofness.}
 The aggregate-sum monotonicity used here has a close antecedent in strong group
@@ -109,6 +117,17 @@ lower uses the individual constraints. It cannot be transferred solely from
 the theorem headline; an additional reduction would be needed. We make no
 claim that all related lower-bound techniques have been exhausted.
 
+\paragraph{Population-monotonic matching allocations.}
+\citet{XiaoFang2021} study efficient allocation schemes for induced-subgraph
+matching games whose players are vertices. Their population monotonicity
+requires each incumbent's share to increase when the population expands.
+The P4 property in their Lemma~3 rules out the unit-weight path under that
+contract. Our graph theorem instead permits subsidized payments, divisible
+resource reports and mixed ownership, and protects a deviating coalition's
+aggregate payment plus its outside production. It does not impose individual
+incumbent population monotonicity. Consequently that obstruction neither
+contradicts nor establishes priority for the construction below.
+
 \paragraph{Static subsidies and restricted coalitions.}
 The cost of stability of \citet{BachrachEtAl2009} concerns subsidies making a
 single cooperative game stable, and already includes projective geometry and
@@ -132,7 +151,7 @@ identity in the lower-bound ladder is a separate arithmetic ingredient.
 
 \paragraph{Review status and scope.}
 The proposed contribution is the collection of quantitative funding bounds
-under the stated contracts, especially the arbitrary-rule projective ladder.
+under the stated contracts, especially the arbitrary-rule projective ladder and the coupled graph selector.
 This draft is not a claim of verified historical priority. The review packet
 identifies original versions inspected, missing published-source comparisons,
 and additional cost-sharing leads. Internal AI-assisted audits and exact
@@ -1195,6 +1214,477 @@ reproducible finite certificates supporting the written argument. The universal
 group averaging and all-size geometry are conventional proofs, not statements
 proved merely by the finite tests.
 
+
+\section{Full outside protection on a four-vertex path}
+\label{graph:section}
+
+This section gives a structured unit-profit graph guarantee. For a finite
+resource graph $G$, let
+\begin{equation}\label{graph:production}
+ F_G(c)=\max\left\{\sum_{e\in E(G)}x_e:
+ x_e\ge0,\quad\sum_{e\ni v}x_e\le c_v\ (v\in V(G))\right\}.
+\end{equation}
+Every edge consumes one unit of each endpoint resource and produces one
+unit of output. Owners and their finite coordinatewise endowment boxes
+remain fixed; all real reports in those boxes are allowed. Owners may
+hold arbitrary mixtures of resources, and every coalition, including its
+unchanged members, receives coverage and full outside-production protection.
+
+\begin{theorem}[Protected-leaf path rule]\label{graph:theorem}
+For the path $B-A-D-C$, there is an explicit nonnegative payment rule that
+satisfies coalition coverage and full OUT for every coalition at every
+real report, with
+\begin{equation}\label{graph:funding-bound}
+ \sum_i y_i(b)\le(1+1/\sqrt2)F_G\left(\sum_i b_i\right).
+\end{equation}
+The same guarantee holds for complete blow-ups of this path, their finite
+disjoint unions, and additional isolated resources, with the same fixed
+mixed owners. Thus the total-funding factor is $1+1/\sqrt2$, and the
+extra subsidy is at most $F_G(\sum_i b_i)/\sqrt2$.
+\end{theorem}
+
+A complete blow-up replaces each of the four vertices by a nonempty
+independent group, includes every edge between groups corresponding to a
+path edge, and includes no other edges. The theorem is restricted to unit
+profits and these graph classes. It asserts neither an all-graph bound
+below two nor optimality among payment rules on the path.
+
+\subsection{The selected flow and its payment rule}
+
+Write the path capacities as $c=(A,B,C,D)$, using a vertex label also for
+its capacity, and put
+\[
+ \alpha=\frac1{\sqrt2},\qquad \beta=\alpha^2=\frac12.
+\]
+These are the constants of this section. For the path,
+\begin{equation}\label{graph:path-value}
+ F_G(c)=\min\{A+C,B+D,A+D\}.
+\end{equation}
+Indeed, each expression is a vertex-cover capacity and hence an upper
+bound. If $P$ is their minimum, the edge quantities
+\[
+ x_{AB}=(P-D)_+,\qquad x_{DC}=(P-A)_+,\qquad
+ x_{AD}=P-(P-D)_+-(P-A)_+
+\]
+are feasible and sum to $P$. Here $t_+=\max\{t,0\}$;
+nonnegativity of $x_{AD}$ follows from $P\le A+D$, and the other capacity
+constraints follow from $P\le A+C$ and $P\le B+D$.
+
+Form a directed bipartite double cover: a left copy of each vertex has
+capacity $c_v$, a right copy has capacity $\alpha c_v$, and an edge $uv$
+gives arcs $u_Lv_R$ and $v_Lu_R$. Its two components have maximum values
+\begin{equation}\label{graph:oriented-values}
+ V=\min\{A+C,\alpha(B+D),A+\alpha D\},\qquad
+ V'=\min\{B+D,\alpha(A+C),D+\alpha A\}.
+\end{equation}
+We require a particular choice of left uses, rather than an arbitrary
+maximum flow.
+
+\begin{lemma}[All maximum-flow left uses]\label{graph:flow-interval}
+In the component $\{A_L,C_L\}\to\{B_R,D_R\}$, the possible left uses
+of a maximum flow are exactly
+\begin{equation}\label{graph:first-interval}
+ w_A+w_C=V,\qquad
+ \max\{0,V-A\}\le w_C\le\min\{C,\alpha D,V\}.
+\end{equation}
+In the other component they are exactly
+\begin{equation}\label{graph:second-interval}
+ w_B+w_D=V',\qquad
+ \max\{0,V'-D\}\le w_B\le\min\{B,\alpha A,V'\}.
+\end{equation}
+Both intervals are nonempty, including at zero capacities.
+\end{lemma}
+\begin{proof}
+The three bounds defining $V$ are the total left capacity, total right
+capacity, and the combined capacity of $A_L,D_R$. They upper-bound every
+flow. For any value-$V$ flow, $w_C\le C$, $w_C\le\alpha D$ because
+$C_L$ can only send to $D_R$, and $0\le w_C\le V$.
+The bound $w_A\le A$ gives the lower endpoint in
+\eqref{graph:first-interval}. The interval is nonempty because
+$V\le A+C$, $V\le A+\alpha D$, and all capacities are nonnegative.
+
+Conversely, for any $z$ in this interval, take
+\[
+ f_{A_LB_R}=(V-\alpha D)_+,\qquad
+ f_{A_LD_R}=V-z-(V-\alpha D)_+,\qquad f_{C_LD_R}=z.
+\]
+These quantities are nonnegative: if $V>\alpha D$, use $z\le\alpha D$;
+otherwise use $z\le V$. The $B_R$ use is at most $\alpha B$ since
+$V\le\alpha(B+D)$, and the $D_R$ use is
+$V-(V-\alpha D)_+\le\alpha D$. Their left uses are $V-z\le A$ and
+$z\le C$. This realizes every point of the interval and proves that $V$
+is the maximum. Reflecting the path, that is, exchanging $A$ with $D$ and
+$B$ with $C$, proves the second assertion. Explicitly, with $z=w_B$ its
+flows are $(V'-\alpha A)_+$ on $D_LC_R$, $V'-z-(V'-\alpha A)_+$ on
+$D_LA_R$, and $z$ on $B_LA_R$.
+\end{proof}
+
+Define $\operatorname{clamp}(x;\ell,h)=\min\{h,\max\{\ell,x\}\}$ and
+select
+\begin{align}
+ w_C&=\operatorname{clamp}\bigl(\beta C;
+             \max\{0,V-A\},\min\{C,\alpha D,V\}\bigr),
+ &w_A&=V-w_C,\label{graph:selector}\\
+ w_B&=\operatorname{clamp}\bigl(\beta B;
+             \max\{0,V'-D\},\min\{B,\alpha A,V'\}\bigr),
+ &w_D&=V'-w_B.\nonumber
+\end{align}
+The vector $w$ is continuous, nonnegative, homogeneous, and piecewise
+linear, with $0\le w_v\le c_v$. The following equivalent formulas expose
+its linear cells:
+\begin{align}
+ w_A&=\min\{A,\alpha B+(\alpha D-\beta C)_+\},
+ &w_D&=\min\{D,\alpha C+(\alpha A-\beta B)_+\},\label{graph:explicit-uses}\\
+ w_C&=\min\{C,\alpha D,\max\{\beta C,\alpha(B+D)-A\}\},
+ &w_B&=\min\{B,\alpha A,\max\{\beta B,\alpha(A+C)-D\}\}.\nonumber
+\end{align}
+To verify the first orientation algebraically, put
+$U=\min\{C,\alpha D\}$, $T=\alpha(B+D)$, $t=\beta C$, and
+$m=\min\{U,t\}=\min\{\alpha D,\beta C\}$.
+Then $T\ge U$ and $V=\min\{T,A+U\}\ge U$, so the upper endpoint is
+$U$. Since $V-A\le U$, the clamp equals
+\[
+ w_C=\min\{U,\max\{t,V-A\}\}
+     =\max\{m,V-A\}
+     =\min\{U,\max\{t,T-A\}\}.
+\]
+Consequently
+$w_A=\min\{A,V-m\}=\min\{A,T-m\}$, giving
+\eqref{graph:explicit-uses}. Reflection gives the other two formulas.
+
+Set
+\begin{equation}\label{graph:prices}
+ p_v(c)=\begin{cases}w_v(c)/c_v,&c_v>0,\\0,&c_v=0,\end{cases}
+ \qquad y_i(b)=\sum_{v\in\{A,B,C,D\}}b_{iv}p_v\left(\sum_j b_j\right).
+\end{equation}
+Prices lie in $[0,1]$. The price chosen at an absent coordinate has no
+effect on any payment.
+
+The selected left uses are realized by the flows in
+Lemma~\ref{graph:flow-interval}. Collapse both directed copies of each
+path edge into one edge flow. At vertex $v$, its incident use is at most
+$c_v+\alpha c_v$, from the left and right copies respectively. Dividing
+by $1+\alpha$ yields a feasible original packing. Therefore
+\begin{equation}\label{graph:flow-funding}
+ \sum_i y_i(b)=\sum_v w_v(c)=V+V'\le(1+\alpha)F_G(c).
+\end{equation}
+This argument uses fractional flows and no integrality assumption.
+
+\subsection{The restoration inequalities on every smooth cell}
+
+At a strictly positive aggregate $c$, let $a$ be a coalition's current
+aggregate holding, with $0\le a\le c$, and write
+$\theta_v=a_v/c_v\in[0,1]$. On a smooth cell define
+\begin{equation}\label{graph:restoration-coefficients}
+ g_v=p_v+\sum_j a_j\partial_v p_j.
+\end{equation}
+This differentiates the coalition's total payment when its holding and
+the aggregate capacity are restored together, while outsiders stay fixed.
+We prove
+\begin{equation}\label{graph:cover-certificate}
+ g_v\ge0\quad\text{for every vertex},\qquad
+ g_A+g_B\ge1,\quad g_A+g_D\ge1,\quad g_D+g_C\ge1.
+\end{equation}
+Ties and zero capacities will be handled by direct integration below.
+
+First record the single-edge calculation used in the first cells. For
+edge capacities $X\ge Y>0$, put $t=Y/X$ and take
+$w_X=\alpha Y$, $w_Y=\min\{Y,\alpha X\}$.
+When $t\le\alpha$, the restoration coefficients are
+\[
+ g_X=\alpha t(1-\theta_X),\qquad g_Y=1+\alpha\theta_X.
+\]
+They are nonnegative and their sum is
+$1+\alpha t+\alpha(1-t)\theta_X\ge1$.
+When $t\ge\alpha$, they are
+\[
+ g_X=\alpha t(1-\theta_X)+\alpha\theta_Y,\qquad
+ g_Y=(\alpha/t)(1-\theta_Y)+\alpha\theta_X.
+\]
+They are nonnegative. Minimizing their sum over the holding fractions gives
+$\alpha(1+t)\ge\alpha(1+\alpha)>1$: the coefficient of $\theta_X$ in
+the sum is nonnegative, and that of $\theta_Y$ is nonpositive.
+Swapping $X,Y$ handles the other capacity ordering.
+
+For the path put
+\[
+ u=A-\alpha B,\qquad v=D-\alpha C.
+\]
+The following cases exhaust the smooth cells; the displayed weak
+inequalities describe their closures.
+
+\paragraph{A nonpositive difference.}
+If $u\le0$, formula \eqref{graph:explicit-uses} reduces to
+\[
+ w_A=A,\quad w_B=\alpha A,\quad
+ w_C=\min\{C,\alpha D\},\quad w_D=\min\{D,\alpha C\}.
+\]
+For the first pair,
+\[
+ g_A=1+\alpha\theta_B\ge1,\qquad
+ g_B=(\alpha A/B)(1-\theta_B)\ge0.
+\]
+The other pair satisfies the single-edge calculation, so $g_C,g_D\ge0$
+and $g_C+g_D\ge1$. The cross edge is covered by $g_A\ge1$.
+If $v\le0$, reflection gives the same conclusions with $g_D\ge1$.
+
+For the remaining cells $u,v>0$, and the common formulas are
+\begin{align*}
+ w_A&=\alpha B+\min\{u,\alpha v\},&
+ w_D&=\alpha C+\min\{v,\alpha u\},\\
+ w_B&=\min\{B,\beta B+(\alpha u-v)_+\},&
+ w_C&=\min\{C,\beta C+(\alpha v-u)_+\}.
+\end{align*}
+Since $\alpha<1$, at most one of $\alpha u-v$ and $\alpha v-u$ is
+positive.
+
+\paragraph{The middle cone: $\alpha v\le u$ and $\alpha u\le v$.}
+Here
+\[
+ w_B=\beta B,\quad w_C=\beta C,\quad
+ w_A=\alpha(B+D)-\beta C,\quad w_D=\alpha(A+C)-\beta B.
+\]
+Moreover $p_A,p_D\ge\beta$. For example,
+$\alpha u\le v$ gives
+$w_A=\alpha B+\alpha v\ge\beta(\alpha B+u)=\beta A$;
+the other inequality follows by reflection. Direct differentiation yields
+\begin{align*}
+ g_A&=p_A(1-\theta_A)+\alpha\theta_D,&
+ g_D&=p_D(1-\theta_D)+\alpha\theta_A,\\
+ g_B&=\beta+\alpha\theta_A-\beta\theta_D,&
+ g_C&=\beta+\alpha\theta_D-\beta\theta_A.
+\end{align*}
+All are nonnegative. Their edge-sum minima over $\theta\in[0,1]^4$ are
+\[
+ \min(g_A+g_B)=\beta+\min\{p_A,\alpha\},\qquad
+ \min(g_D+g_C)=\beta+\min\{p_D,\alpha\},
+\]
+and
+\[
+ \min(g_A+g_D)=\min\{p_A,\alpha\}+\min\{p_D,\alpha\}.
+\]
+Every displayed value is at least $2\beta=1$.
+
+\paragraph{An outer cone: $u\le\alpha v$.}
+The opposite outer cone is its reflection. In this cone
+\[
+ w_A=A,\quad w_B=\beta B,\quad
+ w_D=\alpha(A+C)-\beta B,\quad
+ w_C=\min\{C,\alpha(B+D)-A\}.
+\]
+If $w_C<C$, then $p_C\ge\beta$ because $\alpha v-u\ge0$.
+The unsaturated condition gives
+$\alpha v-u\le(1-\beta)C$. Multiplying by $\alpha$ and using
+$\beta=\alpha^2$ gives
+\[
+ \beta v\le\alpha u+\alpha(1-\beta)C,
+ \qquad \beta D\le\alpha u+\alpha C=w_D.
+\]
+Thus $p_D\ge\beta$ as well. The coefficients are
+\begin{align*}
+ g_A&=1-\theta_C+\alpha\theta_D,&
+ g_B&=\beta+\alpha\theta_C-\beta\theta_D,\\
+ g_C&=p_C(1-\theta_C)+\alpha\theta_D,&
+ g_D&=p_D(1-\theta_D)+\alpha\theta_C.
+\end{align*}
+They are nonnegative. Direct affine minimization gives
+\begin{align*}
+ \min(g_A+g_B)&=\alpha+\beta\ge1,\\
+ \min(g_C+g_D)&=\min\{p_C,\alpha\}+\min\{p_D,\alpha\}\ge2\beta=1,\\
+ \min(g_A+g_D)&=\alpha+\min\{p_D,\alpha\}\ge\alpha+\beta\ge1.
+\end{align*}
+For example the first sum is
+$1+\beta+(\alpha-1)\theta_C+(\alpha-\beta)\theta_D$, whose minimum
+is $\alpha+\beta$.
+
+If instead $w_C=C$ on a smooth saturated cell, the coefficients are
+\[
+ g_A=1+\alpha\theta_D,\qquad g_C=1+\alpha\theta_D,
+ \qquad g_B=\beta(1-\theta_D),\qquad
+ g_D=p_D(1-\theta_D).
+\]
+They are nonnegative; $g_A\ge1$ covers $AB$ and $AD$, and $g_C\ge1$
+covers $CD$. This completes \eqref{graph:cover-certificate} on every
+smooth cell for every holding fraction, without restricting mixed ownership.
+
+\subsection{Finite restorations, ties, and zero reports}
+
+For outsider aggregate $o\ge0$ and coalition aggregate $a\ge0$, define
+\[
+ H(o,a)=\sum_v a_v p_v(o+a).
+\]
+This function is jointly continuous on its entire nonnegative domain.
+At a coordinate whose aggregate tends to zero, its contribution lies
+between zero and $a_v$ and hence tends to zero; at a positive aggregate
+coordinate, continuity follows from that of $w$. Also $H(o,0)=0$.
+
+Fix $0\le a'\le a$ and put $d=a-a'$. The finitely many polyhedral cells
+of $w$ have boundaries contained in finitely many proper hyperplanes.
+Choose a strictly positive vector $z$ having nonzero inner product with
+each of their nonzero normals. Such a vector exists because a finite union
+of proper hyperplanes cannot cover the positive orthant. Choose
+$\varepsilon\downarrow0$ omitting the finitely many positive values for
+which the segment
+\[
+ c(t)=o+\varepsilon z+a'+td,\qquad 0\le t\le1,
+\]
+is contained in any boundary hyperplane. Indeed, containment requires the
+hyperplane to be parallel to $d$ and imposes one linear equation in
+$\varepsilon$ with a nonzero coefficient. All other boundary intersections
+occur at at most one parameter value per hyperplane.
+
+The segment is strictly positive. Its coalition payment
+$H(o+\varepsilon z,a'+td)$ is continuous and piecewise continuously
+differentiable, with only finitely many breakpoints. Away from them its
+derivative is $g\cdot d$, and its holding fractions are
+$(a'_v+td_v)/c_v(t)\in[0,1]$. The verified inequalities therefore apply.
+For any edge packing $x$ feasible at $d$, they imply
+\[
+ \sum_e x_e\le\sum_{e=uv}(g_u+g_v)x_e
+ =\sum_v g_v\sum_{e\ni v}x_e\le\sum_v g_vd_v.
+\]
+Taking the maximum gives $g\cdot d\ge F_G(d)$. Integrating on the
+finitely many pieces, using continuity at their endpoints, yields
+\[
+ H(o+\varepsilon z,a)-H(o+\varepsilon z,a')\ge F_G(d).
+\]
+Joint continuity as $\varepsilon\downarrow0$ proves
+\begin{equation}\label{graph:finite-out}
+ H(o,a)-H(o,a')\ge F_G(a-a')
+ \qquad(o\ge0,\ 0\le a'\le a).
+\end{equation}
+The perturbation is an analytic approximation to the globally defined
+formula $H$; no perturbed owner profile is required to fit the fixed boxes,
+and no owner is added or reassigned in the asserted mechanism.
+
+For an actual coalition $T$, take $o=\sum_{i\notin T}b_i$,
+$a=\sum_{i\in T}b_i$, and $a'=\sum_{i\in T}b'_i$ for its binding
+underreports. Its aggregate payment is exactly $H(o,a)$, so
+\eqref{graph:finite-out} is full OUT for the original owners, including
+passive members. It includes segments on ties, zero capacities, the
+all-zero profile, and the grand coalition. Taking $a'=0$ proves coverage.
+Together with \eqref{graph:flow-funding}, this proves
+Theorem~\ref{graph:theorem} for the path.
+
+\subsection{Complete blow-ups and disjoint unions}
+
+Let $X\in\{A,B,C,D\}$ now denote one of four independent vertex groups,
+and aggregate capacities as $c_X=\sum_{v\in X}c_v$. The production value
+of a complete blow-up equals the path value at these four aggregates.
+Aggregating any original packing proves one inequality. To prove the
+other, let $f_{XY}$ be a feasible aggregate path packing. For $c_X>0$ assign
+the incidence of this group-pair flow to $v\in X$ by
+\[
+ r_{v,XY}=\frac{c_v f_{XY}}{c_X}.
+\]
+The sum over incident group pairs is at most $c_v$, and
+$\sum_{v\in X}r_{v,XY}=f_{XY}$. If $f_{XY}>0$, both group capacities
+are positive and we may put
+\[
+ x_{vw}=\frac{r_{v,XY}r_{w,XY}}{f_{XY}}
+ \qquad(v\in X,\ w\in Y)
+\]
+on every edge of that complete bipartite pair. Its two marginals are the
+assigned incidences, and its total is $f_{XY}$. Zero-flow pairs receive
+zero flow. Zero-capacity groups have no positive incident aggregate flow,
+so no division by zero is used. This constructs an original feasible
+packing of exactly the aggregate objective.
+
+Apply the four path prices to every resource in its corresponding group.
+Each actual owner's payment equals the path-rule payment on its own
+aggregated report. Every actual withholding maps to a coordinatewise
+withholding of that same owner's aggregate, and the equality of production
+values holds for all coalition and withheld bundles. Thus funding,
+coverage, and full OUT transfer exactly, retaining the original mixed
+owners and their fixed endowment boxes.
+
+For a finite disjoint union, sum the component payments. Both production
+and withheld production are additive across components, so summing their
+OUT, coverage, and funding inequalities preserves the constant $1+\alpha$.
+An owner may hold resources in several components. Isolated resources
+contribute no production and may receive zero payment. This completes
+Theorem~\ref{graph:theorem}.
+
+\begin{remark}[Scope of the funding number]\label{graph:scope}
+At $(A,B,C,D)=(4,1,1,1)$, the path value is two and
+$(V,V')=(2\alpha,2)$, so this particular rule attains the ratio
+$1+\alpha$. This is not a lower bound for arbitrary mechanisms on the
+path. The proof does not extend the guarantee to arbitrary edge profits
+or to incomplete connections between the four groups, and makes no
+claim of historical novelty.
+\end{remark}
+
+
+\subsection{An obstruction to a direct leaf-layer recursion}
+The path theorem does not license independent leaf reservations throughout a
+tree. The following obstruction concerns a specified selection procedure;
+it is not a lower bound for arbitrary mechanisms on trees.
+
+Fix $0<\alpha<1$ and $0\le\beta<1$. In each orientation of the scaled
+bipartite double cover, process left vertices in a leaf-layer order of the
+original tree: all original leaves precede newly exposed leaves, and each
+successive layer is exhausted before the next. Among maximum flows consistent
+with previous choices, clamp each current left use to $\beta c_v$ within its
+feasible interval. Pay owners by their resource fractions of these left uses,
+as in \eqref{graph:prices}. On P4, $\alpha=1/\sqrt2$ and $\beta=1/2$
+recover \eqref{graph:selector}. The collapsed-flow funding argument still
+applies on every tree, but incentives need not.
+
+\begin{proposition}[Failure of fixed leaf reserves]\label{graph:recursion-failure}
+For every $0<\alpha<1$ and $0\le\beta<1$, this leaf-layer selector fails
+full OUT on P6, already for a singleton coalition consisting of one mixed owner.
+The failure is independent of tie-breaking within the first leaf layer and
+of every selection choice after the first leaf in each orientation is fixed.
+\end{proposition}
+\begin{proof}
+Use the path $0-1-2-3-4-5$, choose
+\[
+ 0<q<\min\{1-\beta,\alpha^{-2}-1,1\},
+ \qquad c(q)=(1,\alpha^{-1},q,q,\alpha^{-1},1).
+\]
+One fixed owner holds all resources at $0,2,3,5$; two outsiders hold resources
+$1,4$ respectively. The first owner alone reduces both middle reports from
+$q$ to $q/2$, leaving its two endpoint reports unchanged. Its withheld bundle
+has production $q/2$ on edge $2-3$.
+
+Consider the orientation with left vertices $\{0,2,4\}$. The flows
+\[
+ f_{0_L1_R}=1-q,\quad f_{2_L1_R}=q,\quad
+ f_{4_L3_R}=\alpha q,\quad f_{4_L5_R}=\alpha
+\]
+are feasible: in particular $\alpha(1+q)<\alpha^{-1}$.
+They saturate every right capacity, so their value $1+\alpha(1+q)$ is
+maximum. Every maximum flow saturates $1_R$, whose only incoming sources
+are $0_L,2_L$. Since the latter has capacity $q$, its original leaf satisfies
+$w_0\ge1-q$. The displayed flow attains this lower endpoint. As
+$1-q>\beta c_0=\beta$, the first leaf clamp fixes $w_0=1-q$.
+Saturating $1_R$ then forces source $2_L$ to spend its entire $q$ there;
+all other right use must come from $4_L$. Thus every remaining left use
+is forced. Reflection proves the same statement for the other orientation,
+whose first original leaf is $5_L$. Hence
+\[
+ w(q)=(1-q,\alpha(1+q),q,q,\alpha(1+q),1-q).
+\]
+The same argument applies at $q/2$, since all strict inequalities persist.
+The deviating owner's total payment is
+\[
+ (1-q)+q+q+(1-q)=2
+\]
+at both reports. Its payment loss is zero, contradicting the required
+outside-production compensation $q/2>0$.
+\end{proof}
+
+For the theorem's constants, $q=1/4$ gives the concrete capacities
+$(1,\sqrt2,1/4,1/4,\sqrt2,1)$ and a productive withdrawal of $1/8$
+at each middle vertex. Retuning a fixed fraction below one or taking
+$\alpha$ closer to one cannot repair this leaf-layer architecture. The
+proposition does not cover reserve fraction one, report-dependent reserves,
+other global selectors, or orders that process a newly exposed vertex before
+an original leaf in its orientation. In particular it establishes no
+impossibility for arbitrary full-OUT tree mechanisms. A viable recursion
+must retain additional information about the simultaneous payment response
+across the central edge.
+
 \section{Interpretation, scope and remaining questions}\label{sec:discussion}
 The two parameters answer different questions. The dimension frontier allows
 arbitrary technologies on $d$ resources and protects every coalition. The
@@ -1210,6 +1700,13 @@ keeps the counts separate. Neither the exponent nor its sharper constant
 claims minimal witness size. The simple binomial upper evaluates finitely
 many coalition production programs, potentially exponentially many. Efficient
 approximate evaluation requires separate incentive and coverage analysis.
+
+The graph construction in Section~\ref{graph:section} protects every coalition
+while allowing the number of resources to grow within complete P4 blow-ups and
+disjoint unions. Its factor is uniform in those counts, but its interaction
+structure is restricted. Extending the selector to arbitrary trees or graphs,
+and determining the optimal factor even on P4, remain open within this program.
+The extra funding is $F/\sqrt2$, not $(1+1/\sqrt2)F$ in addition to output.
 
 The proposed contribution is the quantitative link between fixed-owner
 coalition withholding and funding, particularly the projective cap exchange
@@ -1233,8 +1730,8 @@ reliability, energy-saving or net-value claim here.
 This manuscript concerns coordinated withholding. It does not settle the
 separate owner-count/resource-dimension gap for individual incentives in the
 companion truthful-production project. Optional floor parameters, structured
-production refinements and application measurement studies are not separate
-new claims of this draft. The immediate questions are correctness of the
+production refinements beyond the explicitly proved graph class, and application
+measurement studies are not separate new claims of this draft. The immediate questions are correctness of the
 fixed-institution reductions, priority of the quantitative bounds, and whether
 these results form a useful unit of publication.
 
@@ -1750,6 +2247,12 @@ Author version, 24 May 2004.
 Published in \emph{Journal of Economic Theory} 125(1), 1--35 (2005),
 \url{https://doi.org/10.1016/j.jet.2004.05.003}.
 Cited proposition numbering refers to the inspected author version.
+\bibitem[Xiao and Fang(2021)]{XiaoFang2021}
+H. Xiao and Q. Fang (2021).
+Population monotonicity in matching games.
+Inspected original: arXiv:2105.00621v1, especially Section~2 and Lemma~3.
+\url{https://arxiv.org/abs/2105.00621}.
+
 \end{thebibliography}
 
 \end{document}

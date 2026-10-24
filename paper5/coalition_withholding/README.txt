@@ -1,52 +1,47 @@
-COALITION WITHHOLDING — CORRECTNESS AND PRIORITY REVIEW PACKAGE
-Prepared 18 October 2026 (America/New_York).
+COALITION WITHHOLDING — UPDATED CORRECTNESS AND PRIORITY REVIEW PACKAGE
+Source update24 October2026. Existing dimension and arity results retained.
 
 READ FIRST
-manuscript.pdf / manuscript.tex — coherent paper with complete proofs.
-specialist_brief.pdf / specialist_brief.tex — focused review request.
-review/PRIORITY_MATRIX.txt — precise antecedents and unresolved comparisons.
-review/FINAL_ADJUDICATION.txt — actual final checks and review disposition.
+manuscript.tex — standalone main manuscript, now including Section6 graph rule.
+specialist_brief.tex — updated scoped correctness and priority questions.
+review/PRIORITY_MATRIX.txt — original-source comparisons and unresolved gaps.
+review/GRAPH_ADDITION_ADJUDICATION.txt — checks for the24October addition.
 
-WHAT WAS CONSOLIDATED
-The sharp universal dimension endpoints, inherited sparse full-OUT upper,
-new arbitrary-rule square-root lower, optimized finite tail, higher-arity
-extension, and pure-owner realization. The previously open coalition paper
-blueprint is now a manuscript. It is separate from the individual-incentive
-truthful_cooperation paper. The older s^(1/4) lower is superseded, not a
-second contribution. Structured reserve/floor/application branches remain
-archival supplements and are not silently claimed as proved in this draft.
+ADDITION
+Explicit funding1+1/sqrt(2) for full coalition outside-production protection on
+unit-profit P4 graphs, complete path blow-ups and disjoint unions. Fixed actual
+mixed owners, all real report boxes, every coalition including passive members.
+Total funding is distinguished from additional subsidy1/sqrt(2) times output.
+Neither arbitrary graphs nor optimality on P4 are claimed. Complete proof is
+integrated in the same paper; no separate corollary paper or novelty clearance.
 
-MAIN CHANGE
-sqrt(s/6) <= K_3(s) <= K_3^OUT(s) <= 3s^2.
-The sharper B_s is asymptotic to sqrt(2*pi*s)/(3*sqrt(e)); B_6=493/243.
-The upper is inherited. The remaining gap is not closed. Resource rows grow
-exponentially in the lower construction; pure-owner and small-owner counts
-must not be combined. Total funding and external subsidy have different
-normalizations: subsidy=(kappa-1)*production.
+RETAINED FRONTIERS
+Dimension factors(d+1)/2 and1+c(d-1), c(2-exp(-1/c))=1.
+Arity3: sqrt(s/6)<=K3(s)<=K3^OUT(s)<=3s^2, with sharper finite certificate
+B_s~sqrt(2*pi*s)/(3*sqrt(e)); B6=493/243. Higher-arity and separate pure-owner
+realizations remain. No old proof was replaced by the graph construction.
 
 REPLAY
-From this directory, with existing Python 3 and assertions enabled:
-  python3 reproduce.py
-Read review/REPRODUCTION_NOTES.txt for exact scope/dependencies. The runner
-copies evidence to fresh output, records hashes, and does no downloads.
-Its finite checks do not prove universal statements or novelty.
+The six inherited checks remain python3 reproduce.py from this directory.
+The added graph diagnostic is separate:
+  python3 evidence/graph/protected_leaf_exact_replay.py
+It uses exact Q(sqrt2) arithmetic at625 profiles and holding-cube corners.
+All-real correctness is proved analytically, not by that finite replay.
+The new recursive-architecture counterexample has its own exact checker:
+  python3 evidence/graph/leaf_recursion_exact_check.py
+Its FINAL proof note narrows an ambiguous historical peeling-order label to
+layerwise processing; arbitrary sequential orders are not ruled out.
 
-LATEX
-Both main .tex documents are standalone, with no external input files.
-The source/ fragments retain editorial provenance; they are not compilation
-dependencies. Compile manuscript.tex and specialist_brief.tex directly.
+LATEX AND REVIEW
+Both main .tex sources are standalone. source/ fragments are maintained editorial
+inputs to assemble.py; the assembled manuscript has no external dependencies.
+Human specialist correctness and historical-priority review have not yet been
+obtained. OPEN_REVIEW_REQUEST.txt is an updated UNSENT local draft. No external
+message, purchase, submission, Git commit or push is part of this source update.
 
-STATUS
-Prepared for specialist correctness and novelty review. Internal AI reviews
-are recorded separately from source verification and human assessment.
-No external specialist review has yet been obtained, no outreach has been
-sent, and no submission or historical-priority certification is claimed.
-A human author must review and approve the exact paper before submission.
-No license to third-party article PDFs/text is implied; those are excluded.
-
-PROVENANCE
-PROVENANCE.json binds selected internal proof notes and exact checker bytes.
-Original six-hour campaign evidence is preserved separately and unchanged.
-SHA256SUMS identifies this package's final files; hashes establish identity,
-not mathematical truth. OPEN_REVIEW_REQUEST.txt is a draft for the user to
-adapt and send if desired; it has not been transmitted.
+PDF VERSION BOUNDARY
+The existing manuscript.pdf and specialist_brief.pdf are the18October exports;
+they do not include the24October graph addition. They are retained as archive
+artifacts. Use the current .tex sources and live editor preview for this update.
+Both current sources passed the desktop compiler. No separate PDF was compiled
+or new editor tab opened, respecting the current document workflow.
