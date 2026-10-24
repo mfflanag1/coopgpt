@@ -1,0 +1,158 @@
+Persistent exact SIFT10K retrieval service — preparation draft, 24 October 2026
+STATUS: NOT AUTHORIZED FOR REAL CORPUS TIMING, MPS COLLECTION OR CALIBRATION.
+
+Question and unchanged qualification
+Does bounded-wait batching improve inclusive response latency by at least 10%
+over immediate singleton dispatch, while preserving exact answers and a fixed
+100 ms response deadline? This is a local engineering comparison. It does not
+measure semantic relevance, energy, welfare or independent-owner pooling.
+Keep the qualified CC0 ANN_SIFT10K corpus: 10,000 vectors, 100 queries, dimension
+128, exhaustive squared L2 and canonical (distance, original corpus ID) top ten.
+Data hashes and provenance are in PROVENANCE.json and DATA_MANIFEST.json.
+No normalization, rounding, reordering of corpus IDs, query omission, metric
+change, new corpus, model, or groundtruth-guided search. Prior top-ten outputs
+are already observed: this is not a held-out semantic/correctness dataset.
+
+Service and correctness
+One Swift process per window loads base/query coordinates once, validates hashes
+and integer bounds, computes integer norms and retains its Metal corpus buffer
+and command queue through warmup and all requests. Query vectors are preloaded;
+requests identify a fixed query ID rather than upload a new embedding. Each
+request recomputes every candidate dot/distance and all 10,000 direct integer
+oracle distances. No result cache or precomputed distance lookup is permitted.
+Reuse the qualified Float32 MPS dot product, options.none, independent recommended
+row strides, NaN result initialization, exact integer norm reconstruction and
+streaming canonical selection. Invalid dots/command status or any distance/rank
+mismatch fail the request. Native oracle uses direct coordinate differences and
+full sorting. Client also checks each top ten against previously qualified answers.
+The copied answer table is schema-checked before preparing a freeze and before a
+real launch: all100 canonical query keys, ten unique integer IDs per answer,
+bounded integer distances, and canonical distance/ID order. This format/provenance
+check computes no new real-query distances and does not validate new MPS behavior.
+Both policies include this expensive full checking; results concern this checked
+service, not a production system with validation disabled.
+The existing arithmetic/parser/oracle/self-tests are copied unchanged into
+src/QualifiedCore.swift. New service logic accepts arbitrary/repeated query IDs.
+At most one batch is in flight. Both policies use the same backend and checks.
+Explicit native arrays/staging/scratch plus actual Metal buffers are checked
+against 64 MiB. This is not total RSS or free unified RAM; Python/framework/file
+caches are excluded. Corpus buffer persists; per-batch buffers use autoreleasepool.
+
+Two scheduling policies, fixed before development outcomes
+Immediate: dequeue the oldest pending request and immediately dispatch singleton.
+Bounded: FIFO, up to 16 requests; dispatch when 16 are pending or the oldest
+request's PLANNED arrival time plus 2 ms is reached. A busy backend may delay
+dispatch beyond 2 ms: 2 ms is the batching-only wait cap, not a response/queueing
+guarantee. Do not restart the wait timer when a busy backend becomes free.
+Every batch is returned together after ALL its answers pass native checking.
+No speculative parallel GPU work, dropped requests or serving only convenient IDs.
+
+Arrivals, clocks and inclusive response latency
+The Python driver prewrites every planned offer and starts a separate external
+arrival thread using monotonic timestamps. Arrival scheduling never waits for a
+previous response. Frozen Poisson gaps and balanced query-ID cycles are generated
+by separate fixed PRNGs; both treatments in a pair receive identical schedules.
+Every 200-request window uses each of the 100 query IDs twice, shuffled separately
+in each 100-query cycle. Repeated requests are not independent semantic cases.
+Record planned offer, actual enqueue, batch submission and client delivery times.
+Latency is client delivery minus PLANNED offer, so offer jitter and time in the
+queue count. Delivery occurs after receiving/decoding the complete JSON answer,
+checking identity/counts/canonical ranks and matching the qualified top ten.
+Thus batch formation, native preparation, GPU wait, reconstruction, full native
+oracle, result serialization, pipe delivery and client checking all count.
+Hardware GPU timestamps are not the outcome clock. The stdout reader preserves
+raw bytes before parsing, so that capture overhead counts. On-disk post-delivery
+result-log persistence is outside response latency; its backpressure on later
+jobs remains. Raw stdout captures also retain malformed JSON and fatal output.
+Neither service startup nor warmup is part of the steady-state response metric.
+Startup duration and every warmup response/time are retained separately, and
+startup overhead must be reported alongside service results.
+
+Development calibration: a separate parent-approved freeze required
+Draft generator: make_plan('calibration'). Rates 20, 50, 100, 200 requests/sec,
+two pairs per rate, 200 planned requests per window, 16 windows total. Fixed
+ascending rates; order immediate/bounded in pair 0 and bounded/immediate in pair1.
+Before each measured window, fresh backend loads corpus once and processes 20
+singleton warmups, query IDs 0..19, checked and retained but excluded from metrics.
+The phase has a 600-second watchdog, backend startup 30 seconds, each dispatched
+batch 2 seconds. Abort whole phase on any process/protocol/correctness failure.
+The phase deadline is shared across windows, startups and warmups; each startup
+or response wait is capped by its remaining time, not a newly reset600 seconds.
+Process termination/log cleanup follows expiration and can take additional time.
+No automatic retry, replacement or omitted invalid window. Every planned window
+and request remains in the immutable phase PLAN even if never started/offered.
+Select the HIGHEST listed rate for which BOTH immediate windows delivered every
+answer correctly and >=99% within 100 ms, with valid arrivals. Calibration as a
+whole must be complete, correct and arrival-valid for either policy. Batching
+gains do not determine rate selection. If no eligible rate or invalid calibration,
+stop and report it; do not tune or extend this experiment. A separately approved
+protocol amendment would be a new development study, not a retry/holdout replacement.
+If all rates pass, choose 200 and state that capacity saturation was not bracketed.
+
+Independent scheduled evaluation: another parent-approved freeze required
+After calibration adjudication, generate make_plan('evaluation', selected_rate).
+Four pairs at that rate, 200 requests/window, eight windows total. Seed range
+241024900..241024903 is distinct from calibration 241024100..241024131; fixed
+independently of all outcomes. Alternate treatment order by pair. Same warmups,
+watchdogs, deadline and policies. Both policies in each pair have identical
+arrival offsets and query IDs. A new service starts for each window. The split
+is independent schedules/runs, not previously unseen corpus/query answers.
+No evaluation outcomes may change rates, wait, size, metric, deadline, windows,
+query order, stopping, correctness rules or endpoint. No automatic evaluation run
+or automatic authorization follows calibration.
+
+Validity and success, fixed now
+Every measured request must be delivered and correct, with zero crashes, missing
+answers, corrupted responses or invalid native commands. Actual offer delay must
+have nearest-rank p99 <=2 ms and maximum <=10 ms in EACH window. Otherwise the
+experiment is invalid for a treatment improvement claim; keep and report it.
+For each window calculate nearest-rank p95 of all 200 planned response latencies.
+Failed/unserved requests have +infinity latency (JSON null p95 if nonfinite), not
+removal from denominator. Deadline success requires correct delivery <=100 ms.
+Both policies must reach >=99% deadline success in EVERY evaluation window.
+Primary endpoint: median across the four paired ratios p95_bounded/p95_immediate.
+Material improvement requires median <=0.90 AND ratio <1 in at least three pairs,
+in addition to all validity/deadline requirements. No significance/power claim is
+made from four pairs. This is a bounded descriptive engineering gate, not a
+population treatment estimate. Report every per-window metric and paired ratio,
+not only a winning median; failure of gate is a legitimate result.
+
+Failure retention and conditions
+Immutable phase PLAN lists all planned windows/requests before real execution.
+Each started window has another immutable PLAN; RESULT includes status for every
+request: ok, failed_after_submit, unserved_after_offer, not_offered_after_abort.
+SUMMARY explicitly names windows not completed. Native stderr, readiness, warmup
+responses and raw measured responses are retained. Process startup failure may
+produce no native response but is recorded as phase abort with unrun windows.
+Backend timeouts state the wait limit. Arrival-thread exceptions propagate to
+the driver, including checks at most50 ms apart during a backend-response wait;
+the window abort retains the complete planned denominator and partial statuses.
+A hard kill of Python can prevent final RESULT: immutable PLAN and partial logs
+then remain the accounting denominator; an external reviewer must mark all absent
+responses failed and the phase invalid. Never interpret absent SUMMARY as success.
+Freeze a known stable power/desktop-use condition in the approval note. Keep it
+unchanged within a phase; record interruptions and report them, without replacing
+windows. The runner records OS/Python and device identity; it does not establish
+isolation from all host activity or causal treatment effects across machines.
+The approval must explicitly fill power_condition and desktop_activity; HOST.json
+copies these declarations, not a claim of independent hardware verification.
+HOST.json also records sys.getswitchinterval(); the runner never tunes it. The
+default Python/GIL scheduling interval can compete with the2 ms arrival-validity
+threshold, especially at high rate. A resulting validity failure remains a
+failure under the fixed protocol, not permission to tune the scheduler or retry.
+No energy samplers or power-savings inference. Any later energy measurement needs
+useful sustained service evidence and its own full-horizon accounting protocol.
+One Mac and differently prioritized requests do not establish independent owners,
+capacity entitlements, feasible withholding or opportunity costs.
+
+Preparation permissions and freeze
+Current permission covers code, public local input copies, build, synthetic
+CPU/native tests and inspecting old outcomes. No new real-query distance/oracle,
+MPS command, service timing or calibration/evaluation before the parent approves
+the exact freeze. --prepare emits authorized:false with source/binary/data hashes.
+Real run requires a separate approval JSON with authorized:true and exact hashes
+and generated plan; no approved file is created by preparation. Parent review must
+also state the host/power condition and resolve any QA issues. Native real mode
+requires that approval file; synthetic mode never opens the corpus or Metal.
+Independent QA must audit arithmetic preservation, scheduled-arrival independence,
+all-request denominators, timeout evidence, statistical scope and freeze checks.

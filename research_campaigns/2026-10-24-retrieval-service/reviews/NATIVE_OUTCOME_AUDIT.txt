@@ -1,0 +1,111 @@
+Independent retained-outcome audit — 24 October 2026
+
+Verdict
+The evidence recount passes; the native development calibration is INVALID under
+its frozen arrival-validity rule. All16 windows have p99 offer jitter above2 ms.
+There is no selected rate and no valid basis to advance to scheduled evaluation,
+energy measurement, automatic retry or outcome-informed parameter changes.
+
+Method and independence
+audit_calibration.py is a new stdlib-only verifier. It does not import the driver,
+call the service, invoke Metal, compute new query distances, collect host timings,
+or modify plans/results/freezes. It independently reads both approved freezes,
+phase/window PLAN.json files, RESULT.json, raw RESPONSES.jsonl, complete native
+stdout/stderr, readiness, separate warmup records, copied qualified answers and
+the already observed October14 qualified RAW file identified by PROVENANCE.json.
+Executed python3 audit_calibration.py and its --verify-only replay successfully.
+Outputs: CALIBRATION_AUDIT.json and CALIBRATION_TABLE.csv. Input SHA256 hashes
+are recorded in the audit JSON. Protocol, code, data, raw outcomes and approvals
+remain untouched by this audit.
+
+Accounting/correctness
+Exactly16 measured windows,200 planned requests each:3,200 planned, offered,
+submitted, correctly delivered responses. Exactly2,867 measured native batches.
+Each window contains every planned request ID once in the declared order; each
+of100 fixed query IDs occurs twice. Paired policies share identical frozen query
+IDs and arrival offsets. Immediate batches are singleton; all bounded batches
+are within the16 cap. No measured response is missing, duplicated or substituted.
+
+Every returned top ten equals the prior qualified canonical answer. Every new
+full-distance SHA256 equals the prior qualified direct-integer/GPU-agreed digest
+for that query. Native records report32,000,000 measured distance comparisons,
+zero invalid dots and zero distance/rank mismatches. This independently verifies
+retained answers/digests and report consistency; it does not recompute32 million
+distances or turn native-reported checks into a separately executed full oracle.
+
+Warmups are separate:20 per window,320 total, all correct and all retained.
+Their reported native comparisons add3,200,000. Warmups never enter the200-request
+window percentiles or deadline denominator. Largest retained warmup client time
+is207.696875 ms; it is not a measured deadline failure. Longest recorded startup
+is182.406584 ms. Native raw stdout reconciles exactly to readiness, all20 warmups,
+then all measured response batches in every window. Native stderr is empty.
+
+Timing and frozen gate
+For every measured request, independently checked exact integer equality:
+ planned time = window start + frozen offset;
+ latency = validated client delivery - planned time;
+ offer jitter = actual offer - planned time.
+Also checked planned <= offered <= submitted <= native start <= native checked
+<= client delivery, assigned batch identity, and common submission/delivery time
+within each batch. Percentiles use independent nearest-rank integer arithmetic,
+not interpolation. All recomputed summaries equal the stored RESULT summaries.
+
+Window p99 arrival jitter ranges3.677819–5.025643 ms: all16 fail the<=2 ms rule.
+Every window stays below the separate10 ms maximum-jitter limit; that does not
+rescue the p99 failure. Thus even the otherwise deadline-successful immediate
+reference windows cannot select a calibration rate under the frozen procedure.
+
+3,144/3,200 measured responses meet100 ms;56 do not. All56 misses occur in:
+ calibration-r20-p0-bounded: 12 misses,188/200 timely,p95=113.945079 ms;
+ calibration-r100-p1-bounded:22 misses,178/200 timely,p95=136.201216 ms;
+ calibration-r200-p1-bounded:22 misses,178/200 timely,p95=131.394416 ms.
+Those three windows fail the separate>=99% deadline gate. The other13 have all
+200 requests timely. Pooled98.25% timeliness is descriptive and does not replace
+per-window gates. No four-pair evaluation or10% improvement success was assessed.
+
+Completion/clock scope
+All16 native windows completed without recorded abort or unrun window. Independently
+recomputed calibration assessment is valid:false,selected_rate:null, exactly as
+SUMMARY.json reports. Startup and dispatched-request times remain inside their
+30-second/2-second caps. The observed first native warmup-start to last checked
+client-delivery span is68.010284416 seconds. The frozen source uses a shared
+600-second phase deadline, but no absolute phase-start epoch was saved. Hence
+this audit cannot independently certify the exact whole-process wall duration;
+the observed span excludes initial startup and final bookkeeping. This recording
+limit does not alter the independently established arrival-validity failure.
+
+Freeze and preserved first attempt
+All eight frozen protocol/source/binary/input hashes match current files. The
+approved native amendment preserves the original plan and all eight hashes.
+Both phase PLAN files match that same frozen plan; inner authorized:false is the
+unchanged design object, while the separate approved wrapper authorizes its run.
+
+calibration_run retains its initial fatal startup: Unified-memory Metal device/
+queue required. Its complete plan has3,200 scheduled requests and its summary
+lists all16 windows unrun; there are no readiness, warmup or measured responses.
+The raw fatal output is preserved. It is not silently replaced or merged with
+the native outcome cohort. reviews/EXECUTION_PERMISSION_AMENDMENT.txt documents
+the separately authorized execution-environment amendment before native outcomes.
+
+Host conditions, hypothesis and interpretation limits
+HOST records Python3.15.0, switch interval0.005 seconds, and no runner adjustment.
+Most observed p99 jitters cluster near5 ms; higher-rate windows also show smaller
+but still-invalid p99 values. Compatibility with the5 ms GIL switch interval is
+an observational hypothesis, not an identified cause. No trace/intervention here
+separates interpreter scheduling, OS timers, desktop activity or other effects.
+Do not describe a tuning/rerun as already justified or performed.
+
+Retained power observations say AC Power while the internal battery discharges:
+59% before the attempts,58% after initial startup failure,56% after native run.
+Observed labels do not prove continuous power-mode stability between snapshots,
+charger sufficiency, wall energy, process-attributable energy or energy savings.
+The host declaration explicitly acknowledges unisolated user/OS activity. The
+invalid, small fixed-order calibration is not a causal treatment-effect estimate
+and cannot support a general batching advantage/disadvantage, service-capacity
+claim, independent-owner pooling result or semantic-relevance claim.
+
+Next decision
+Preserve both attempts and this invalid result. Stop: no selected rate, no
+evaluation/energy run, no retry/tuning under this authorization. Any future
+redesign must be a separately reviewed and authorized study, not a replacement
+of these windows or a relaxation of the failed gate.

@@ -1,0 +1,62 @@
+Worker response to independent review — 24 October 2026
+
+Review read:
+/Users/maxf/.local/state/claude-reviews/2026-10-24-retrieval-service-132d9f32bda4/20261024-114626-62a85de5/review.md
+Review verdict: findings, none invalidating gate logic. This response is the
+implementing worker's verification, not a replacement independent review.
+
+1. Qualified-answer comparison: verified a missing test/schema-validation gap.
+Added validate_expected_answers before draft generation and real launch. It
+requires all100 canonical keys, exactly ten unique integer corpus IDs and
+integer distances in range, no extra neighbor fields, and canonical ordering.
+Tests read the copied existing table only; they compute no new SIFT distances.
+A native tiny synthetic response is independently computed in Python and passed
+through the expected-answer match path; a still-valid but deliberately wrong
+expected distance is rejected. Tests also reject missing keys, float distances,
+misordering, bool IDs and unknown fields.
+
+The old PREPARATION_CHECKS assertion was an executed copy-provenance equality
+against capture/p01_b1/RAW.json from the October14 qualification, not a claim that
+the new service produced identical MPS answers. That equality was checked again
+without distance calculations. Renamed and expanded the metadata to avoid this
+ambiguity. The review packet did not include the copied table or the one-off
+copy-verification command, so its inability to verify those facts was legitimate;
+the underlying copy check was not fabricated or a real-MPS outcome claim.
+
+2. Timeout/arrival errors: verified robustness gaps. Backend.receive now converts
+queue.Empty to a descriptive TimeoutError with the wait limit. Arrival-thread
+exceptions are queued and checked by the main dispatcher and at<=50ms intervals
+while awaiting a backend response. Failure aborts preserve every planned request,
+including submitted, offered-but-unserved and future-unoffered requests. A test
+injects an arrival failure while a response is pending and checks all three
+statuses and the complete denominator. Another tests the timeout message.
+
+3. GIL concern: legitimate validity risk, not an observed outcome or code bug.
+No switch-interval tuning performed. HOST records sys.getswitchinterval() and
+runner_changes_switch_interval:false. Draft host power/desktop declarations are
+left null; an approved freeze must explicitly fill them. The protocol states
+that host scheduling can violate the frozen2ms jitter criterion and that such
+failure does not authorize tuning/retry. No metric/rate/deadline changed.
+
+4. Build evidence: an empty compiler log means there were no compiler messages,
+not that compilation did not run. Existing successful build/tool exit had been
+observed; initial failed logs remain present. Rebuilt unchanged native sources
+and separately recorded exact argv,cwd,source hashes and process exit in
+logs/build-qa-execution.json, with stdout/stderr in logs/build-qa.log. No compiler
+output was manufactured to make an empty success log look nonempty.
+
+5. Phase budget: the delivered source ALREADY shared phase_deadline through
+startup,warmup and run_window; the independent review recognized this. The
+parent's concern came from an earlier source and was explicitly withdrawn.
+Added remaining_timeout to centralize caps and remove tiny expired-startup/race
+allowances, plus tests for remaining startup/warmup limits and a shared deadline
+expiring before a future offer. No600-second reset bug was present in the reviewed
+delivery. Process termination/log cleanup can extend wall time after expiration;
+the protocol now says this expressly. Slow startup can still invalidate a phase.
+
+Verification/status
+See PREPARATION_CHECKS.json and its named execution records for current source,
+binary, draft and test hashes. Metrics, treatment policies, rates, schedule seeds,
+data and native arithmetic are unchanged. DRAFT_CALIBRATION_QA.json is unsigned;
+all prior unsigned drafts are stale. No real-query oracle, MPS command, calibration
+or evaluation ran. Parent verification/collection authorization remains pending.
