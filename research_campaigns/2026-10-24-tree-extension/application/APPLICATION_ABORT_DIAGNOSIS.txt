@@ -1,0 +1,165 @@
+Arrival qualification abort: independent static diagnosis
+24 October 2026 — frozen run; no repair or repeat authorized
+
+Scope
+This audit reads the saved PLAN/EPOCH/RAW/RESULT files, COLLECTION_ABORT.json,
+the approved frozen source and protocol, and installed Python standard-library
+source. It does not execute/import the harness, perform physical probes/tests,
+collect timing, inspect live processes, alter the freeze, or run serving work.
+All paths below are relative to this application directory unless absolute.
+
+Verdict
+The qualification is incomplete and disqualified. The cooperative 80-second
+deadline was not a hard wall-time limit: blocking calls and cleanup can prevent
+control from returning to the deadline checks. The protocol's below-90-second
+claim was therefore not enforced by this implementation. An independent external
+supervisor is required for the promised bounded collection, alongside correcting
+the cleanup/control lifecycle. No rerun is justified by this diagnosis alone.
+
+The recorded stopping point is substantially later than merely starting the
+second process. BOTH first cases received all 50 offers and a final producer
+done message. Only the first case published RESULT.json. The second process case
+stalled somewhere after the final receive/logging boundary and before its RESULT
+publication. The exact blocking operation is unobserved; spawn failure or offer
+transport failure is not an adequate description of the evidence.
+
+Frozen source and denominator
+arrival_qualification.py SHA256:
+379c54559b9e5bb6ccd2c30bc8ba6ff2df2acae9e634b84ea8907971ba6f0af3
+This matches APPROVED_QUALIFICATION.json's source hash. The phase PLAN contains
+48 cases and 2,400 planned requests. There are exactly two case directories,
+each with a 50-request absolute-time PLAN and 51 RAW records (50 offers, one done).
+Only r0-rate20-idle-thread has RESULT.json. No SUMMARY.json exists. The other
+46 planned cases have no case directory and were not reached. The 2,400-request
+planned denominator remains; 100 received offers are not 2,400 completed trials.
+
+Observed sequence, using stored monotonic nanoseconds
+EPOCH.json: consumer PID 67856, phase epoch 3670864390765541,
+UTC 2026-10-24T18:54:17.343774+00:00, Python 3.15.0, macOS 26.6.2 arm64,
+recorded switch interval 0.005 seconds; runner_adjusted_switch_interval:false.
+
+1. r0-rate20-idle-thread, scheduler PID 67856:
+   RAW lines 1–50 contain each request ID 0–49 exactly once.
+   RAW line 51: done, failure:null, all 50 producer rows have admitted_ns.
+   Its recorded receive time is 3670866908733875, phase +2.517968334 seconds.
+   RESULT exists: 50 planned/admitted/received, no operational failure, but
+   admission p99=max=5,951,299 ns, exceeding the fixed 2 ms p99 gate.
+   This individual completed case fails qualification already.
+
+2. r0-rate20-idle-process, ready scheduler PID 68039:
+   PLAN case start 3670867021724958; last planned offer 3670869445308298.
+   RAW lines 1–50 contain each request ID 0–49 exactly once.
+   RAW line 51: done, failure:null, all 50 producer rows have admitted_ns.
+   Its recorded receive time is 3670869445801666, phase +5.055036125 seconds.
+   No RESULT exists. Startup, configuration transfer, all planned offers and
+   final producer-message transfer demonstrably progressed. Final case
+   reconciliation/publication did not finish; do not label it a finalized
+   successful case merely because the RAW producer record is complete.
+
+3. COLLECTION_ABORT.json records root's observation at 18:55:57 UTC and elapsed
+   100.147570334 seconds, followed by SIGTERM and tool exit 143. The exact signal
+   dispatch timestamp was not recorded. Hence 95.092534209 seconds elapsed from
+   the last raw receive timestamp to the recorded overrun observation, not
+   necessarily to signal dispatch. The same abort record reports five leaked
+   semaphore objects at shutdown and a scoped post-stop check with no surviving
+   driver/spawn/resource-tracker processes. These termination/process facts are
+   root's recorded observations, not new live checks by this audit.
+
+Both reached cases are idle. The controlled python_cpu thread was never started
+in either. A controlled-load GIL contention explanation cannot account for this
+particular stall. The recorded host conditions do not establish an otherwise
+idle machine or a causal OS/interpreter/power explanation.
+
+What the source proves about the deadline failure
+Source line references are to the approved arrival_qualification.py.
+
+* Lines 279–283 compute the shared deadline and check it before each run_case.
+  Lines 199–201 and 212–223 check deadlines while polling readiness/data.
+  These checks require control to return to those loops. No independent timer
+  interrupts a blocking operation or supervises process cleanup.
+
+* worker.start() at line 194 precedes creation of the startup deadline at 199.
+  A blocked spawn/start is not bounded by the claimed two-second readiness cap.
+  This is a general defect, not the observed second-case stopping point: its
+  ready message and all offers are saved.
+
+* parent.recv() at 202, parent.send() at 211, receiver.recv_bytes() at 217,
+  and parent.recv() at 223 are blocking framed IPC calls. A successful poll
+  establishes readable data, not necessarily availability of the complete
+  frame. A deadline checked before a blocking full-frame read cannot interrupt
+  a partial-message stall. Producer control sends and transport sends at
+  115/119/121/123 similarly have no independent bound. These are possible
+  deadline escape paths generally; complete second-case RAW transport means
+  they do not identify the observed finalization stall.
+
+* Most directly relevant, line 227 calls stop.set() BEFORE the .5-second joins
+  at 230/231/234. stop is a multiprocessing.Event (line 189), so set() is not
+  simply a local Boolean assignment. There is no timeout parameter or separate
+  watchdog around it. The finite joins do not bound operations before reaching
+  them. Cleanup also does not re-check the phase deadline. File creation,
+  serialization, buffered flush/close and RESULT publication are likewise not
+  made interruptible by the cooperative loop checks (24–26, 210, 213–224, 252).
+
+* SUMMARY is only saved after run_case returns (281–294). A blocked finalization
+  therefore prevents the very failure summary that would describe the overrun.
+  Preserved phase PLAN and RAW are useful, but are not a completed abort report
+  automatically emitted by the runner. Root supplied the external abort record.
+
+PROTOCOL.txt lines 53–61 promise a shared 80-second phase budget with roughly
+1.5 seconds of bounded cleanup and a collection below 90 seconds. Those bounds
+cover only the explicitly timed waits/joins when execution reaches them; they
+do not imply a total wall-time bound. This is an implementation/protocol defect,
+not evidence that the timing threshold should be relaxed.
+
+Specific cleanup hazard: plausible, not confirmed at runtime
+The scheduler starts a daemon cancellation relay that calls stop.wait() on the
+shared multiprocessing.Event (111–113). Its main path sends done and returns;
+finally sets only the local timed_stop and closes connections (120–127). It
+neither joins the relay nor acknowledges that the shared waiter has departed.
+In process mode, normal process exit can therefore race the parent's stop.set().
+
+The installed Python 3.15.0 source at
+/opt/homebrew/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/multiprocessing/synchronize.py
+shows Event.set acquiring a Condition and calling notify_all (348–352). Condition
+notify waits without a timeout for each recorded sleeper's acknowledgement
+(297–304); Condition.wait records and acknowledges sleepers at 265–278. Thus
+set() can block waiting for a registered waiter that cannot acknowledge after
+its process has exited, or waiting for a shared lock. A daemon relay left in this
+lifecycle is a concrete unsafe dependency in cancellation/cleanup. It also shows
+why merely adding a timeout to worker.join cannot repair the earlier hazard.
+
+This provides a source-supported hypothesis consistent with the last recorded
+done message and absent RESULT. It is NOT proof that line 227 was the blocking
+instruction, that the child had already exited then, or that a particular Python
+or macOS bug occurred. No stack trace, lifecycle checkpoints or process-state
+snapshot at the stall was captured. The semaphore shutdown warning does not
+locate the hang or prove its cause. Other finalization or I/O stalls remain
+unexcluded. The reviewed local standard-library source documents the mechanism;
+it is not a captured call stack from the stopped runner.
+
+Required next repair gate, without making edits here
+1. An external supervisor must own the elapsed deadline independently of the
+   runner's GIL, shared Events and pipes. It must stop the controlled runner and
+   descendants as a group, allow only a bounded graceful interval, then escalate
+   if needed. Its deadline must leave room for termination within the agreed
+   total collection ceiling. It must not block waiting for the runner's cleanup
+   acknowledgement. Record observation/signal times and preserve partial logs;
+   the supervisor should emit the abort manifest even if the runner never returns.
+   This is practical wall-time enforcement under normal OS scheduling, not an
+   absolute guarantee against an unresponsive operating system.
+2. Repair the cancellation/child-exit lifecycle so completion cannot strand a
+   shared synchronization waiter. Avoid unbounded shared Event.set in the only
+   path to terminate/join; make startup, control exchange and transport failure
+   paths explicitly bounded. External supervision contains failures but does
+   not by itself make this lifecycle safe or explain the recorded stall.
+3. Add durable, sparse lifecycle checkpoints around completion receipt, cleanup
+   entry, cancellation signalling, worker exit/join and RESULT publication. These
+   locate a future failure without treating a missing RESULT as missing offers.
+   Use deterministic failure-path checks and focused independent review before
+   any newly authorized physical qualification. Do not tune rates, seeds,
+   thresholds or switch intervals in response to this aborted observation.
+
+No mode/load group qualifies from this phase. There is no serving, energy,
+pooling, whole-host causal, process-placement performance or repaired-protocol
+success claim. The original one-run authorization is consumed; this note
+authorizes no repeat and changes no frozen input or outcome.

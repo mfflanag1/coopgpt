@@ -1,0 +1,646 @@
+\section{The universal resource-dimension frontier}
+\label{dim:section}
+
+Here the technology may be any finite-valued function
+$F:\R_+^d\to\R_+$ that is coordinatewise nondecreasing, concave, and
+positively homogeneous of degree one. In particular, $F(0)=0$.
+Continuity between different support faces is not assumed.
+The owners, their eligibility, and their finite coordinatewise endowment
+bounds are fixed throughout each mechanism. All real reports in those
+boxes, including zero reports, are in its domain.
+
+Write $D_d$ for the supremum, over these technologies and fixed finite
+owner models, of the infimal funding factor for nonnegative,
+coalition-covering TCWM payments. Define $D_d^{\mathrm{OUT}}$ in the same
+way with full coalition outside-production protection. Write $Y_S(b)=\sum_{i\in S}y_i(b)$. Thus coverage means
+$Y_S(b)\ge F(\sum_{i\in S}b_i)$ for every coalition, and full OUT means
+\begin{equation}\label{dim:out-contract}
+ Y_S(b)-Y_S(b-w_S)\ge
+ F\left(\sum_{i\in S}w_i\right),
+ \qquad 0\le w_i\le b_i\quad(i\in S).
+\end{equation}
+TCWM replaces the right-hand side by zero. A coalition may contain members
+whose reports do not change. A funding factor $K$ means
+$\sum_i y_i(b)\le K F(\sum_i b_i)$ at every report, including those with
+zero production. These definitions do not presume attainment of a
+particular model's infimal factor.
+
+\begin{theorem}[Sharp universal dimension factors]\label{dim:main}
+For every integer $d\ge1$,
+\begin{equation}\label{dim:frontiers}
+ D_d=\frac{d+1}{2},\qquad
+ D_d^{\mathrm{OUT}}=1+c(d-1),
+ \qquad c\bigl(2-e^{-1/c}\bigr)=1,
+\end{equation}
+where $c$ is the unique solution in $(1/2,1)$
+($c\simeq0.5430633898$).
+The upper bounds use explicit payment formulas for arbitrary fixed mixed
+owners. At a report with exactly $k\ge1$ active resource coordinates they
+give the stronger respective factors $(k+1)/2$ and $1+c(k-1)$; at the zero
+report they pay zero. The matching lower bounds already hold for
+$F(C)=\min_{1\le j\le d}C_j$ on fixed finite endowment boxes, uniformly
+over the number of actual owners.
+\end{theorem}
+
+The sharpness is a worst-case statement across finite owner models.
+It does not assert the same lower bound for every technology or every fixed
+owner count. The lower bounds impose no anonymity, continuity,
+measurability, homogeneity, or price representation on the original
+mechanisms. The proof below constructs regular prices only as a consequence
+of assuming a uniform bound for all finite owner models.
+
+\subsection{Payment-only upper bound and a finite-owner lower bound}
+
+For aggregate report $C=\sum_i b_i$, let $I=\{j:C_j>0\}$ and $k=|I|$.
+For $j\in I$ define the independent-uniform face average
+\begin{equation}\label{dim:uniform-rule}
+ A_j(C)=\int_{[0,1]^{I\setminus\{j\}}}
+ F\left(C_j e_j+\sum_{\ell\in I\setminus\{j\}}u_\ell C_\ell e_\ell\right)
+ \,du_{-j},\qquad
+ y_i(b)=\sum_{j\in I}\frac{b_{ij}}{C_j}A_j(C).
+\end{equation}
+An integral over an empty set of coordinates is its integrand; all payments
+are zero when $I$ is empty.
+
+\begin{proposition}\label{dim:uniform-upper}
+The rule \eqref{dim:uniform-rule} is nonnegative, covers every coalition,
+is TCWM at all real reports, and has total payment at most
+$(k+1)F(C)/2$ when $k\ge1$.
+\end{proposition}
+
+\begin{proof}
+For coalition aggregate $a$ and fixed outsider aggregate $o$, its
+coordinate-$j$ payment is
+\[
+ \frac{a_j}{a_j+o_j}A_j(a+o).
+\]
+Both nonnegative factors are nondecreasing under any coordinatewise
+increase of $a$. If a new coordinate becomes active, its own contribution
+is nonnegative. In each old face average, integrating over that newly
+active coordinate cannot lower the old integrand, whose coordinate was
+identically zero. This proves finite TCWM, including comparisons between
+different support faces.
+
+For coverage, work in the $k$-dimensional active face. A finite concave
+function is locally Lipschitz and differentiable almost everywhere on its
+relative interior. At such a point $x$, its gradient $g(x)$ is nonnegative,
+and homogeneity gives $g(x)\cdot x=F(x)$. Moreover
+\begin{equation}\label{dim:gradient-majorant}
+ g(x)\cdot z\ge F(z)
+ \quad\text{for every nonnegative $z$ supported on this face.}
+\end{equation}
+This includes boundary $z$: for $0<t<1$, apply the supporting inequality
+at $x$ to $(1-t)x+tz$, and combine it with concavity along the same segment.
+After subtracting $F(x)$ and dividing by $t$, Euler's identity gives
+\eqref{dim:gradient-majorant}, without taking a boundary-continuity limit.
+
+Let $U_j$ be independent uniform random variables. For almost every fixed
+$U_{-j}$, one-dimensional absolute continuity on $[\varepsilon,1]$ gives
+\[
+ C_j\int_\varepsilon^1
+ \partial_jF(u_jC_j,U_{-j}C_{-j})\,du_j
+ =F(C_j,U_{-j}C_{-j})-F(\varepsilon C_j,U_{-j}C_{-j})
+ \le F(C_j,U_{-j}C_{-j}).
+\]
+The derivatives are nonnegative. Letting $\varepsilon\downarrow0$ and
+using Tonelli therefore yields
+$\E g_j(U\mathbin{\odot}C)\le A_j(C)/C_j$.
+Averaging \eqref{dim:gradient-majorant} proves
+$\sum_jz_jA_j(C)/C_j\ge F(z)$. Taking $z$ to be the aggregate of any
+actual coalition proves coverage.
+
+Finally, two applications of concavity give
+\begin{align*}
+ \sum_{j\in I}A_j(C)
+ &\le\sum_{j\in I}
+ F\left(C_je_j+\tfrac12\sum_{\ell\in I\setminus\{j\}}C_\ell e_\ell\right)\\
+ &\le kF\left(\frac{k+1}{2k}C\right)
+ =\frac{k+1}{2}F(C).
+\end{align*}
+For $k=1$ the same formula pays exactly $F(C)$; the empty face is immediate.
+\end{proof}
+
+\begin{proposition}[A finite obstruction]\label{dim:finite-lower}
+Let $d\ge2$ and $s\ge2$ be integers. On $n=(d-1)s+1$ fixed owners,
+each eligible for every resource and each with endowment box $[0,1]^d$,
+the technology $F(C)=\min_jC_j$ forces every nonnegative,
+coalition-covering TCWM rule to have funding factor at least
+\begin{equation}\label{dim:finite-bound}
+ 1+\frac{(s-1)((d-1)s-1)}{2s^2+(d-3)s-1}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Suppose the factor is $\kappa$, and put $\delta=\kappa-1\ge0$.
+Average the rule over all permutations of the owner labels and resource
+labels. The fixed domain and technology are invariant under these finite
+groups. Nonnegativity, every coverage and TCWM inequality, and the funding
+bound are linear and hence are preserved. It suffices to consider this
+invariant rule; symmetry is not an assumption on the original mechanism.
+
+At profile $P_0$, put $s$ pure unit reporters in each resource group
+$1,\ldots,d-2$, one pure unit reporter in each of the last two groups,
+and leave the other $s-1$ actual owners at zero reports. Let the respective
+per-owner payments be $a,b,w$, where $w\ge0$. Selecting one owner from
+each resource group produces one, and grand production is one. Thus
+\[
+ (d-2)a+2b\ge1,\qquad
+ (d-2)sa+2b+(s-1)w\le\kappa.
+\]
+Subtracting gives $(d-2)(s-1)a+(s-1)w\le\delta$, whence
+\begin{equation}\label{dim:b-bound}
+ 2b\ge1-\frac{\delta}{s-1}.
+\end{equation}
+When $d=2$ the terms involving the absent first groups are zero.
+
+At $P_1$, the $s-1$ zero reporters restore a pure unit of resource $d-1$.
+TCWM applied to these owners together with the original resource-$(d-1)$
+owner shows that this group's new payment is at least $b+(s-1)w\ge b$.
+The first $d-1$ groups are now symmetric. If $S$ is their union, then
+$Y_S(P_1)\ge(d-1)b$.
+
+At $P_2$, every member of this same coalition $S$ restores its report to
+one in each of resources $1,\ldots,d-1$ and zero in resource $d$.
+These are feasible increases within the original unit boxes. Leave the
+last-resource owner unchanged. Write $m=(d-1)s$. All $m$ members of $S$
+now have the same payment $p$, and write $q$ for the last owner's payment.
+One member of $S$ together with that owner produces one, so
+$p+q\ge1$ while $mp+q\le\kappa$. Consequently
+\[
+ (d-1)b\le Y_S(P_1)\le Y_S(P_2)=mp
+ \le\frac{m}{m-1}\delta.
+\]
+Combining this with \eqref{dim:b-bound} and rearranging gives
+\eqref{dim:finite-bound}. All denominators are positive. All $n$ owners
+remain present throughout; in particular, the proof never assumes that a
+zero reporter receives zero at a positive-output profile.
+\end{proof}
+
+Letting $s\to\infty$ in \eqref{dim:finite-bound} and using
+Proposition~\ref{dim:uniform-upper} proves $D_d=(d+1)/2$ for $d\ge2$.
+For $d=1$, homogeneity makes $F$ linear on its ray; linear payments and
+grand-coalition coverage give $D_1=1$.
+
+\subsection{The logarithmic rule for full outside production}
+
+Put $t_0=1-e^{-1/c}$. The defining equation for $c$ gives
+$c(1+t_0)=1$. The function $h(x)=x(2-e^{-1/x})$ has
+\[
+ h'(x)=2-e^{-1/x}(1+1/x)>1\quad(x>0),
+\]
+and $h(1/2)<1<h(1)$, proving the asserted existence and uniqueness.
+Let $U$ have density
+\begin{equation}\label{dim:log-law}
+ f_U(u)=\frac{c}{1-u}\ind_{(0,t_0)}(u).
+\end{equation}
+It has mass $-c\log(1-t_0)=1$ and mean
+$c[-t_0-\log(1-t_0)]=c$.
+Use one common scalar within each face average:
+\begin{equation}\label{dim:log-rule}
+ H_j(C)=\E F\left(C_je_j+U\sum_{\ell\ne j}C_\ell e_\ell\right),
+ \qquad y_i(b)=\sum_{j:C_j>0}\frac{b_{ij}}{C_j}H_j(C).
+\end{equation}
+Absent-coordinate terms are zero. The independent-uniform and common-scalar
+averages are different rules.
+
+\begin{lemma}[Two scalar inequalities]\label{dim:scalar}
+For positive $x\in\R_{++}^k$, $k\ge2$,
+\begin{equation}\label{dim:ray-lemma}
+ \sum_{j=1}^k\frac{\E\min\{x_j,U\min_{\ell\ne j}x_\ell\}}{x_j}\ge1.
+\end{equation}
+If $H:[0,1]\to\R_+$ is nondecreasing and concave and $0\le t\le t_0$,
+then, with derivatives taken almost everywhere,
+\begin{equation}\label{dim:hinge-lemma}
+ \int_0^{t_0}[H(u)-uH'(u)]\,du
+ =2\int_0^{t_0}H(u)\,du-t_0H(t_0)
+ \ge t_0H(t)-tH(1).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For \eqref{dim:ray-lemma}, choose one smallest coordinate $m$, let $S$
+be the second-smallest coordinate, counting multiplicity, and put $t=m/S$.
+The smallest coordinate contributes
+\[
+ q(t)=\E\min\{1,U/t\}
+ =\begin{cases}
+ 1-c-c(1-t)\log(1-t)/t,&0<t\le t_0,\\
+ c/t,&t_0\le t\le1.
+ \end{cases}
+\]
+A second-smallest coordinate contributes $ct$, and all other terms are
+nonnegative. If $t\le t_0$, then
+$q(t)+ct-1=c(1-t)[-1-\log(1-t)/t]\ge0$.
+If $t\ge t_0$, then $q(t)+ct=c(t+t^{-1})\ge2c>1$.
+
+For \eqref{dim:hinge-lemma}, a possible downward jump at zero may be
+filled with the right limit. This does not change the integral and only
+strengthens the assertion when $t=0$. A finite nondecreasing concave
+function is continuous from the left at one: concavity applied to a segment
+ending at one proves this by letting the segment parameter tend to one.
+After filling zero, therefore, $H$ is continuous on $[0,1]$.
+The integral identity follows by integration by parts from a positive
+endpoint and then passage to zero; boundedness gives $uH(u)\to0$.
+
+A continuous piecewise-linear nondecreasing concave function is a
+nonnegative constant plus a nonnegative linear function and a positive
+linear combination of hinges $\min\{u,s\}$, $0<s\le1$.
+For a constant $A$, the residual left side minus right side of the
+inequality is $tA$; for $Bu$ it is $tB(1-t_0)$.
+For the hinge with parameter $s$, the residual is respectively
+\[
+ \begin{cases}
+ s(t-s),&s\le t,\\
+ (s-t)(t_0-s),&t<s<t_0,\\
+ t(s-t_0),&s\ge t_0.
+ \end{cases}
+\]
+Each is nonnegative. Linear interpolation on increasingly fine grids
+approximates a continuous concave function uniformly by such concave
+piecewise-linear functions. The integral identity, involving only values
+of $H$, passes the inequality to the limit.
+\end{proof}
+
+\begin{proposition}\label{dim:out-upper}
+The rule \eqref{dim:log-rule} satisfies full OUT and coalition coverage at
+every real report, and its total payment is at most
+$[1+c(k-1)]F(C)$ when $k\ge1$.
+\end{proposition}
+
+\begin{proof}
+Nonnegativity is immediate. As in the proof of
+Proposition~\ref{dim:uniform-upper}, the coalition's coordinate-$j$
+payment is the product of its nondecreasing share $a_j/(a_j+o_j)$ and
+the nondecreasing face value $H_j(a+o)$. The same formula also shows that
+an activated coordinate cannot lower any old contribution. Thus finite
+TCWM holds, including across support faces. Two Jensen inequalities give
+\[
+ \sum_jH_j(C)
+ \le\sum_jF\left(C_je_j+c\sum_{\ell\ne j}C_\ell e_\ell\right)
+ \le[1+c(k-1)]F(C).
+\]
+
+First suppose $F$ is smooth on the positive relative interior of every
+face. Fix a positive aggregate $C$ in its active face, coalition holdings
+$0\le a\le C$, and a nonnegative restoration direction $z$ on this face.
+Write $\alpha_j=a_j/C_j$ and
+$v_j(u)=C_je_j+u\sum_{\ell\ne j}C_\ell e_\ell$.
+Differentiating while both $a$ and $C$ increase in direction $z$ gives
+\begin{align}
+ D Y_S[z]&=\sum_j\{(1-\alpha_j)L_j(z)+\alpha_j M_j(z)\},
+ \label{dim:holding-derivative}\\
+ L_j(z)&=\frac{H_j(C)}{C_j}z_j,\nonumber\\
+ M_j(z)&=\E\left[U\nabla F(v_j(U))\cdot z
+ +(1-U)\partial_jF(v_j(U))z_j\right].\nonumber
+\end{align}
+The gradients are nonnegative and satisfy
+\eqref{dim:gradient-majorant}, so $L_j\ge0$ and $M_j\ge cF(z)$.
+The expression is affine in each holding fraction $\alpha_j$.
+It is therefore enough to prove $DY_S[z]\ge F(z)$ at every corner
+$\alpha\in\{0,1\}^k$.
+
+The result is immediate if $F(z)=0$. For $k=1$ the technology is linear
+on the active ray, and the assertion follows directly; assume $k\ge2$.
+Initially suppose $z$ is strictly
+positive on the active face. If at least two holding fractions are one,
+the derivative is at least $2cF(z)\ge F(z)$.
+If all are zero, put $x_j=C_j/z_j$. Monotonicity and homogeneity imply
+\[
+ \frac{F(v_j(u))}{F(z)}
+ \ge\min\{x_j,u\min_{\ell\ne j}x_\ell\}.
+\]
+Equation~\eqref{dim:ray-lemma} yields $\sum_jL_j(z)\ge F(z)$.
+
+It remains to consider a corner with only $\alpha_j=1$.
+Normalize $G(x)=F(z\mathbin{\odot}x)/F(z)$, so $G(\mathbf1)=1$.
+Common rescaling of $x=C/z$ leaves the normalized directional expressions
+in \eqref{dim:holding-derivative} unchanged. We may therefore arrange
+$\min_{\ell\ne j}x_\ell=1$. Put $t=x_j$ and $V=G(x)$.
+Every face vector is at least $u x$, so the other coordinate terms satisfy
+\[
+ \sum_{\ell\ne j}\frac{L_\ell(z)}{F(z)}
+ \ge cV\sum_{\ell\ne j}\frac1{x_\ell}\ge cV.
+\]
+The first part of $M_j/F(z)$ is at least $c$.
+If $V\ge t_0$, their sum is at least $c(1+t_0)=1$.
+If $t\ge1$, monotonicity gives $V\ge1$, so this case is already covered.
+The only remaining case is $0<t\le V<t_0$.
+
+Set $H(u)=G(te_j+u\sum_{\ell\ne j}x_\ell e_\ell)$.
+Then $H(t)\ge t$, $H(1)=V$, and Euler's identity gives
+\[
+ \partial_jG(te_j+u x_{-j})
+ =\frac{H(u)-uH'(u)}{t}.
+\]
+Because $(1-u)f_U(u)=c$ on $(0,t_0)$, the second part of $M_j/F(z)$
+is at least
+\[
+ \frac{c}{t}\int_0^{t_0}[H(u)-uH'(u)]\,du
+ \ge c(t_0-V)
+\]
+by \eqref{dim:hinge-lemma}. The singleton corner therefore contributes at
+least $c+c(t_0-V)+cV=1$. This completes every holding corner.
+
+Differentiation under the expectation is justified locally by Euler's
+identity and nonnegative gradients:
+\[
+ C_j\partial_jF(v_j(u))\le F(C),\qquad
+ uC_\ell\partial_\ell F(v_j(u))\le F(C)\quad(\ell\ne j).
+\]
+These bounds dominate the differentiated integrands on every compact
+positive capacity set, including as $u\downarrow0$.
+For directions with zero coordinates, apply the proved inequality to
+$z+\eta\mathbf1_I$ and let $\eta\downarrow0$. The derivative expression
+is a finite linear function of its direction, while monotonicity gives
+$F(z+\eta\mathbf1_I)\ge F(z)$. No continuity of $F$ across faces is used.
+
+For a finite restoration $z$, take $a(s)=a(0)+sz$ and
+$C(s)=o+a(s)$, $0\le s\le1$. For every $s>0$ its active face is the
+fixed face of $C(1)$. The derivative inequality integrates on
+$[\varepsilon,1]$ to
+$Y_S(1)-Y_S(\varepsilon)\ge(1-\varepsilon)F(z)$.
+Finite TCWM gives $Y_S(\varepsilon)\ge Y_S(0)$ even if the initial
+activation produces a payment jump. Letting $\varepsilon\downarrow0$
+proves full OUT for smooth $F$. A one-coordinate face is handled by its
+linear formula and the zero face is immediate.
+
+Finally, choose a smooth probability density for $Z$ supported in
+$[-1,1]^d$ and let
+\[
+ F_\varepsilon(x)=\E_Z
+ F\bigl(\operatorname{diag}(e^{\varepsilon Z_j})x\bigr).
+\]
+This preserves nonnegativity, monotonicity, concavity, and degree-one
+homogeneity. Convolution in logarithmic coordinates makes it smooth on
+every positive relative face. Monotonicity and homogeneity give the
+pointwise bounds
+\begin{equation}\label{dim:smoothing-bound}
+ e^{-\varepsilon}F(x)\le F_\varepsilon(x)
+ \le e^\varepsilon F(x)
+ \qquad\text{on every face.}
+\end{equation}
+The smooth finite OUT inequalities thus pass to the limit, since
+\eqref{dim:smoothing-bound} also bounds each face average and each
+nonnegative owner payment multiplicatively. This proves the claim for the
+entire stated class, including downward boundary jumps.
+Restoring a coalition's entire bundle from its zero report then proves
+coverage: its initial payment under \eqref{dim:log-rule} is zero.
+\end{proof}
+
+\subsection{Why arbitrary finite-owner rules satisfy the matching OUT lower bound}
+
+The remaining argument concerns only the continuous technology
+$F_r(C)=\min_{1\le j\le r}C_j$. Its continuity imposes no restriction on
+the broader class used for the upper bound. We give the reduction in full
+to distinguish a fixed finite-owner impossibility from a restriction to
+price mechanisms.
+
+\begin{lemma}[Prices forced by bounded finite-owner models]
+\label{dim:price-reduction}
+Fix $r\ge2$. Suppose that, for every $N$, the model with $N$ fixed
+pure-resource owners of each of the $r$ types, each with report interval
+$[0,1]$, admits a nonnegative, coalition-covering, full-OUT rule funded by
+$\kappa F_r$. Then there are nonnegative degree-zero homogeneous prices $p(C)$ on
+$\R_{++}^r$, locally Lipschitz there, such that
+\begin{align}
+ C\cdot p(C)&\le\kappa F_r(C),\label{dim:price-budget}\\
+ a\cdot p(C)&\ge F_r(a)\qquad(0\le a\le C),
+ \label{dim:price-coverage}\\
+ a\cdot p(C)&\ge(a-u)\cdot p(C-u)+F_r(u)
+ \qquad(0\le u\le a\le C).
+ \label{dim:price-out}
+\end{align}
+When an aggregate has a zero coordinate, all its prices may be set to
+zero and these statements still hold at every nonnegative real profile.
+The prices can also be chosen symmetric under resource permutations.
+\end{lemma}
+
+\begin{proof}
+For each $N$, average its rule over permutations within each resource
+type. At a binary profile with $m_j$ active unit reporters of type $j$,
+write $\pi_j^{(N)}(m)$ for an active owner's payment. For integer
+$0\le u\le a\le m$, coverage, budget, and the OUT comparison that
+turns $u_j$ coalition members of type $j$ completely off give
+\begin{align}
+ m\cdot\pi^{(N)}(m)&\le\kappa F_r(m),\nonumber\\
+ a\cdot\pi^{(N)}(m)&\ge F_r(a),\label{dim:count-array}\\
+ a\cdot\pi^{(N)}(m)&\ge
+ (a-u)\cdot\pi^{(N)}(m-u)+F_r(u).\nonumber
+\end{align}
+Inactive reporters may have positive payments. We have only dropped their
+nonnegative payments from the budget and from the right side of the last
+inequality. Set an unused coordinate $\pi_j(m)$ to zero when $m_j=0$.
+For $m_j>0$ the coordinate bound is
+$0\le\pi_j^{(N)}(m)\le\kappa F_r(m)/m_j$, independently of $N$.
+A diagonal subsequence as $N\to\infty$ therefore gives one array
+$\pi(m)$ satisfying \eqref{dim:count-array} for all integer count vectors.
+Every finite group of these constraints is available once $N$ exceeds
+its largest count. The set $\mathcal C$ of arrays obeying these constraints
+and coordinate bounds is nonempty, compact in the countable product
+topology, and convex.
+
+For a positive integer $h$ let $(T_h\pi)(m)=\pi(hm)$.
+Multiplying all counts in \eqref{dim:count-array} by $h$ and dividing by
+$h$ shows that $T_h$ preserves $\mathcal C$. These linear maps commute.
+For the first $L$ primes $\ell_1,\ldots,\ell_L$, average $T_h\pi$ over
+$h=\prod_{j=1}^L\ell_j^{e_j}$, $0\le e_j<L$.
+For a fixed prime $\ell_j$, shifting its exponent changes this average
+by at most $\kappa F_r(m)/(Lm_v)$ in coordinate $(m,v)$, by cancellation
+of the interior terms. A diagonal subsequential limit as $L\to\infty$
+is fixed by every prime dilation, hence by every positive integer dilation.
+
+For rational $C>0$ define $p(C)=\pi(LC)$, where $L$ clears the
+denominators. Integer-dilation invariance makes this independent of $L$
+and homogeneous under positive rational scaling. Clearing the
+denominators of $C,a,u$ in \eqref{dim:count-array} proves
+\eqref{dim:price-budget}--\eqref{dim:price-out} for rational data.
+
+Regularity follows from finite comparisons, rather than from any property
+of the original rules. For rational $C,C'>0$, put
+$\lambda=\min_j C_j/C'_j$ and $v=C-\lambda C'\ge0$.
+At aggregate $\lambda C'$, give a coalition all of resource $j$ and no
+other resource; then restore $v$ to that same coalition. TCWM, which is
+implied by OUT, and rational homogeneity yield
+\begin{equation}\label{dim:relative-comparison}
+ p_j(C')-p_j(C)
+ \le\frac{v\cdot p(C)}{\lambda C'_j}.
+\end{equation}
+On any compact box $[a,b]^r$ with $a>0$, the coordinate prices are bounded
+by $\kappa b/a$, the denominator is at least $a^2/b$, and
+\[
+ 0\le v_\ell\le\|C-C'\|_\infty(1+b/a).
+\]
+Interchanging $C,C'$ supplies the opposite inequality. Thus $p$ is
+Lipschitz on the rational points of each such box and has a unique locally
+Lipschitz extension to the positive orthant. Its inequalities and
+homogeneity pass to real data by continuity. If coalition holdings or
+withheld amounts have zero coordinates, approximate retained holdings $a-u$, withdrawals $u$, and outsider
+holdings $C-a$ separately by nonnegative rational vectors, retaining their zero
+patterns, and reconstruct $a,C$ by summation. This preserves
+$0\le u\le a\le C$; both positive aggregate totals remain positive.
+
+If $F_r(C)=0$, every subbundle of $C$ has zero worth, so zero prices give
+coverage and budget on that face. If $C>0$ but $F_r(C-u)=0$, the right
+payment in \eqref{dim:price-out} is zero, while coverage and monotonicity
+give $a\cdot p(C)\ge F_r(a)\ge F_r(u)$.
+These observations complete all boundary comparisons. Finally, average
+the constructed prices over the finite resource-permutation group.
+All the inequalities, homogeneity, and local Lipschitz continuity survive,
+and the resulting prices are resource-symmetric.
+\end{proof}
+
+\begin{lemma}[Removing abundant coordinates]\label{dim:pair-limit}
+Under the hypothesis of Lemma~\ref{dim:price-reduction}, there is a
+symmetric, homogeneous, locally Lipschitz price rule for $\min\{A,B\}$
+with nonnegative payments, coalition coverage, full OUT, finite funding
+factor $\kappa$, and the expenditure cap
+\begin{equation}\label{dim:pair-cap}
+ B P_2(A,B)\le D A\quad(B\ge A>0),
+ \qquad D=\frac{\kappa-1}{r-1},
+\end{equation}
+together with its symmetric counterpart.
+\end{lemma}
+
+\begin{proof}
+At $(A,M,\ldots,M)$, $0<A<M$, symmetry gives a short-resource price
+$q$ and common long-resource price $b$. Coverage of a bundle with $A$
+units of every resource and the budget yield
+\[
+ q+(r-1)b\ge1,\qquad Aq+(r-1)Mb\le\kappa A.
+\]
+Subtracting $A$ times the first inequality gives
+$Mb\le D A M/(M-A)$.
+At $(A,B,M,\ldots,M)$ with $A\le B\le M$, restore a coalition owning
+all $B$ units of the second resource to $M$ units. TCWM gives
+\begin{equation}\label{dim:prelimit-cap}
+ Bp_2(A,B,M,\ldots,M)\le D\frac{AM}{M-A}.
+\end{equation}
+For $r=2$, the left side is independent of $M$; letting $M\to\infty$
+already proves the lemma using the prices from
+Lemma~\ref{dim:price-reduction}. Suppose henceforth $r\ge3$.
+
+For each positive rational pair $(A,B)$, the first two prices at
+$(A,B,M,\ldots,M)$ lie in $[0,\kappa]$. A common diagonal subsequence
+$M\to\infty$ gives rational pair prices $P_1,P_2$.
+They inherit symmetry and pair budget at most $\kappa\min\{A,B\}$.
+Equation~\eqref{dim:prelimit-cap} gives \eqref{dim:pair-cap}.
+For coalition pair holdings $(a,b)\le(A,B)$, add $\min\{a,b\}$ units
+of every extra resource to this coalition. The added payment is at most
+\[
+ \min\{a,b\}\sum_{j\ge3}p_j(A,B,M,\ldots,M)
+ \le\frac{\kappa\min\{a,b\}\min\{A,B\}}{M},
+\]
+which vanishes. Its worth is $\min\{a,b\}$, so pair coverage survives.
+
+For OUT, it is essential to control the shifted extra totals in a
+deviation. For fixed $w\ge0$, compare
+$z=(A,B,M,\ldots,M)$ and $z'=(A,B,M-w,\ldots,M-w)$, where $M>w$.
+Equation~\eqref{dim:relative-comparison}, first in one orientation and
+then the other, gives for $j=1,2$
+\begin{align}
+ p_j(z')-p_j(z)&\le\frac{w\kappa\min\{A,B\}}{Mz_j},
+ \label{dim:shift-bound}\\
+ p_j(z)-p_j(z')&\le
+ \frac{w\kappa\min\{A,B\}}{(M-w)z_j}.\nonumber
+\end{align}
+Indeed, the forward residual consists only of $w$ units in each extra
+coordinate; the reverse scaling is $(M-w)/M$ and its residual lies in
+the first two coordinates. The budget bounds both residual expenditures.
+
+Fix rational pair holdings $(a,b)$ and withdrawals $(u,v)\le(a,b)$,
+and put $w=\min\{u,v\}$. Give that coalition $w$ units of every extra
+resource and withdraw all of them. Its full outside production is $w$.
+The high extra-coordinate payment vanishes as above, and its low retained
+extra holdings are zero. At the low pair $(A-u,B-v)$ with positive
+production, \eqref{dim:shift-bound} shows that the prices with extra totals
+$M-w$ have the same subsequential limit as those with extra totals $M$.
+If that low pair has zero production, its entire payment is zero by budget.
+The limiting inequality is therefore
+\begin{align*}
+ aP_1(A,B)+bP_2(A,B)
+ \ge{}&(a-u)P_1(A-u,B-v)\\
+ &+(b-v)P_2(A-u,B-v)+\min\{u,v\}.
+\end{align*}
+Set prices to zero at zero-production pairs. We have obtained a rational
+pair rule satisfying all required finite inequalities and the cap.
+
+This limit need not yet be homogeneous. Consider the compact convex set
+of rational pair-price arrays obeying these inequalities, symmetry, the
+budget, and \eqref{dim:pair-cap}. Each coordinate is bounded by
+$\kappa\min\{A,B\}/A$ or $\kappa\min\{A,B\}/B$.
+The operations $(T_hP)(A,B)=P(hA,hB)$ preserve the set. Repeat the
+prime-dilation averaging in Lemma~\ref{dim:price-reduction}; all its
+constraints are homogeneous and closed, so the resulting rational array
+is homogeneous and retains the cap. The finite comparison
+\eqref{dim:relative-comparison} now gives local Lipschitz continuity and
+extension to real positive pairs exactly as before. Coverage handles any
+zero-production low profile as in the last paragraph of that lemma.
+\end{proof}
+
+\begin{lemma}[The two-resource obstruction]\label{dim:pair-obstruction}
+Every pair-price rule with the properties of
+Lemma~\ref{dim:pair-limit} has $D\ge c$.
+\end{lemma}
+
+\begin{proof}
+For $A\ge B>0$ write $t=B/A$, $p(t)=P_1(A,B)$ and $q(t)=P_2(A,B)$.
+These are well defined by homogeneity, locally Lipschitz for $0<t\le1$,
+and $p(t)\le Dt$. Budget gives $q(t)\le\kappa$, while symmetry at the
+positive balanced profile gives $q(1)=p(1)\le D$.
+
+If a coalition owns all of the short resource and restores only that
+resource, TCWM implies that $z(t)=tq(t)$ is nondecreasing. To obtain the
+OUT constraint, start at aggregate $(A,B)$ with coalition holdings
+$(0,B)$ and restore $(h,h)$ to that same coalition. Its new holdings are
+$(h,B+h)$ and its new aggregate is $(A+h,B+h)$, with outsiders fixed.
+This is a feasible restoration from a zero holding, not a withdrawal
+from that zero holding. At almost every $t<1$, differentiating its finite
+OUT inequality at $h=0+$ gives
+\[
+ p(t)+q(t)+t(1-t)q'(t)\ge1.
+\]
+Using the cap, this yields
+\[
+ \left[\frac{tq(t)}{1-t}\right]'
+ =\frac{q(t)+t(1-t)q'(t)}{(1-t)^2}
+ \ge\frac{1-Dt}{(1-t)^2}.
+\]
+Integrate from $\varepsilon$ to $t$ and send $\varepsilon\downarrow0$.
+Boundedness of $q$ makes the lower endpoint vanish, and hence
+\[
+ z(t)\ge (1-D)t-D(1-t)\log(1-t).
+\]
+Since $z$ is nondecreasing and $z(1)=q(1)\le D$, the right side is at
+most $D$ for every $0<t<1$. If $D=0$, this is already a contradiction.
+For $D>0$, its maximum occurs at $t=1-e^{-1/D}$ and equals
+$1-D+De^{-1/D}$. Consequently
+$D(2-e^{-1/D})\ge1$. The strict monotonicity of $h$ proved above implies
+$D\ge c$.
+\end{proof}
+
+\begin{proof}[Completion of Theorem~\ref{dim:main}]
+The TCWM equality was proved after Proposition~\ref{dim:finite-lower}.
+Proposition~\ref{dim:out-upper} proves the OUT upper bound.
+For $d\ge2$, suppose a factor $\kappa<1+c(d-1)$ were feasible for
+every fixed finite pure-owner unit-box model of $F_d=\min_jC_j$.
+Lemmas~\ref{dim:price-reduction}--\ref{dim:pair-obstruction} would give
+$(\kappa-1)/(d-1)\ge c$, a contradiction. Therefore for each such
+$\kappa$ at least one finite, fixed, bounded owner model has no
+$\kappa$-funded rule. This is a compactness contrapositive over finite
+models, not a mechanism on an infinite owner population.
+If the supremum of their infimal feasible factors were smaller than the
+claimed constant, choosing $\kappa$ strictly between them would give just
+such a rule for every model. This also deals with possible nonattainment
+of individual infima. For $d=1$, linear payments satisfy full OUT with
+factor one and coverage forces that factor.
+\end{proof}
+
+\begin{remark}\label{dim:scope}
+These dimension frontiers concern protection of total coalition payments,
+with the full value of withheld production added only in the OUT contract.
+They do not settle a sharp frontier for individual payment monotonicity.
+The displayed integrals are mathematical payment formulas; no efficient
+evaluation guarantee for an arbitrary value oracle is asserted. Intermediate
+outside-protection parameters and extra deletion-marginal floors are not
+included in the present theorem.
+\end{remark}

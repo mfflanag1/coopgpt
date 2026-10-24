@@ -1,0 +1,46 @@
+Focused premeasurement repair —24 October2026
+
+Review read:
+/Users/maxf/.local/state/claude-reviews/application-1798d808ef12/20261024-144550-a541cea5/review.md
+Root accepted the conservative early-return guard before any timing outcomes.
+No whole-review rerun is claimed; root will independently verify these focused
+changes. All historical unsigned freezes remain untouched.
+
+Verified issue and repair
+The previous produce() waited once and could pass a short early return to
+reconcile(), which correctly rejects early offers but would then abort the phase.
+This is a source-level fragility independent of whether this host ever returns
+early. The new identical producer function in both modes rechecks the original
+absolute planned time after every wait. It waits again if still early, checks
+cancellation on each repetition, and never moves any planned timestamp. wake_ns
+records the final accepted return. The2ms p99/10ms max completed-send admission
+thresholds, rates, seeds, cases, endpoints and cleanup limits are unchanged.
+
+Do not infer the reviewer's proposed macOS clock mechanism is established. This
+repair requires no claim about actual condvar clock choice, clock slew or why
+the old retrieval trace had roughly5ms tails. Those causal questions remain open.
+
+Other focused clarifications
+EPOCH uses runner_adjusted_switch_interval:false. It records what this runner
+does, not a measured history of every actor's changes. No interval was tuned.
+If CPU load join remains incomplete after the existing0.5-second cap, final
+iterations are reported unknown and the case fails with 'CPU load cleanup
+incomplete; final accounting unavailable'. It no longer interprets an unfinalized
+zero counter as proof the load never ran. Successful joins retain final counts.
+
+Deterministic verification
+Fourteen fake-clock/stdlib tests pass, including the prior eleven and:
+ -1ns early return followed by on-time return, with all50 planned IDs admitted;
+ -three successive early returns then cancellation, preserving all50 planned
+  IDs and counting missing admissions as failure/infinity;
+ -incomplete CPU join reports unknown final count, while completed positive
+  iteration accounting remains accepted.
+Syntax compilation also passes. No real scheduler/thread/process timing run,
+physical wait measurement, MPS invocation or serving experiment occurred.
+
+Artifacts
+DRAFT_FREEZE_REPAIRED.json is the new authorized:false packet. Its plan is exactly
+equal to DRAFT_FREEZE_FINAL.json; only frozen source/protocol/test hashes change.
+REPAIR_DIFF.txt is the complete unified diff of the changed preparation sources
+and docs from the pre-repair snapshot. PREPARATION.json records execution logs
+and final hashes. audit_arrivals.py and old retrieval-service files were not edited.

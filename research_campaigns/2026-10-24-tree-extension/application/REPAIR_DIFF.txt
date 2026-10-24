@@ -1,0 +1,171 @@
+--- before/arrival_qualification.py
++++ after/arrival_qualification.py
+@@ -86,9 +86,15 @@
+     failure=None
+     try:
+         for r in rows:
+-            if stop.wait(max(0,(r['planned_ns']-clock())/1e9)):
+-                failure='Producer stopped before all offers';break
+-            r['wake_ns']=clock()
++            while True:
++                if stop.wait(max(0,(r['planned_ns']-clock())/1e9)):
++                    failure='Producer stopped before all offers';break
++                woke=clock()
++                if woke>=r['planned_ns']:
++                    r['wake_ns']=woke;break
++                # Conservative early-return guard; the original absolute
++                # deadline stays fixed and cancellation is checked each wait.
++            if failure is not None:break
+             r['emitted_ns']=clock()
+             send({'kind':'offer','request_id':r['request_id'],'planned_ns':r['planned_ns'],
+                   'wake_ns':r['wake_ns'],'emitted_ns':r['emitted_ns']})
+@@ -129,6 +135,15 @@
+         for _ in range(2048):value=(value*1664525+1013904223)&0xffffffff
+         iterations+=2048
+     state.update(iterations=iterations,checksum=value)
++
++
++def final_cpu_accounting(state, worker_exists, worker_alive):
++    if not worker_exists:
++        return {'status':'not_started','iterations':None},'CPU load worker not started'
++    if worker_alive:
++        return {'status':'cleanup_incomplete','iterations':None},'CPU load cleanup incomplete; final accounting unavailable'
++    result=dict(state,status='complete')
++    return result,('CPU load completed with zero recorded iterations' if result['iterations']==0 else None)
+ 
+ 
+ def reconcile(planned, offers, done):
+@@ -172,7 +187,7 @@
+     directory=root/spec['case_id'];directory.mkdir()
+     ctx=mp.get_context('spawn');parent,child=ctx.Pipe();receiver,sender=ctx.Pipe(duplex=False)
+     stop=ctx.Event();load_stop=threading.Event();load_started=threading.Event();load_state={'iterations':0}
+-    load_worker=None;worker=None;offers=[];done=None;failure=None;planned=[];ready=None
++    load_worker=None;load_join_incomplete=False;worker=None;offers=[];done=None;failure=None;planned=[];ready=None
+     try:
+         worker=(ctx.Process(target=scheduler,args=(child,sender,stop),daemon=True) if spec['mode']=='process'
+                 else threading.Thread(target=scheduler,args=(child,sender,stop),daemon=True))
+@@ -215,7 +230,9 @@
+             worker.join(timeout=.5)
+             if worker.is_alive() and spec['mode']=='process':worker.terminate();worker.join(timeout=.5)
+             if worker.is_alive():failure=(failure or '')+' Worker cleanup incomplete'
+-        if load_worker is not None:load_worker.join(timeout=.5)
++        if load_worker is not None:
++            load_worker.join(timeout=.5)
++            load_join_incomplete=load_worker.is_alive()
+         # Thread worker owns these connections too; close only after bounded join.
+         child.close();sender.close()
+     if not planned:
+@@ -227,7 +244,9 @@
+         except BaseException as exc:
+             failure=(failure or '')+f' Reconciliation: {exc}'
+             rows=[dict(r,wake_ns=None,emitted_ns=None,admitted_ns=None,received_ns=None,status='unverified') for r in planned];stats=None
+-    if spec['load']=='python_cpu' and load_state['iterations']==0:failure=(failure or '')+' CPU load did not run'
++    if spec['load']=='python_cpu':
++        load_state,accounting_error=final_cpu_accounting(load_state,load_worker is not None,load_join_incomplete)
++        if accounting_error:failure=(failure or '')+' '+accounting_error
+     result={'case_id':spec['case_id'],'spec':spec,'failure':failure,'requests':rows,'summary':stats,
+             'producer_ready':ready,'consumer_load':load_state,'raw_offers_received':len(offers)}
+     save(directory/'RESULT.json',result);return result
+@@ -254,7 +273,7 @@
+     save(args.output/'PLAN.json',p)
+     epoch={'phase_start_monotonic_ns':time.monotonic_ns(),'wall_epoch_ns':time.time_ns(),
+            'utc':datetime.now(timezone.utc).isoformat(),'platform':platform.platform(),'python':platform.python_version(),
+-           'consumer_pid':os.getpid(),'switch_interval_seconds':sys.getswitchinterval(),'switch_interval_changed':False,
++           'consumer_pid':os.getpid(),'switch_interval_seconds':sys.getswitchinterval(),'runner_adjusted_switch_interval':False,
+            'host_conditions':approval['host_conditions']}
+     save(args.output/'EPOCH.json',epoch)
+     deadline=epoch['phase_start_monotonic_ns']/1e9+PHASE_SECONDS
+--- before/test_arrival_qualification.py
++++ after/test_arrival_qualification.py
+@@ -51,6 +51,46 @@
+         self.assertEqual([r['wake_ns'] for r in rows],[1_000_000,2_000_000,3_000_000])
+         self.assertEqual([r['admitted_ns']-r['planned_ns'] for r in rows],[100]*3)
+         self.assertTrue(a.summarize(rows)['qualification_pass'])
++
++    def test_early_return_rechecks_absolute_time_then_offers_all_fifty(self):
++        class EarlyOnce(FakeClock):
++            def wait(self,seconds):
++                self.waits.append(seconds)
++                self.ns+=round(seconds*1e9)-(1 if len(self.waits)==1 else 0)
++                return False
++        planned=[{'request_id':i,'offset_ns':i*1_000_000,'planned_ns':(i+1)*1_000_000} for i in range(50)]
++        clock=EarlyOnce();done=a.produce(planned,clock,clock.clock,clock.send)
++        rows=a.reconcile(planned,clock.messages,done)
++        self.assertIsNone(done['failure']);self.assertEqual(len(rows),50)
++        self.assertEqual(clock.waits[:2],[.001,1e-9])
++        self.assertEqual([r['planned_ns'] for r in rows],[r['planned_ns'] for r in planned])
++        self.assertEqual([r['wake_ns'] for r in rows],[r['planned_ns'] for r in planned])
++        self.assertTrue(a.summarize(rows)['qualification_pass'])
++
++    def test_repeated_early_returns_then_cancel_preserves_fifty(self):
++        class EarlyThenStop(FakeClock):
++            def wait(self,seconds):
++                self.waits.append(seconds)
++                if len(self.waits)==4:return True
++                self.ns=1_000_000-(4-len(self.waits))
++                return False
++        planned=[{'request_id':i,'offset_ns':i*1_000_000,'planned_ns':(i+1)*1_000_000} for i in range(50)]
++        clock=EarlyThenStop();done=a.produce(planned,clock,clock.clock,clock.send)
++        rows=a.reconcile(planned,clock.messages,done);stats=a.summarize(rows)
++        self.assertEqual(clock.waits,[.001,3e-9,2e-9,1e-9])
++        self.assertEqual(len(rows),50);self.assertEqual(clock.messages,[])
++        self.assertEqual([r['request_id'] for r in rows],list(range(50)))
++        self.assertIn('stopped',done['failure']);self.assertEqual(stats['admitted'],0)
++        self.assertIsNone(stats['admission_jitter']['p99_ns']);self.assertFalse(stats['qualification_pass'])
++
++    def test_incomplete_cpu_join_reports_unknown_final_count(self):
++        record,error=a.final_cpu_accounting({'iterations':0},True,True)
++        self.assertEqual(record,{'status':'cleanup_incomplete','iterations':None})
++        self.assertIn('final accounting unavailable',error)
++        self.assertNotIn('did not run',error)
++        record,error=a.final_cpu_accounting({'iterations':2048,'checksum':1},True,False)
++        self.assertEqual(record['iterations'],2048);self.assertEqual(record['status'],'complete')
++        self.assertIsNone(error)
+ 
+     def test_timely_wake_does_not_hide_transport_backpressure(self):
+         clock=FakeClock(send_delay=3_000_000)
+--- before/PROTOCOL.txt
++++ after/PROTOCOL.txt
+@@ -13,6 +13,12 @@
+ Modes: thread and spawn-process. Both execute the same producer function, use
+ threading.Event.wait for the remaining absolute planned interval,
+ and send the same framed JSON offer through multiprocessing.Connection pipes.
++Both add the same conservative early-return guard to the old Event.wait algorithm:
++after EVERY return, recheck the unchanged absolute planned time and wait again
++if it has not arrived. Every repeated wait remains cancellation-aware. Do not
++recenter the schedule or emit early. wake_ns records the final accepted return,
++not an intermediate early return. This is a premeasurement robustness repair,
++not evidence for a particular host clock implementation or the old failure cause.
+ Each scheduler has the same otherwise-blocked cancellation-relay thread; its
+ multiprocessing Event is only for shutdown, not the offer timer. This preserves
+ the old threading.Event timer implementation in both placements.
+@@ -24,8 +30,12 @@
+ Load begins before the case schedule is sent and ends after all offers/results
+ or abort. Record iteration count/checksum to verify it ran; this is a synthetic
+ contention condition, not a calibrated percentage CPU or a model of MPS service.
++If its bounded join is incomplete, report final accounting unavailable and an
++operational failure, not that the load never ran. The cleanup cap is unchanged.
+ Do not change sys.setswitchinterval, priority, affinity, sleep policy or thresholds.
+-Record consumer and producer switch intervals and process IDs. Hold declared
++Record consumer and producer switch intervals and process IDs; the epoch field
++runner_adjusted_switch_interval:false describes only this runner's lack of tuning,
++not an observed history of every host/interpreter setting. Hold declared
+ host/power/desktop conditions unchanged; record interruptions without replacements.
+ 
+ Cases fixed before any new timing
+--- before/README.txt
++++ after/README.txt
+@@ -13,9 +13,10 @@
+ approve the exact hashed source/protocol/plan, fill host_conditions and send go
+ before any --authorization run. Do not treat these preparation commands or a
+ passing test suite as permission to measure timing. Root handles that review.
+-The current delivered unsigned packet is DRAFT_FREEZE_FINAL.json. Earlier unsigned
+-drafts are stale; the final source closes parent duplicate pipe endpoints after
+-process spawn so early child exit is not hidden from EOF/error accounting.
++The current delivered unsigned packet is DRAFT_FREEZE_REPAIRED.json. All older
++unsigned freezes are preserved and stale. The premeasurement repair rechecks the
++absolute planned time after every early wait return, keeping cancellation and
++the50-request denominator. See PREMEASUREMENT_REPAIR.txt and REPAIR_DIFF.txt.
+ 
+ Synthetic producer implementation shares Event.wait logic and framed-pipe transport
+ across threaded and process-isolated modes. The optional pure-Python CPU thread

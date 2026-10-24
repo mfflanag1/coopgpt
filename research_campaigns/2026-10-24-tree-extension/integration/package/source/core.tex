@@ -1,0 +1,456 @@
+\section{Model and funding frontiers}\label{sec:model}
+An institution fixes a finite set $N$ of actual owners and $d$ resource types.
+Owner $i$ has an endowment $\bar b_i\in\R_+^d$ and may report any
+$b_i\in[0,\bar b_i]$ coordinatewise. Zero endowment coordinates encode
+ineligibility. These owners, coordinates, boxes and the public technology
+remain fixed throughout every comparison. Write $b_C=\sum_{i\in C}b_i$,
+$B=b_N$, and $\mathcal B=\prod_{i\in N}[0,\bar b_i]$.
+Different institutions may have different, arbitrarily large finite owner and
+resource counts.
+
+The technology $F:\R_+^d\to\R_+$ is finite-valued, monotone, concave and
+homogeneous of degree one, with $F(0)=0$. These properties imply
+superadditivity:
+\begin{equation}\label{eq:superadditive}
+ F(x+y)=2F((x+y)/2)\ge F(x)+F(y).
+\end{equation}
+No closed-orthant continuity assumption is imposed on the general dimension
+class. In the sparse-production sections we specialize to a finite packing
+program
+\begin{equation}\label{eq:packing}
+ F(c)=\max\{\pi\cdot x: Ax\le c,\ x\ge0\},\qquad A\ge0,\quad\pi\ge0.
+\end{equation}
+Every positive-profit column consumes a positive amount of at least one
+resource. Zero-profit columns may be discarded. The optimum is finite and
+attained at finite capacities. Its \emph{activity arity} is the maximum number
+of positive entries in a positive-profit column. Arity three permits many
+resource rows; it does not mean three resources in total.
+
+A rule is an arbitrary map $y:\mathcal B\to\R_+^N$.
+It need not be continuous, anonymous, marginal, or linear. All requirements
+below concern the same rule at every real report profile. For
+$y_C(b)=\sum_{i\in C}y_i(b)$, \emph{coalition coverage} is
+\begin{equation}\label{eq:coverage}
+ y_C(b)\ge F(b_C)\qquad(C\subseteq N,\ b\in\mathcal B).
+\end{equation}
+Coverage is required for \emph{every} coalition, without a size restriction.
+A total-funding factor $\kappa$ means
+\begin{equation}\label{eq:funding}
+ \sum_{i\in N}y_i(b)\le\kappa F(B)\qquad(b\in\mathcal B).
+\end{equation}
+Thus the external subsidy is at most $(\kappa-1)F(B)$; $\kappa$ itself is a
+factor on total payments. When $F(B)=0$, nonnegativity and
+\eqref{eq:funding} force every payment to vanish. At a positive-production
+profile, an owner reporting zero is allowed to receive a positive payment.
+There is no deletion-marginal floor or separate dummy-zero axiom.
+
+\begin{definition}[Coalition withholding contracts]\label{def:contracts}
+Fix an integer $s\ge1$. For every $C\subseteq N$ with $|C|\le s$, let
+$\delta_i\in[0,b_i]$ for $i\in C$ and $\delta_i=0$ outside $C$.
+\emph{Transferable coalition withholding monotonicity} (TCWM) requires
+\begin{equation}\label{eq:tcwm}
+ y_C(b)-y_C(b-\delta)\ge0.
+\end{equation}
+\emph{Full outside-production protection} (full OUT) requires
+\begin{equation}\label{eq:out}
+ y_C(b)-y_C(b-\delta)\ge F(\delta_C).
+\end{equation}
+Protected coalitions may contain unchanged members: $\delta_i=0$ is allowed
+for any member of $C$. For unrestricted coalition protection, these
+inequalities are required for every $C\subseteq N$.
+\end{definition}
+
+Both contracts permit side payments within the protected coalition. TCWM
+uses payment-only utility; full OUT additionally allows the coalition to
+produce with its pooled withheld resources. Neither is a model of arbitrary
+misreports, private opportunity costs, or an endogenous change in the owner
+roster. Full OUT implies TCWM. A lower bound for TCWM therefore also applies
+to full OUT, whereas a TCWM construction need not satisfy full OUT.
+
+For an institution $I$, let $k_s(I)$ and $k_s^{\mathrm{OUT}}(I)$ be the
+infima of its feasible factors under these respective contracts and
+\eqref{eq:coverage}. Define
+\begin{equation}\label{eq:frontiers}
+ K_r(s)=\sup_{I:\,\text{arity}(I)\le r} k_s(I),\qquad
+ K_r^{\mathrm{OUT}}(s)=\sup_{I:\,\text{arity}(I)\le r}
+ k_s^{\mathrm{OUT}}(I).
+\end{equation}
+The supremum ranges over all finite packing institutions, including their
+actual eligibility and endowment boxes. A uniform upper constructs one rule
+for each entire institution; a lower constructs an institution on which
+\emph{every} rule has an expensive feasible report. The infimum convention
+does not assume optimal rules are attained. We use $D_d$ and
+$D_d^{\mathrm{OUT}}$ for the corresponding worst-instance factors for general
+$d$-resource technologies when \emph{every} coalition receives protection.
+
+\begin{remark}[Static feasibility versus cross-report incentives]\label{rem:static}
+For a packing technology, at each fixed profile an optimal nonnegative dual
+price $w$ gives payments $w\cdot b_i$. Dual feasibility implies
+$w\cdot b_C\ge F(b_C)$, and their sum is $F(B)$.
+Thus each individual report profile admits an efficient coalition cover.
+The funding problem concerns selecting payments consistently across profiles.
+Neither the static core nor an integrality-gap calculation by itself proves
+our cross-report lower bounds.
+\end{remark}
+
+\section{Sparse production: a uniform coalition-size upper bound}\label{sec:upper}
+We first state the upper bound with which the new lower must be compared.
+The binomial semivalue and bounded-rank support inequalities are established
+ingredients \citep{FeigeEtAl2014,EzraEtAl2018,Casajus2011}. Their use here retains
+actual mixed owners, all-coalition coverage and the stronger full-OUT contract.
+The proof is included to expose the precise comparison class.
+
+\begin{theorem}[Sparse-production guarantee]\label{thm:sparse-upper}
+For every finite packing institution of activity arity at most $r\ge1$ and
+every integer $s\ge1$, there is an all-profile rule satisfying coalition
+coverage and full OUT for every coalition of size at most $s$, with
+\begin{equation}\label{eq:sparse-upper}
+ K_r(s)\le K_r^{\mathrm{OUT}}(s)\le r s^{r-1}.
+\end{equation}
+For $p=1/s$, one such rule is
+\begin{equation}\label{eq:semivalue}
+ m_i(p;b)=\mathbb E_{R\subseteq N\setminus\{i\}}
+       [F(b_i+b_R)-F(b_R)],\qquad y_i(b)=p^{1-r}m_i(p;b),
+\end{equation}
+where other owners are independently included in $R$ with probability $p$.
+For rational data the rule is a finite rational computation. No
+polynomial-time implementation or incentive guarantee for a sampled estimator
+is asserted.
+\end{theorem}
+
+\begin{lemma}[Owner support and thinning]\label{lem:owner-support}
+Fix a report profile and let $v(T)=F(b_T)$. For $i\in R$, set
+$U_i(R)=v(R)-v(R\setminus\{i\})$. Then
+\begin{align}
+ \sum_{i\in T}U_i(R)&\ge v(T) &&(T\subseteq R),\label{eq:dual-cover}\\
+ \sum_{i\in R}U_i(R)&\le r v(R),\label{eq:rank-loss}\\
+ \mathbb E v(S\cap R_p)&\ge p^r v(S),\label{eq:thinning}
+\end{align}
+where $R_p$ independently retains every owner with probability $p$.
+\end{lemma}
+\begin{proof}
+An optimal nonnegative dual price $w$ at $b_R$ satisfies
+$v(R)=w\cdot b_R$ and $v(R\setminus\{i\})\le w\cdot b_{R\setminus\{i\}}$.
+Thus $U_i(R)\ge w\cdot b_i$, and dual feasibility proves
+\eqref{eq:dual-cover}.
+
+For a fixed $S$, choose an optimal production plan $x$. For every used
+activity $e$ and each required row $a$, assign that row to an actual supplier
+$i\in S$ with probability $b_{ia}/(b_S)_a$, independently across required
+rows. The denominator is positive whenever $x_e>0$ and $A_{ae}>0$.
+Each assignment gives a nonnegative value piece, of weight
+$\pi_e x_e$ times its assignment probability, supported on at most $r$ owners.
+Let $h(T)$ be the total weight of pieces whose suppliers all belong to
+$T\subseteq S$. For activity $e$, its retained fraction is
+\[
+ \prod_{a:A_{ae}>0}\frac{(b_T)_a}{(b_S)_a},
+\]
+which is at most the fraction in each individual required row. The retained
+plan is therefore feasible for $b_T$. Consequently $h(T)\le v(T)$ and
+$h(S)=v(S)$. Applying this at $S=R$ gives
+\[
+ U_i(R)\le h(R)-h(R\setminus\{i\});
+\]
+summing counts each value piece at most $r$ times and proves
+\eqref{eq:rank-loss}. Under independent thinning, a piece supported on $k\le r$
+owners survives with probability $p^k\ge p^r$. Hence
+$\mathbb E v(S\cap R_p)\ge\mathbb E h(S\cap R_p)\ge p^r v(S)$.
+This decomposes a production plan, not the strategic owners.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:sparse-upper}]
+Let $R_p$ now thin all owners. Conditioning on whether $i\in R_p$ gives
+\[
+ p\sum_{i\in S}m_i(p;b)
+ =\mathbb E\sum_{i\in S\cap R_p}U_i(R_p)
+ \ge\mathbb E v(S\cap R_p)\ge p^r v(S).
+\]
+After multiplication by $p^{-r}$, this is coverage of every $S$, including
+$|S|>s$. Nonnegativity follows from monotonicity. Also
+\[
+ p\sum_i m_i(p;b)\le r\mathbb E F(b_{R_p})
+ \le rF(pB)=rpF(B),
+\]
+where the second inequality is concavity. This proves the funding bound.
+
+For $s\ge2$, fix a protected coalition $C$ and write $M_C=\sum_{i\in C}m_i$.
+Expanding the finite expectation yields
+\[
+ M_C(b)=\sum_{A\subseteq N}c_C(A)F(b_A),
+\]
+with, for $0<|A|<n$,
+\begin{equation}\label{eq:coefficient}
+ c_C(A)=p^{|A|-1}(1-p)^{n-|A|-1}(|A\cap C|-p|C|).
+\end{equation}
+The endpoints are $c_C(\varnothing)=-|C|(1-p)^{n-1}$ and
+$c_C(N)=|C|p^{n-1}$. Since $p|C|\le1$, every coefficient of a value affected
+by $C$'s report is nonnegative. For a withdrawal $\delta$ supported on $C$,
+superadditivity gives
+$F(b_A)-F(b_A-\delta_A)\ge F(\delta_A)$.
+For $A\cap C=\varnothing$, both this difference and $F(\delta_A)$ vanish.
+Therefore
+\[
+ M_C(b)-M_C(b-\delta)\ge\sum_A c_C(A)F(\delta_A)=M_C(\delta).
+\]
+The profile $\delta$ lies in the same endowment boxes, with the same owners
+and the same rule. Coverage at that profile gives
+$p^{1-r}M_C(\delta)\ge F(\delta_C)$, proving full OUT.
+
+At $s=1$, $p=1$ and $m_i=F(B)-F(B-b_i)$. The second term is fixed under
+$i$'s withdrawal, so superadditivity proves full OUT directly; the first two
+inequalities of Lemma~\ref{lem:owner-support} give coverage and factor $r$.
+If no positive-profit activity exists, the zero rule suffices. Empty
+coalitions and the empty owner set are immediate.
+\end{proof}
+
+\section{A square-root lower bound for arity three}\label{sec:lower}
+The following lower applies to arbitrary rules under the full report-domain
+contract. It does not impose a marginal formula, an efficient-price floor,
+anonymity, or a zero payment to inactive owners.
+
+\begin{theorem}[Projective cap exchange]\label{thm:projective}
+For each integer $M\ge1$, there is a unit-profit packing technology of arity
+three on $d=2^{M+1}-1$ resources, with $n=2M+1$ fixed fully eligible owners,
+for which every coalition-covering rule satisfying TCWM for coalitions of
+size at most $2M-1$ has funding factor at least
+\begin{equation}\label{eq:projective-finite}
+ \max\left\{\frac23 Q_M,\ 1+\frac{2(M-1)}{3M}Q_M\right\},
+ \qquad Q_M=\prod_{m=2}^M\frac{2m}{2m-1}
+             =\frac{4^M}{2\binom{2M}{M}}.
+\end{equation}
+Every owner's report domain is the full real unit cube. Consequently, for
+every integer $s\ge1$,
+\begin{equation}\label{eq:main-interval}
+ \sqrt{s/6}\le K_3(s)\le K_3^{\mathrm{OUT}}(s)\le3s^2.
+\end{equation}
+\end{theorem}
+
+\subsection{Technology, legal symmetry and productive profiles}
+Let $V=\mathbb F_2^{M+1}$ have basis $v,e_1,\ldots,e_M$.
+Resources are the nonzero vectors of $V$. For every unordered triple
+$\{a,b,a+b\}$ of distinct nonzero vectors, include one activity consuming one
+unit of each row and yielding one unit of output. Duplicate triples are
+identified. All activities have exactly three inputs.
+
+There are actual owners $p,h_1,\ell_1,\ldots,h_M,\ell_M$, each endowed with
+the all-ones vector. Every report in $[0,1]^d$ is legal for every owner.
+The product of owner permutations and invertible binary linear maps acts on
+this institution: the latter permute resources and activities, while owner
+permutations preserve the identical report domains.
+
+\begin{lemma}[Finite averaging]\label{lem:average}
+If a rule on this institution satisfies coverage, size-$s$ TCWM (or full OUT)
+and factor $\kappa$, then its finite group average satisfies the same
+constraints and factor, and is equivariant. A lower on total payment of the
+average at a profile of production one is a lower on the original rule at
+some profile in that profile's finite symmetry orbit.
+\end{lemma}
+\begin{proof}
+For a group element $g$ with owner permutation $\sigma_g$, define the
+conjugate rule by $y^g(b)=\sigma_g^{-1}y(gb)$. Resource and owner maps preserve
+coordinate order, report feasibility, coalition values, coalition sizes,
+and the production value of a withheld bundle. Each contract inequality
+therefore holds for every conjugate. All constraints are linear in payment
+values, so their finite average also satisfies them. A change of variable
+in the group sum proves equivariance. Finally, its total payment at $b$ is
+the average of original total payments at the legal profiles $gb$, which
+all have production $F(B)$. At least one is at least that average. This is a
+proof transformation of rules; no strategic comparison changes an owner.
+\end{proof}
+
+For $m=1,\ldots,M$, define profile $C_m$ as follows. Owner $p$ reports the
+unit vector in row $v$; each $h_j$ reports the unit vector in row $e_j$;
+$\ell_j$ reports the unit vector in row $v+e_j$ if $j\le m$, and zero
+otherwise. Every unmentioned resource coordinate is zero. In particular,
+\emph{dormant high owners still report $e_j$} when $j>m$.
+
+\begin{lemma}[Exact support and value]\label{lem:star-support}
+The only activities supported at $C_m$ are the $m$ triples
+$\{v,e_j,v+e_j\}$ with $j\le m$, and $F(C_m)=1$.
+\end{lemma}
+\begin{proof}
+In the possible row set
+$\{v\}\cup\{e_j,v+e_j:1\le j\le M\}$, the sum of private rows from
+ distinct indices has two nonzero $e$ coordinates and leaves the set. The
+sum of the private pair at index $j$ is $v$, and adding $v$ exchanges those
+two rows. Thus every supported triple is precisely a complete active branch.
+Every branch consumes the reported unit of $v$, giving the upper bound one;
+one branch attains it. Equivalently, the full packing dual prices $v$ and
+all zero-capacity rows at one and all other rows at zero. Supported columns
+contain $v$ and unsupported columns contain a zero-capacity row, so this is
+a feasible dual of value one for the full technology.
+\end{proof}
+
+\subsection{A constant seed and a fixed-owner payment ladder}
+Work with the averaged rule of Lemma~\ref{lem:average}. At $C_1$, the linear
+map exchanging $v$ and $e_1$ and fixing $e_j$ for $j>1$, together with the
+owner swap $(p,h_1)$, preserves the whole profile. So does the invertible map
+$v\mapsto v+e_1$, fixing every $e_j$, together with the swap $(p,\ell_1)$.
+These maps fix the dormant high reports. Hence the three productive owners
+receive a common payment $a$. Their coalition produces one, and coverage
+requires $3a\ge1$. This uses static coverage for a three-member coalition,
+not a three-member incentive constraint.
+
+At $C_m$, permuting active indices and independently replacing
+$e_j$ by $e_j+v$ for active $j$ preserves the entire profile after the matching
+owner swaps. These invertible maps fix $v$ and all inactive high rows.
+They act transitively on the $2m$ active private owners. Let $q_m$ be their
+common payment and put $T_m=2m q_m$. The seed is
+\begin{equation}\label{eq:seed}
+ q_1\ge\frac13,\qquad T_1\ge\frac23.
+\end{equation}
+
+The transition $C_{m-1}\to C_m$ restores only the actual owner $\ell_m$.
+Protect the coalition consisting of $\ell_m$ and the $2m-2$ old active
+private owners. Its cardinality is $2m-1$, and every old member's report
+is unchanged. At the old profile its payment is at least $T_{m-1}$:
+$y_{\ell_m}(C_{m-1})$ is nonnegative, and is \emph{not} assumed to be zero.
+At the new profile the protected sum is $(2m-1)q_m$. Therefore TCWM gives
+\begin{equation}\label{eq:ladder}
+ (2m-1)q_m\ge2(m-1)q_{m-1},\qquad
+ T_m\ge\frac{2m}{2m-1}T_{m-1}.
+\end{equation}
+The unchanged new high owner $h_m$ and the cap owner $p$ are not in this
+protected coalition. No owner is split, cloned, added, or removed.
+Iterating \eqref{eq:ladder} proves $T_M\ge2Q_M/3$. Since production is one,
+nonnegativity and funding imply $\kappa\ge2Q_M/3$.
+
+Let $z=y_p(C_M)$. Terminal branch coverage gives $z+2q_M\ge1$, and total
+payment is at least $z+2M q_M$. Hence
+\[
+ \kappa\ge z+2M q_M\ge1+2(M-1)q_M
+ \ge1+\frac{2(M-1)}{3M}Q_M.
+\]
+This remains valid even if $2q_M>1$; it does not set $z=1-2q_M$.
+For an asymmetric original rule, Lemma~\ref{lem:average} locates the costly
+profile somewhere in the orbit, not necessarily at the displayed $C_M$.
+This proves the finite assertion of Theorem~\ref{thm:projective}.
+
+\subsection{The uniform exponent and an optimized tail}
+The elementary estimate
+\begin{equation}\label{eq:central-bound}
+ Q_M\ge\frac12\sqrt{3M+1}
+\end{equation}
+follows by induction. The base $M=1$ is equality; after squaring, the step
+reduces to
+$4(M+1)^2(3M+1)-(2M+1)^2(3M+4)=M\ge0$.
+For $M=\lfloor(s+1)/2\rfloor$, all incentive coalitions used have size at
+most $s$, and $M\ge s/2$. Thus
+$K_3(s)\ge2Q_M/3\ge\sqrt{3M+1}/3\ge\sqrt{s/6}$.
+Combining this with Theorem~\ref{thm:sparse-upper} proves
+\eqref{eq:main-interval}, including $s=1$.
+
+\begin{corollary}[Optimized ladder certificate]\label{cor:tail}
+Set $B_1=1$. For $s\ge2$, let $h=\lceil s/2\rceil$ and
+\begin{equation}\label{eq:Bs}
+ B_s=1+\frac{2(s-1)Q_h}{3h}
+            \left(\frac{s-1}{s}\right)^{s-h}.
+\end{equation}
+Then $K_3(s)\ge B_s$, and
+\begin{equation}\label{eq:tail-asymptotic}
+ \lim_{s\to\infty}\frac{B_s}{\sqrt s}
+   =\frac{\sqrt{2\pi}}{3\sqrt e}.
+\end{equation}
+The witness may use $2s+1$ fully eligible owners and $2^{s+1}-1$ resource
+rows. In particular $B_6=493/243>2$, with 13 owners and 127 rows.
+The optimization is of this ladder certificate, not of the unrestricted
+funding frontier.
+\end{corollary}
+\begin{proof}
+Keep $s$ fixed and permit arbitrary ladder length $M$. At stage $m$ protect
+$\ell_m$ and any $k_m=\min\{s-1,2m-2\}$ old active private owners. Whole
+pairs are unnecessary; all selected old owners have payments $q_{m-1}$ and
+$q_m$ at the respective profiles. TCWM and nonnegativity imply
+\[
+ (k_m+1)q_m\ge k_m q_{m-1},\qquad
+ q_M\ge\tfrac13 P_{M,s},\qquad
+ P_{M,s}=\prod_{m=2}^M\frac{k_m}{k_m+1}.
+\]
+Terminal coverage therefore gives
+$\kappa\ge1+2(M-1)P_{M,s}/3$.
+Up to $h$ the uncapped recurrence gives $P_{h,s}=Q_h/h$; afterwards every
+factor is $\alpha=(s-1)/s$. For $M\ge h$ and $M>1$, the consecutive ratio
+of $(M-1)P_{M,s}$ is $M\alpha/(M-1)$, which is greater than one for $M<s$,
+equal to one for $M=s$, and less than one for $M>s$.
+Before the cap the increment increases; its $M=1$ value is zero and is
+handled separately. Thus the equal maxima occur at $M=s,s+1$, proving
+\eqref{eq:Bs}. The central-binomial asymptotic
+$Q_h\sim\sqrt{\pi h}/2$, together with $h\sim s/2$ and
+$\alpha^{s-h}\to e^{-1/2}$, proves \eqref{eq:tail-asymptotic}.
+Finally $Q_3=8/5$ gives $B_6=493/243$.
+\end{proof}
+
+\subsection{Exact certificate form and what computation verifies}
+The displayed argument has nonnegative rational multipliers. For fixed $M,s$,
+use the rows
+\[
+ 3q_1\ge1,\qquad (k_m+1)q_m-k_mq_{m-1}\ge0,
+ \qquad z+2q_M\ge1,\qquad \kappa-z-2M q_M\ge0.
+\]
+Give the two final rows weight one. Starting with residual coefficient
+$2(M-1)$ at $q_M$, eliminate backwards: weight the row at $m$ by the
+residual divided by $k_m+1$, then replace the residual by that weight times
+$k_m$. Weight the seed by the final residual divided by three.
+All coefficients of $q_m$ and $z$ cancel, leaving
+$\kappa\ge1+2(M-1)P_{M,s}/3$. At $M=1$ only the final rows are needed.
+A lifted certificate can expand averaging back into the original
+owner/profile variables; it retains the nonnegativity rows for dormant
+payments rather than replacing those payments by zero.
+
+The accompanying standard-library checks verify small full projective
+technologies, the required linear maps, exact finite coefficient cancellation,
+and the optimized scalar tail. A selected original-variable lift additionally
+checks 34,440 inequalities cancelling 26,040 payment coordinates. These are
+reproducible finite certificates supporting the written argument. The universal
+group averaging and all-size geometry are conventional proofs, not statements
+proved merely by the finite tests.
+
+\section{Interpretation, scope and remaining questions}\label{sec:discussion}
+The two parameters answer different questions. The dimension frontier allows
+arbitrary technologies on $d$ resources and protects every coalition. The
+sparse frontier limits each activity to $r$ resources, allows $d$ to grow,
+and protects coalitions of at most $s$ owners while retaining coverage for all
+coalitions. A resource-dimension upper cannot be substituted for an
+owner-independent bound depending only on $r,s$.
+
+At arity three, the square-root-to-quadratic gap remains open. The lower uses
+exponentially many resource rows. Pure ownership is possible, but requires
+more owners than the fully eligible construction; Appendix~\ref{sec:arity}
+keeps the counts separate. Neither the exponent nor its sharper constant
+claims minimal witness size. The simple binomial upper evaluates finitely
+many coalition production programs, potentially exponentially many. Efficient
+approximate evaluation requires separate incentive and coverage analysis.
+
+The graph construction in Section~\ref{graph:section} protects every coalition
+while allowing the number of resources to grow within complete P4 blow-ups and
+disjoint unions. Its factor is uniform in those counts, but its interaction
+structure is restricted. Extending the selector to arbitrary trees or graphs,
+and determining the optimal factor even on P4, remain open within this program.
+The extra funding is $F/\sqrt2$, not $(1+1/\sqrt2)F$ in addition to output.
+
+The proposed contribution is the quantitative link between fixed-owner
+coalition withholding and funding, particularly the projective cap exchange
+that supplies a constant seed without a dummy-zero assumption. Projective
+geometry, positive hypergraph supports, semivalues, and coalition monotonicity
+are established ingredients. A specialist must assess whether a prior theorem,
+possibly under different terminology or normalization, already implies the
+present bounds. The accompanying priority matrix records inspected versions
+and unresolved original-source comparisons. Internal model reviews and exact
+certificates are not a historical-novelty certificate or human peer review.
+
+A conditional infrastructure interpretation would give each owner genuine
+rights over compute inputs and firm power capacity, with physically feasible
+partial withdrawals and a sponsor who benefits from the stronger contract.
+Public telemetry does not establish those rights. The earlier bounded
+feasibility check supplied no compatible held-out outcome panel or sponsor
+surplus estimate. Moreover, a Gaussian reserve model is not automatically an
+arity-three packing technology. We therefore make no measured pooling,
+reliability, energy-saving or net-value claim here.
+
+This manuscript concerns coordinated withholding. It does not settle the
+separate owner-count/resource-dimension gap for individual incentives in the
+companion truthful-production project. Optional floor parameters, structured
+production refinements beyond the explicitly proved graph class, and application
+measurement studies are not separate new claims of this draft. The immediate questions are correctness of the
+fixed-institution reductions, priority of the quantitative bounds, and whether
+these results form a useful unit of publication.

@@ -1,0 +1,79 @@
+INDEPENDENT ARRIVAL AUDIT — ABORTED SINGLE COLLECTION
+24 October 2026. No retry or scheduler execution by this auditor.
+
+VERDICT: THE WHOLE 48-CASE QUALIFICATION IS DISQUALIFIED.
+The independent checker exits 1. No mode/load group qualifies. The favorable
+subset of any case cannot override the missing phase completion or failed gates.
+
+Artifacts
+  audit_arrivals.py                  independent stdlib auditor
+  ARRIVAL_AUDIT_PARTIAL.json         full audit, including all 2,400 planned rows
+  ARRIVAL_AUDIT_PARTIAL.log          command output and complete error list
+Inputs: qualification_run/, DRAFT_FREEZE_REPAIRED.json,
+        APPROVED_QUALIFICATION.json, and the four hashed source/protocol files.
+Source/freeze/authorization comparisons passed. The checker does not import the
+driver, copy its reconciliation/statistics routines, or execute physical timing.
+All 59 synthetic-only checker assertions pass, including received<admitted,
+missing denominators, duplicate/reordered IDs, changed absolute planned times,
+CPU checksum/PID semantics, and clean evidence with a failed timing gate.
+
+ACCOUNTING FROM THE PRESERVED FILES
+  Fixed design:                    48 cases, 50 IDs per case, 2,400 requests.
+  Case PLAN files:                 2.
+  RAW streams:                     2, each with 50 ordered offers plus one done.
+  Raw admissions and receipts:     100 each, verified against final producer rows.
+  Saved RESULT files:              1 (thread/idle, rep 0, rate 20).
+  Missing RESULT files:            47, including the raw-complete process case.
+  Cases without a case PLAN/RAW:   46.
+  Missing admissions/receipts:     2,300 of 2,400; retained in all denominators.
+  SUMMARY.json:                    absent.
+  Audit checks:                    16,245.
+  Audit error entries:             2,679, predominantly missing-file/row failures.
+These are audit messages, not 2,679 independent experimental failures.
+
+RAW DESCRIPTIVE TIMING, NANOSECONDS
+Nearest-rank p99 has rank ceil(.99*50)=50, so it equals the maximum in each case.
+
+                                 Thread/idle          Process/idle
+  rate, repetition               20, 0                20, 0
+  wake jitter p99=max             5,899,841            5,035,630
+  emission jitter p99=max         5,902,091            5,038,213
+  admission jitter p99=max        5,951,299            5,083,630
+  receipt delay p99=max           5,996,091            5,306,620
+  raw planned/admitted/received   50/50/50             50/50/50
+
+Every metric is its recorded timestamp minus its original absolute planned
+timestamp. Both cases fail the frozen admission p99<=2,000,000 ns criterion;
+both are below the separately reported 10,000,000 ns maximum limit. The process
+statistics are reconstructed from raw records because RESULT is absent. They
+are descriptive partial evidence, not a completed case or comparison study.
+
+Producer/consumer PID semantics are consistent for these two cases: consumer
+PID 67856, thread producer PID 67856, spawned producer PID 68039. Their recorded
+switch intervals are 0.005 seconds. The saved idle load record reports zero
+iterations. No python_cpu case was reached; neither CPU-load group has evidence
+of execution. The missing process RESULT also omits its final load record.
+No received timestamp precedes admission in these two raw streams; the checker
+explicitly permits that legal ordering when both timestamps follow emission.
+
+TIME-BOUND AND CAUSAL LIMITATIONS
+EPOCH phase_start_monotonic_ns = 3670864390765541.
+Last raw done receipt          = 3670869445801666.
+Their difference is 5,055,036,125 ns (5.055036125 seconds).
+No phase-end timestamp exists, so the audit leaves phase_end and phase_elapsed
+null. It does not substitute the final request timestamp for experiment end.
+
+The coordinator separately reported external SIGTERM after observed elapsed
+100.1476 seconds and exit 143. That observation is sufficient for the recorded
+operational stop decision, but it is not independently measured by PLAN/RAW/
+RESULT. The raw extent establishes that the second producer finished its offers
+before the missing RESULT; it does not identify the subsequent blocking call or
+prove a particular GIL, pipe, process-cleanup, or OS cause. No cause is inferred.
+
+The source schema does not separately timestamp ready arrival, schedule send,
+cleanup start/end, or CPU load start/end. Thus these intervals cannot be exactly
+reconstructed. Reported CPU checksums/PIDs can be checked for consistency; the
+files are not an independent OS execution trace. These limitations do not soften
+the outcome: missing SUMMARY, missing cases, and the two observed p99 failures
+each prevent qualification. No serving, energy, or general performance inference
+and no replacement run is authorized by this audit.

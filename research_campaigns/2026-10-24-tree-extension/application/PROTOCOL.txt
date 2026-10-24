@@ -1,0 +1,123 @@
+Arrival-driver qualification — premeasurement protocol,24 October2026
+UNAPPROVED: no timing collection until root reviews the exact freeze and sends go.
+
+Question and scope
+Can a process-isolated absolute-time scheduler meet the fixed arrival criterion
+under idle and controlled Python CPU/GIL-contending consumer load, compared with
+the old Event.wait producer mechanism in a consumer-process thread? This separate
+study uses synthetic request IDs, no corpus, no retrieval, no Metal/MPS, no energy
+sampler and no owner/pooling model. It neither replaces nor rehabilitates the
+invalid sealed retrieval calibration. Passing does not authorize a serving run.
+
+Treatments and common workload
+Modes: thread and spawn-process. Both execute the same producer function, use
+threading.Event.wait for the remaining absolute planned interval,
+and send the same framed JSON offer through multiprocessing.Connection pipes.
+Both add the same conservative early-return guard to the old Event.wait algorithm:
+after EVERY return, recheck the unchanged absolute planned time and wait again
+if it has not arrived. Every repeated wait remains cancellation-aware. Do not
+recenter the schedule or emit early. wake_ns records the final accepted return,
+not an intermediate early return. This is a premeasurement robustness repair,
+not evidence for a particular host clock implementation or the old failure cause.
+Each scheduler has the same otherwise-blocked cancellation-relay thread; its
+multiprocessing Event is only for shutdown, not the offer timer. This preserves
+the old threading.Event timer implementation in both placements.
+The same consumer loop receives and logs messages in both modes. No result cache,
+batching or response service exists. Startup finishes before the50ms case lead;
+startup/cleanup still consume the shared phase budget.
+Loads: idle(no extra consumer-process worker) and python_cpu(one continuously
+runnable pure-Python integer-recurrence thread,2048 updates per stop check).
+Load begins before the case schedule is sent and ends after all offers/results
+or abort. Record iteration count/checksum to verify it ran; this is a synthetic
+contention condition, not a calibrated percentage CPU or a model of MPS service.
+If its bounded join is incomplete, report final accounting unavailable and an
+operational failure, not that the load never ran. The cleanup cap is unchanged.
+Do not change sys.setswitchinterval, priority, affinity, sleep policy or thresholds.
+Record consumer and producer switch intervals and process IDs; the epoch field
+runner_adjusted_switch_interval:false describes only this runner's lack of tuning,
+not an observed history of every host/interpreter setting. Hold declared
+host/power/desktop conditions unchanged; record interruptions without replacements.
+
+Cases fixed before any new timing
+Rates20,50,100,200 offers/sec. Three repetitions with distinct schedule seeds
+2410242000+10*rep+rate_index(rep0..2,index0..3), disjoint from the old study.
+Each case has exactly50 offered IDs0..49, positive exponential interarrival gaps
+from its frozen PRNG. Do not discard, clip or resample an inconvenient gap.
+Both modes AND both load levels share the same intended offsets for each rate/rep.
+There are4rates*3reps*2loads*2modes=48cases and2,400 planned requests. Mode order
+alternates by rep/rate/load; rate/load group order is shuffled with independent
+fixed seeds2410244000+rep. All cases and offsets are in the unsigned freeze.
+No schedule is chosen using timing outcomes. Repetitions use independent PRNG
+streams; they are sequential runs on one host, not independent machines.
+
+Duration and stopping
+The generated sum of planned case horizons plus50ms leads must be<70seconds.
+A shared80-second phase deadline includes startup, case execution and cleanup;
+startup is capped at2seconds and case draining at1second after its last offer.
+Bounded cleanup can follow expiry(up to approximately1.5seconds), so the proposed
+collection is below90seconds. Slow host/startup may leave cases unrun; that is an
+incomplete failed qualification, not permission to extend or retry. No data-driven
+early success stop. Timing-criterion failures do NOT prune later frozen cases;
+process/protocol/identity/timeout failures abort the phase and preserve all plans.
+
+Clock boundary and primary qualification endpoint
+Write EPOCH.json with absolute phase_start_monotonic_ns, wall_epoch_ns and UTC
+before launching the first case. Keep monotonic integer nanoseconds as the
+interval clock; wall UTC is provenance only. After ready, prewrite every case
+planned_ns=case_start_monotonic_ns+offset_ns, with case_start=now+50ms, then send
+that exact schedule to the producer. Never recenter delayed offers or wait for a
+previous offer/receipt to schedule the next. Late requests stay late and count.
+Record for every request:
+ wake_ns: immediately after the timed wait returns;
+ emitted_ns: immediately before preparing/sending the framed offer;
+ admitted_ns: immediately after send_bytes returns;
+ received_ns: consumer clock immediately after recv_bytes returns, before parsing.
+The PRIMARY arrival jitter is admitted_ns-planned_ns. This includes producer
+wakeup, interpreter reacquisition, serialization and any pipe backpressure.
+Post-send admitted_ns is a conservative userspace upper bound on completed pipe
+acceptance, not an exact kernel timestamp. The consumer can finish reading before
+the producer regains its GIL and records admitted_ns; received<admitted is legal.
+Wake/pre-send jitter and receipt delay are separately reported diagnostics.
+A timely wake/pre-send alone NEVER qualifies the driver. Timely admission also
+does not prove timely consumer processing; receipt delay is disclosed separately.
+This endpoint is stricter than the old pre-queue.put timestamp and does not alter
+any old result. Both new modes use the same endpoint and transport.
+
+Fixed gates and comparisons
+For EACH case, exact nearest-rank p99 admission jitter<=2ms and maximum<=10ms;
+no omissions, duplicates, reordered IDs, early offers or missing timestamp/data.
+Missing admission/receipt is failure; missing admission enters percentile as
+infinity(JSON null), never leaves the denominator. With50 requests, nearest-rank
+p99 is the maximum; this intentionally stringent finite-sample check is not a
+population99th-percentile guarantee. The unchanged10ms maximum is still reported.
+A mode/load group qualifies only if the WHOLE48-case phase is complete without
+operational failures and all its12 cases meet the gates. A scheduler suitable
+for both declared load levels must qualify in both groups. No pooled average or
+favorable subset overrides a failed case. Report all case distributions/counts.
+Descriptive comparison: pair thread/process within identical rate/load/rep and
+report their p99 admission differences, alongside both absolute gates. Do not
+claim a statistical confidence interval or a general performance improvement.
+
+Identified question and exclusions
+The controlled contrast tests changing scheduler placement under these two
+synthetic consumer conditions on this host. Common transport and identical
+schedule control obvious confounds; fixed alternating/shuffled order reduces
+but does not eliminate time-varying host effects. It is not a pure GIL experiment:
+separate interpreter, process placement and OS scheduling all change together.
+It does not identify why every old offer was late, whole-Mac causal effects,
+retrieval throughput/deadline performance, energy, scaling, or owner pooling.
+
+Accounting and freeze
+Immutable phase PLAN includes all48 cases and2,400 requests before execution.
+Per-case PLAN fixes absolute timestamps before offering. RAW.jsonl retains every
+offer received and final producer record; RESULT lists every planned ID, even
+on partial failure. SUMMARY explicitly lists unrun cases. EPOCH fixes the shared
+phase start and SUMMARY records its end. A hard kill may leave no SUMMARY; that
+is an incomplete study, never success. Sender/receiver partial records survive
+where available; missing final post-send times make qualification fail.
+Preparation permits only static old-data inspection and deterministic fake-clock
+unit tests. --prepare writes authorized:false and hashes code/tests/protocol.
+Root must review, obtain cross-model QA, declare host conditions and explicitly
+approve the exact freeze before --authorization can run any physical timing.
+No approved file is created by preparation, and no automatic real collection,
+retry, tuning, threshold change or subsequent serving experiment is authorized.

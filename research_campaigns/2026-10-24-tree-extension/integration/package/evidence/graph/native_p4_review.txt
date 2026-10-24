@@ -1,0 +1,183 @@
+INDEPENDENT NATIVE AUDIT: P4 PROTECTED-LEAF MAXIMUM-FLOW SELECTOR
+24 October 2026. Read-only audit of the frozen source; no numerical probes.
+
+Source:
+/Users/maxf/.codex/visualizations/2026/09/04/01a06e8a-dcbb-7c81-9929-e72831a14ac8/research-campaigns/2026-10-24-graph-return/upper/P4_PROTECTED_LEAF_OUT.txt
+SHA256: 064142fbd338889452e3a6cdc2af96639cd3350d0065d83f2990a9bba258bc4d
+
+VERDICT
+No material gap found in the claimed all-real P4 theorem or its complete
+blow-up/disjoint-union transfer. I independently checked the flow intervals,
+the equivalent selectors, the complete smooth-cell partition, every cube
+minimum needed by the differential certificate, the boundary integration,
+arbitrary mixed actual ownership, and exact production under blow-up.
+The bound is 1+1/sqrt(2) for the stated graph class, not arbitrary graphs.
+The proof does not establish optimality. No historical-priority conclusion
+is part of this review.
+
+1. FLOW DEFINITIONS AND SELECTOR EQUIVALENCE (SOURCE LINES 14--46)
+
+Write a=1/sqrt(2), b=a^2=1/2 in this review. In the first directed component,
+the left vertices A,C have capacities A,C; right vertices B,D have capacities
+aB,aD; the edges are AB,AD,CD. The nonredundant cut bounds are
+  V=min(A+C,a(B+D),A+aD).
+Fixing a left-use w_C leaves w_A=V-w_C. Necessity gives
+  max(0,V-A)<=w_C<=min(C,aD,V).
+Conversely, for any point in this interval route w_C to D, then route
+min(w_A,aB) of A to B and the remainder to D. The latter remainder fits
+because V<=a(B+D). This proves both necessity and sufficiency of the interval.
+The same argument after swapping A<->D and B<->C gives V' and its interval.
+Thus the selected clamped vectors really are maximum flows, including ties
+and zero capacities; the interval is not merely a necessary relaxation.
+
+For the equivalence of formulas, set T=aD and z=bC in the first component.
+If T<=z, then C>=T. Its value is min(A+aD,a(B+D)), and the clamped w_C=T;
+therefore w_A=min(A,aB), as in the source's positive-part formula.
+If T>z, distinguish the active value:
+  V=A+C: w_C=C, w_A=A, and a(B+D)-A>=C;
+  V=A+T: w_C=T, w_A=A, and aB>=A;
+  V=a(B+D): w_C=clamp(z;max(0,V-A),min(C,T,V)),
+             w_A=min(A,a(B+D)-z).
+In the last case z<T<=V and z<C, so the simplification is valid. These cases
+give exactly
+  w_A=min(A,aB+(aD-bC)_+),
+  w_C=min(C,aD,max(bC,a(B+D)-A)).
+The other two formulas follow by the same swap. Equalities are consistent by
+continuity of the clamp. This also confirms 0<=w_v<=c_v globally.
+
+2. FUNDING (SOURCE LINES 48--55)
+
+Each directed double-cover flow contributes once to its source left-use;
+hence its total value is sum_v w_v=V+V'. After adding the directed copies
+on every original edge, a vertex's incident use is its left outgoing use
+plus its right incoming use, at most c_v+a c_v. Dividing these collapsed
+edge amounts by 1+a is a feasible original fractional packing. This gives
+  sum_v w_v<= (1+a) F(c).
+There is no integrality or hidden double-counting assumption. Owner payments
+sum to sum_v w_v, including coordinates with zero aggregate capacity.
+
+3. CELL PARTITION AND EXACT CUBE MINIMA (SOURCE LINES 57--143)
+
+For a coalition holding a coalition bundle s at total c, put theta_v=s_v/c_v.
+Every theta belongs to [0,1]^4. The restoration gradient is exactly
+  g_v=p_v+sum_j s_j partial_v p_j,
+because the coalition's own reported coordinate and the aggregate coordinate
+increase together; outsiders stay fixed. Thus the stated gradients do not
+silently replace mixed owners by pure owners.
+
+Set u=A-aB and v=D-aC. If u<=0, direct substitution gives
+  w_A=A, w_B=aA, w_C=min(C,aD), w_D=min(D,aC).
+If both u<=0 and v<=0, the corresponding symmetric expression agrees, so
+there is no conflicting selector on the overlap. The AB gradients are
+  g_A=1+a theta_B,  g_B=(aA/B)(1-theta_B).
+For the isolated pair X>=Y, t=Y/X:
+  t<=a: g_X=at(1-theta_X), g_Y=1+a theta_X;
+  t>=a: g_X=at(1-theta_X)+a theta_Y,
+         g_Y=(a/t)(1-theta_Y)+a theta_X.
+Both gradients are nonnegative. The minimum pair sums are respectively
+1+at and a(1+t), the latter at least a+b>1. The cross edge AD is protected
+by g_A>=1. The case v<=0 is obtained by swapping A<->D,B<->C.
+
+For u,v>0 the common formulas in source Section 4B follow by substitution.
+The two strict outer cones u<a v and v<a u cannot overlap: they would imply
+u<a^2 u. Outside these outer cones is exactly the middle cone. The listed
+cases therefore exhaust the strictly positive capacity domain, apart from
+the boundaries at which the piecewise-linear selector is continuous.
+
+In the middle cone both p_A,p_D>=b: for example u<=v/a implies
+  aB+a v>=b(aB+u)=bA.
+The four displayed gradients are correct by direct differentiation. Their
+coordinate minima are nonnegative, and the exact edge minima are
+  AB: b+min(p_A,a),
+  DC: b+min(p_D,a),
+  AD: min(p_A,a)+min(p_D,a).
+They are all at least 2b=1.
+
+In the outer cone u<=a v, B is protected at w_B=bB and A is saturated.
+For its unsaturated-C subcase,
+  p_C>=b,
+  a v-u<(1-b)C => b v<a u+a(1-b)C => bD<w_D,
+so p_D>=b. The source's four gradients are correct, individually nonnegative,
+and their exact cube minima along the three edges are
+  AB: a+b,
+  CD: min(p_C,a)+min(p_D,a),
+  AD: a+min(p_D,a).
+All exceed or equal one. In particular, the proof of p_D>=b uses the
+unsaturated-C condition; it is not being asserted without that condition.
+
+In the saturated-C subcase the source gradients are again correct. The
+nontrivial edge minima are
+  AB: 1+b,
+  AD and CD: 1+min(p_D,a),
+which need only p_D>=0, not p_D>=b. This closes the possible saturation gap.
+The symmetric outer cone follows by the same explicit vertex swap.
+
+These checks are symbolic affine minimizations on the entire theta cube,
+not tests on a finite sample of owners, capacities, or report profiles.
+
+4. SELF-CONTAINED TIE AND ZERO-BOUNDARY INTEGRATION (LINES 145--162)
+
+The use vector w is continuous and piecewise linear, with finitely many
+polyhedral cells. On the positive orthant its prices and coalition payment
+map are locally Lipschitz. For fixed outsider aggregate o>=0, let
+  H(o,s)=sum_v s_v p_v(o+s).
+As any aggregate coordinate tends to zero, its term is between zero and s_v
+and tends to zero. The remaining terms are continuous. Hence H is jointly
+continuous on all nonnegative (o,s), and H(o,0)=0.
+
+Here is a direct integration proof, without assuming a nonsmooth theorem.
+Fix 0<=s'<=s and d=s-s'. Perturb outsiders to o+epsilon z, where z is a
+strictly positive generic vector. Choose z and arbitrarily small positive
+epsilon so that the segment c(t)=o+epsilon z+s'+td is not contained in any
+proper hyperplane bounding the finitely many cells. This is possible by
+avoiding finitely many linear equalities; values that cause accidental
+containment can be omitted. Every c(t) is strictly positive. The segment
+then has finitely many breakpoints, and its coalition payment is continuous
+and piecewise continuously differentiable. At other points its derivative
+is g dot d.
+
+The checked inequalities g_v>=0 and g_u+g_v>=1 for every edge imply
+g dot d>=F(d) directly: for any feasible edge packing z_e at d,
+  sum_e z_e <=sum_e(g_u+g_v)z_e
+             =sum_v g_v incidence_v(z)<=sum_v g_v d_v.
+Taking the packing supremum and integrating gives
+  H(o+epsilon z,s)-H(o+epsilon z,s')>=F(d).
+Joint continuity lets epsilon tend to zero. This treats segments lying on
+cell ties, zero coordinates, equal capacities, the all-zero profile, and
+coalitions equal to the entire owner set. Perturbing the formal outsider
+aggregate is only an analytic approximation of H; it does not reassign or
+add actual owners to the claimed mechanism.
+
+Each coalition's actual payment is H(o,s), irrespective of how its resources
+are divided among its fixed members. Passive members contribute to s and
+remain in the payment sum. Thus the result is full coalition OUT for mixed
+owners at all real reports. Setting s'=0 gives coverage of its own production
+because H(o,0)=0. Nonnegative owner payments follow directly from p_v>=0.
+
+5. EXACT BLOW-UP VALUE AND DISJOINT-UNION TRANSFER (LINES 164--178)
+
+Collapsing any feasible packing on a complete path blow-up gives a feasible
+four-group packing, so the original value is at most the aggregate value.
+For the reverse direction take any four-group packing f_XY. At a group X of
+total capacity C_X>0 allocate to its vertex v and incident pair XY the amount
+  r_(v,XY)=c_v f_XY/C_X.
+Its total allocated use is at most c_v. If C_X=0 all incident f_XY are zero.
+For an adjacent pair with f_XY>0, place on each complete bipartite edge vw
+the quantity r_(v,XY) r_(w,XY)/f_XY. Its vertex marginals equal the assigned
+amounts. Zero-flow pairs receive zero. The resulting packing realizes every
+aggregate edge amount with exactly its original objective value. This proves
+the value identity even with zero capacities and unequal group sizes.
+
+Applying the group price to each resource exactly preserves each actual
+owner's aggregate payment and every withheld bundle's production value.
+It therefore transfers OUT, coverage, and the funding bound without changing
+actual owners. For disjoint unions both available and withheld production
+are additive, and summing component payments proves the same bound, including
+owners with resources in many components. Isolated resources contribute zero.
+
+FINAL SCOPE
+All requested theorem obligations pass. The peripheral comparison to the
+previous positive binary-min decomposition class is inherited context, not
+needed by this proof. No conclusion below two for arbitrary resource graphs,
+arbitrary edge profits, incomplete blow-up connections, or optimality on P4
+has been verified or inferred. No source edits or additional searches made.

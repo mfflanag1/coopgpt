@@ -1,0 +1,60 @@
+Static diagnosis of sealed retrieval arrival failures — 24 October 2026
+
+Evidence, not a confirmed cause
+The independent retained-data audit found all16 calibration windows failed the
+frozen2ms p99 arrival-jitter criterion. Their p99 values were3.677819–5.025643 ms;
+all maximum jitters remained below10ms. This is sufficient to invalidate the
+calibration and rate selection; changing the analysis clock cannot rescue it.
+
+The frozen source computes an absolute planned time, calls threading.Event.wait
+for its remaining interval, samples offered_ns immediately after waking, then
+puts the request into an in-process queue. This producer runs in a thread sharing
+the consumer's Python interpreter. The consumer performs response JSON decoding,
+answer checking, log serialization and queue operations, and polls/sleeps when
+idle. Native MPS work is in a subprocess; waiting for that subprocess is not
+itself evidence that the parent Python interpreter holds the GIL continuously.
+HOST.json records sys.getswitchinterval()==0.005, unchanged by the runner.
+
+Several p99s cluster near5ms, making shared-interpreter/GIL scheduling plausible.
+But raw traces do not identify that cause. At20 requests/s median jitter was
+1.978–2.270ms and between23 and47 of200 offers/window lay in[4.9,5.1]ms. At200/s
+median jitter was0.567–0.653ms, p99 was3.678–4.524ms, and only0 or1 offers/window
+lay in[4.9,5.1]ms. Thus the tail did NOT simply increase monotonically with offered
+load. OS timer coalescing/wakeup policy, interpreter reacquisition, desktop
+activity and main-loop polling can all fit aspects of this pattern. No scheduling
+trace, controlled intervention or producer-only baseline was collected then.
+
+There is also a measurement boundary: old offered_ns is sampled BEFORE queue.put.
+It measures the producer reaching the enqueue call, not completed queue admission
+or receiver availability. The new isolated harness must not label a prompt wake
+as a prompt delivered offer if a pipe is blocked. It records wake, pre-send,
+post-send and consumer receipt separately and qualifies post-send admission.
+That stricter endpoint belongs to this NEW study; the old study stays invalid.
+
+Candidate design and discriminating predictions
+Retain the old absolute Event.wait scheduling mechanism, Poisson rate family,
+and unchanged default switch interval. Compare its threaded placement with a
+spawned scheduler process on the same host, using identical framed pipe transport
+in BOTH modes. This avoids making queue-vs-pipe transport a hidden treatment.
+The threaded arm is an adaptation of the old timing algorithm to common transport,
+not a bit-for-bit replay of the old retrieval pipeline.
+
+Cross that intervention with consumer idle vs one continuously runnable pure-
+Python integer thread in the consumer process. If isolation improves admission
+under that controlled load, it supports the usefulness of process isolation for
+this synthetic workload. It does not isolate a pure GIL mechanism: process/OS
+scheduling and IPC interactions also change. If both arms fail when idle, shared
+consumer CPU contention alone is insufficient as an explanation. If an isolated
+producer passes while receipt remains late, timely queue admission has been
+established but not fast downstream processing. All outcomes remain possible.
+
+Frozen historical sources, read only
+Source root:
+/Users/maxf/.codex/visualizations/2026/09/04/01a06e8a-dcbb-7c81-9929-e72831a14ac8/research-campaigns/2026-10-24-retrieval-service
+Files under that root:
+ service_driver.py
+ calibration_native_run/*/RESULT.json
+ calibration_native_run/HOST.json
+ reviews/NATIVE_OUTCOME_AUDIT.txt
+No old protocol, code, raw trace, freeze or summary was edited. Reading timestamps
+and source is not a new timing collection. No GIL tuning, MPS run or rerun occurred.
