@@ -1,0 +1,60 @@
+{
+  "version": 2,
+  "created_utc": "2026-10-25T05:43:50.399079+00:00",
+  "status": "design_for_uninspected_panel; acquisition_not_completed",
+  "evidence_class": "descriptive_disclosure_measurement",
+  "known_development_examples": [
+    "RBB S000077173 2025-11-30",
+    "Gladstone CIK0002026098 2024-12-31"
+  ],
+  "disclosure": "Designed after these two convenience examples. Not externally preregistered. No panel outcome has been loaded.",
+  "source": "https://www.sec.gov/files/dera/data/form-n-port-data-sets/2025q2_nport.zip",
+  "source_snapshot": "Archive as downloaded now, with SHA256 and retrieval date; not claimed to be the exact historical public vintage.",
+  "access_gate": "One further permitted public access attempt, at most 30 minutes of active work. If unavailable, report data-insufficient; no proxies, identity disguise or access-control bypass; no search-selected issuer panel substitution.",
+  "sample": {
+    "filing_batch": "2025Q2 only",
+    "report_date": "2025-03-31",
+    "filing_date_max": "2025-06-30",
+    "primary_unit": "unique nonempty EDGAR series ID, reference date, USD currency entry",
+    "coverage": "Batch-defined universe, not all US bond funds and not all March 2025 filings. No private classification required. Do not duplicate share classes.",
+    "deduplication": "Among records in this batch with the same series and reference date, select the latest filing accepted by cutoff; tie by accession number. Preserve earlier originals/amendments in an audit table. Do not splice metric fields across versions.",
+    "inclusion": "Positive NAV; both metrics and all five nodes present as finite decimals; exactly one unambiguous USD entry. Missing is not zero.",
+    "exclusions": "Missing series ID, conflicting duplicate currency rows, inconsistent reference date, absent/nonfinite fields, incompatible known units; list every reason and count. No positive-NAV threshold beyond zero. Do not select by fund name, exposure size or outcome. Classify B.3 exemption separately only if documented; otherwise omitted_reason_unknown. Current holdings below threshold do not establish the required previous-three-month average. Do not infer an exemption from missing fields alone.",
+    "no_silent_repair": "No winsorization, guessed unit conversion, sign flipping, class summing, epsilon denominators or missing-to-zero fill. All-zero vectors retained and separately counted. Unresolved rows remain quarantined.",
+    "batch_alignment_check": "Before headline residuals, tabulate filing dates and reference dates and validate field mappings against the archive schema. This is a coverage check, not permission to change the fixed March reference date. If fewer than 100 eligible series remain, stop as designed. No claim that all fiscal-year cohorts appear in this batch."
+  },
+  "metrics": {
+    "signed_node_residual": "DV100 - 100*DV01, preserving reported signs",
+    "relative_node_residual": "abs(residual)/(100*abs(DV01)); undefined if DV01=0, including zero/zero",
+    "node_nav_bp": "10000*abs(residual)/NAV for compatible dollar units",
+    "primary_fund_statistic": "maximum node_nav_bp",
+    "secondary": "sum of absolute node residuals/NAV*10000, explicitly only a vector discrepancy; not a parallel-shock loss",
+    "display_precision": "Record literal source decimal strings without assuming trailing zeros reveal internal precision. If a source-documented precision q is available, record both conditional bounds: rounding 100*q01/2+q100/2, and rounding-or-truncation 100*q01+q100. These assume a common latent linear scaling and bounded quantization at the documented precision; neither is a valuation-error or materiality gate. With no documented precision, mark unknown rather than infer six decimals or convert to an error finding.",
+    "reporting": "Counts, unweighted median/p90/max, and NAV-weighted distribution on the same eligible sample; no population inference or causal claim. Report 1, 10 and 100 NAV-bp thresholds together without choosing the most favorable."
+  },
+  "source_reconciliation": {
+    "development_examples": "Exclude from confirmatory language; neither matches the fixed primary reference date.",
+    "selection": "For an initial source audit, inspect the first 20 eligible series in lexicographic series-ID order, the 20 largest primary statistics, and all ties at the 20th value; preserve overlapping membership. This audit selection is not a representative sample.",
+    "required": "Check accession, date, NAV, currency, all node pairs, amendments and Part E explanations against original filings; document shock direction, scaling and convention evidence. If conventions cannot be resolved, classify arithmetic only; no true-convexity or underreported-loss inference.",
+    "replication": "Reproduce primary statistics from the raw fields using independent rational arithmetic on the audited set. Check NAV=assets-liabilities within documented filing precision; quarantine unreconciled discrepancies. Separate Decimal and Fraction implementations in one script are arithmetic cross-checks; fixed expected-value assertions are regression checks. Neither supplies a second independent valuation model."
+  },
+  "gates": {
+    "scale_gate": "At least 100 eligible series in the fixed batch to justify a scalable panel exercise; this is an operational threshold, not a power calculation. Do not append another quarter if it fails.",
+    "materiality_gate": "At least 5 source-reconciled funds from at least 3 registrants with maximum node discrepancy >10 NAV bp, and documented comparable units/conventions. These are researcher-chosen triage thresholds, not regulatory or welfare benchmarks. Failure ends the material-discrepancy lane; do not search alternative cutoffs.",
+    "causal_gate": "No causal estimand in this pilot.",
+    "economic_interpretation_gate": "Even passing the materiality screen supports only a disclosed-scaling result. Independently justified matched portfolio revaluation, shock convention, and uncertainty bounds are required before interpreting a discrepancy as approximation error or economic exposure; fund-wide changes are not derivative margin calls.",
+    "priority_gate": "Read the latest freely accessible full Hidden Duration manuscript and targeted literature on N-PORT reporting quality/rate sensitivity. State an incremental question and contribution relative to prior work. Until then, keep the effort a replication/measurement pilot; no novelty confirmation.",
+    "long_campaign": "Do not start unless acquisition, scale, measurement, economic interpretation and priority gates pass. New holdout/design must be frozen separately before testing predictive or stress-screening claims."
+  },
+  "forbidden_inferences": [
+    "actual internal bank charges",
+    "cross-fund cash-transfer rights",
+    "cooperative stability",
+    "pooling welfare",
+    "a fully public replication of Lipper/CRSP/Morningstar-dependent studies",
+    "real-time predictive performance from a current historical archive",
+    "sum of nonlinear node shocks equals a joint shock"
+  ],
+  "amended_utc": "2026-10-25T05:47:22.739836+00:00",
+  "amendment_reason": "Pre-panel review: clarify conditional precision diagnostics, omitted B.3 fields and the scope of arithmetic checks. Keep date, sample and materiality thresholds unchanged. v1 and its hash are preserved."
+}
