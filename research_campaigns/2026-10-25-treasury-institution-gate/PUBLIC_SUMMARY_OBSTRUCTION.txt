@@ -1,0 +1,23 @@
+Why single-unit and aggregate risk summaries do not identify the allocation
+Elementary illustrative counterexample; no novelty claim or bank-data interpretation.
+
+Consider three fixed books with centered jointly Gaussian unit losses. Divide all Expected Shortfall amounts by their common Gaussian multiplier, so c(S)=sqrt(1_S^T Sigma 1_S). Same horizon, common distributional family, no valuation interaction, no missing-date ambiguity. These are more favorable conditions than the public disclosures.
+
+Model A: Sigma_A = I_3.
+Model B: Sigma_B = [[1,1/2,-1/2],[1/2,1,0],[-1/2,0,1]].
+
+Both matrices are positive definite. B's leading principal minors are1,3/4,1/2, all strictly positive (Sylvester criterion). Both have unit diagonal and 1^T Sigma 1=3. Therefore all three stand-alone risks are1 and total risk is sqrt(3), giving total savings T=3-sqrt(3), in BOTH models. Every marginal Gaussian distribution and the total Gaussian distribution agree, not merely their risk summaries.
+
+However, in A the pair {1,3} has risk sqrt(2), whereas in B it has risk1. Thus its required savings are2-sqrt(2) versus1. Coalition constraints differ despite identical published marginal/aggregate summaries.
+
+The difference also changes both fairness selectors, without relying on a numeric optimizer:
+
+A: y_A=(T/3,T/3,T/3). It is core-feasible. Each pair receives2T/3 >=2-sqrt(2), since sqrt(2)>=2sqrt(3)/3. All singletons receive nonnegative savings; total isT. A vector with meanT/3 cannot have minimum greater or maximum smaller thanT/3. Hence both full ascending leximin and full descending lexicographic minimum select y_A uniquely.
+
+B: y_B=(1/2,2-sqrt(3),1/2). Singleton savings are nonnegative and total isT. Pair {1,3} receives1, attaining its constraint. Pair {1,2} receives5/2-sqrt(3)>=2-sqrt(3); pair {2,3} receives5/2-sqrt(3)>=2-sqrt(2). The latter inequality follows from sqrt(3)-sqrt(2)<1/2. Hence y_B is core-feasible.
+
+For ascending leximin in B, y1+y3>=1 and efficiency imply y2<=T-1=2-sqrt(3)<1/2. The best achievable minimum is2-sqrt(3), attained by y_B. At that level y2 must be fixed and y1+y3=1; the next max-min level is1/2. For descending lexicographic minimum, y1+y3>=1 forces maximum>=1/2, and y_B attains it. At that level y1=y3=1/2 and efficiency fixes y2. Thus both full selectors equal y_B, which differs from y_A.
+
+Scope: this demonstrates non-identification from single-book distributions plus the grand total. It does not prove that every possible richer public disclosure is insufficient. Pairwise covariances would identify this Gaussian example; nonlinear/non-Gaussian applications generally need a joint scenario representation or coalition valuation rule. It also does not establish a gap BETWEEN the two selectors; within each model they agree. It shows that public summary statistics cannot identify WHICH common allocation is correct.
+
+Application implication: request same-scenario book losses (or validated exposures plus full joint factor scenarios), along with the institutional contract. Do not reverse-engineer risk ownership, coalition costs or current allocations from segment profits, VaR diversification rows or annual maxima/minima. No new synthetic portfolio search is proposed.
