@@ -1,0 +1,152 @@
+EXACT P6 OBSTRUCTION TO RECURSIVE PROTECTED-LEAF PROJECTION
+24 October 2026. Bounded tree-extension gate. Read-only canonical work;
+this file concerns a specified recursive selector, not arbitrary mechanisms.
+
+OUTCOME AND STOP.
+The accepted P4 protected-leaf selector does not extend by sequentially
+projecting leaf uses to a fixed fractional reserve on the asymmetric
+maximum-flow face. An exact all-positive P6 example has zero payment loss
+for a fixed mixed owner withholding a productive middle-edge bundle.
+The same failure holds for every 0<alpha<1 and every fixed reserve fraction
+0<=beta<1. This closes this recursive branch; it does not disprove a uniform
+constant below2 for arbitrary full-OUT mechanisms on all trees.
+
+1. PRECISE SELECTOR UNDER TEST.
+For a unit-profit tree T and capacity c, form the asymmetric bipartite double
+cover with left capacities c_v and right capacities alpha*c_v. Select maximum
+flow. A tree is bipartite, so its double cover has two orientation components.
+In each component, visit its left vertices according to a fixed leaf-peeling
+order of the original tree, with any deterministic tie-breaking. At a visited
+vertex v, among maximum flows consistent with all already fixed left uses,
+compute the feasible interval [l_v,h_v] of its left use. Fix that use to
+ clamp(beta*c_v; l_v,h_v).
+Continue until all left uses are fixed; pay each actual owner i
+ y_i=sum_v b_iv*w_v/c_v,
+with zero contribution at c_v=0. On P4, choosing alpha=1/sqrt(2), beta=1/2
+and visiting its two original leaves before the two internal vertices gives
+exactly the accepted protected-leaf selector (one leaf in each orientation).
+
+The universal double-cover funding identity remains true for this rule:
+ sum_v w_v <= (1+alpha) F_T(c).
+It is not an incentive certificate. The counterexample below shows that its
+naive recursive extension loses full OUT, despite retaining flow feasibility.
+
+2. CANONICAL EXACT COUNTEREXAMPLE.
+Let T be the six-vertex path 0--1--2--3--4--5. Set alpha=1/sqrt(2), beta=1/2,
+and use the full capacity vector
+ c=(1, sqrt(2), 1/4, 1/4, sqrt(2), 1).
+The same three actual owners are used at both profiles:
+ owner I holds all resources0,2,3,5;
+ owner II holds resource1, capacity sqrt(2);
+ owner III holds resource4, capacity sqrt(2).
+Only owner I deviates, reducing both middle resources2 and3 from1/4 to1/8.
+It keeps its resources0 and5 unchanged. Thus
+ c'=(1, sqrt(2), 1/8, 1/8, sqrt(2), 1),
+ d=c-c'=(0,0,1/8,1/8,0,0), and F_T(d)=1/8.
+
+At the full profile, the selected left-use vector is
+ w=(3/4, 5alpha/4, 1/4, 1/4, 5alpha/4, 3/4).
+At the lower profile it is
+ w'=(7/8, 9alpha/8, 1/8, 1/8, 9alpha/8, 7/8).
+Therefore owner I's payment is
+ y_I(c)=3/4+1/4+1/4+3/4=2,
+ y_I(c')=7/8+1/8+1/8+7/8=2.
+Full OUT requires their difference to be at least1/8, but it is zero.
+This is already singleton OUT with one mixed owner, not merely a coalition
+failure. No owner or resource is reassigned during the comparison.
+
+3. ELEMENTARY MAXIMUM-FLOW AND SELECTION CERTIFICATE.
+In the orientation with left vertices{0,2,4}, all right capacities can be
+saturated. At the full profile take directed flows
+ 0->1 =3/4, 2->1 =1/4,
+ 4->3 =alpha/4, 4->5 =alpha,
+and all other directed flows in this component zero. The right capacities
+are alpha*c1=1, alpha*c3=alpha/4, alpha*c5=alpha, so this is a maximum flow.
+Any maximum flow saturates right1. Its only incoming sources are0 and2;
+source2 has capacity1/4. Consequently w0>=1-1/4=3/4. The displayed flow
+attains this bound. The first visited original leaf0 therefore has interval
+lower endpoint3/4>beta*c0=1/2, so the selector fixes w0=3/4. Saturation of
+right1 then forces source2 to spend its entire1/4 on that right vertex.
+The remaining right capacities are forced to come from source4. All left
+uses in this orientation are thus fixed, regardless of subsequent order.
+
+The other orientation is the reflected argument: its first original leaf5
+has feasible minimum3/4>1/2, fixing w5=3/4 and forcing w3=1/4, with the
+remaining flow from source1. The order between original leaves0 and5 is
+irrelevant because they lie in different orientation components.
+
+At the lower report, replace1/4 by1/8 in this argument. Right1 and right4
+still have capacity1. Their adjacent middle sources now have capacity1/8,
+so the original leaves have feasible minimum7/8. The displayed lower flow
+saturates all right capacities and obeys every left capacity. In particular
+5alpha/4<sqrt(2) and9alpha/8<sqrt(2), and both endpoint uses are below1.
+The same selection argument forces exactly w'. Thus the finite report
+comparison is proved without relying on numerical differentiation, an LP
+solver, or the generic rank implementation used for discovery.
+
+4. GENERAL FIXED-RESERVE OBSTRUCTION.
+Fix arbitrary 0<alpha<1 and 0<=beta<1. Choose
+ 0<q<min(1-beta, alpha^(-2)-1, 1).
+On the same P6, set
+ c(q)=(1,1/alpha,q,q,1/alpha,1).
+The useful strict inequalities are
+ 1-q>beta and alpha(1+q)<1/alpha.
+Both orientation components therefore admit maximum flows saturating every
+right capacity, with selected left-use vector
+ w(q)=(1-q,alpha(1+q),q,q,alpha(1+q),1-q).
+For example in the first orientation use0->1=1-q, 2->1=q,
+4->3=alpha*q, 4->5=alpha; reflect for the other orientation.
+Each component's maximum-flow value is1+alpha(1+q), its total right capacity.
+Right vertices1 and4 have capacity1. Since their middle sources have capacity
+q, every maximum flow has w0>=1-q and w5>=1-q. The endpoint reserve beta is
+strictly below1-q, so each first original-leaf clamp selects that lower
+endpoint. Right saturation then forces all remaining left uses, independently
+of subsequent tie-breaking or reserve choices.
+
+Let the same mixed owner hold0,2,3,5 and the same two outsiders hold1,4.
+Reduce both middle reports from q to q/2. The new selected vector is
+ w(q/2)=(1-q/2,alpha(1+q/2),q/2,q/2,alpha(1+q/2),1-q/2).
+All capacities remain strictly positive and feasible; the original leaves'
+uses stay below1. The maximum-flow and clamping proof is unchanged. The
+mixed owner's payment is identically2 at both reports, while its withheld
+bundle produces q/2 on edge2--3. Thus OUT fails for every stated alpha and
+beta. A completely specified admissible parameter is
+ q=min(1-beta,alpha^(-2)-1,1)/2.
+
+This includes reserves beta=alpha^2, so increasing alpha toward1 or retuning
+the fractional reserve cannot repair this recursive architecture. The proof
+also allows different fixed endpoint fractions beta0,beta5<1: use their
+maximum in the displayed q bound. It does not cover beta=1, different globally
+coupled selections, reserves depending on other reports, mixtures of selectors,
+or arbitrary admissible mechanisms. No successor search on these alternatives
+is authorized by this obstruction.
+
+5. INDUCTION BOTTLENECK EXHIBITED BY THE EXAMPLE.
+The P4 proof reserves two outer leaves while the two residual central
+vertices remain adjacent and coupled. In P6, fixing the first original leaf
+in each orientation at its feasible minimum saturates both middle sources
+into their outer neighbor sinks. This creates two independently tight cuts.
+A mixed owner holding both endpoint leaves and both middle sources then has
+payment determined only by the two unchanged outsider capacities. Reducing
+the middle edge's two endpoint resources is exactly offset by increased
+payment on its unchanged original leaves. Funding and flow feasibility do
+not constrain this redistribution enough to imply OUT.
+Any valid tree induction must retain a joint boundary-response condition
+across the middle edge; fixing feasible endpoint reserves independently
+loses that information. The example is an exact obstruction to that proposed
+compatibility step, not a proof that every possible compatibility invariant
+fails.
+
+6. NO-GO LEDGER AND VERIFICATION SCOPE.
+Inherited routes not reopened: balanced utilization selection, integrable
+homogeneous gradient prices, independent component-local pair prices,
+positive binary-min decompositions. The only new branch was the explicit
+sequential protected-leaf projection above, and it is now closed by Section4.
+The P4 theorem and its complete-blowup/disjoint-union corollary are untouched.
+No all-tree upper below2 or new arbitrary-mechanism lower has been obtained.
+
+Discovery: leaf_projection_probe.py/.json found finite P5/P6 failures using
+piecewise-linear rank formulas. These are diagnostics only. The proof in
+Sections2--4 uses direct displayed flows and a forced leaf minimum, and is
+independent of the discovery implementation. An exact standalone checker
+verifies the canonical finite report comparison.

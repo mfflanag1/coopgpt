@@ -1,0 +1,2258 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs,array,longtable,enumitem}
+\usepackage[round,authoryear]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage{xcolor}
+\hypersetup{pdftitle={The cost of coalition withholding: resource dimension and coalition size},pdfauthor={Maxwell Flanagan},pdfsubject={Specialist correctness and priority-review draft}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\ind}{\mathbf1}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\setlength{\emergencystretch}{2em}
+\title{The cost of coalition withholding:\\resource dimension and coalition size}
+\author{Maxwell Flanagan\\[2pt]\small New York City, United States\\[2pt]
+\small Corresponding author: \texttt{maxwell.flanagan@gmail.com}}
+\date{24 October 2026\\\small Specialist correctness and priority-review draft; not submitted}
+\begin{document}
+\maketitle
+\begin{abstract}
+Owners contribute resource bundles to a common production technology. Payments
+must cover every coalition's stand-alone production and resist coordinated
+resource withholding, with side payments allowed inside the deviating coalition.
+We distinguish payment-only protection from protection that also compensates
+the coalition's outside production. For finite-valued monotone concave
+homogeneous technologies on $d$ resources, the sharp worst-instance total-funding
+factors are $(d+1)/2$ and $1+c(d-1)$ respectively, where
+$c(2-e^{-1/c})=1$ and $c\simeq0.5430633898$.
+For packing production of activity arity at most $r$, protecting coalitions of
+at most $s$ owners admits a full-outside funding factor $rs^{r-1}$,
+independently of the owner and resource counts.
+A projective construction gives an unrestricted payment-only lower
+$K_3(s)\ge\sqrt{s/6}$, with a sharper explicit certificate asymptotic to
+$\sqrt{2\pi s}/(3\sqrt e)$. It extends to
+$K_r(s)=\Omega_r(s^{(r-2)/(r-1)})$ for every fixed $r\ge3$.
+For unit-profit four-vertex paths, complete path blow-ups and their disjoint
+unions, an explicit coupled flow selector gives full outside protection with
+total-funding factor $1+1/\sqrt2$, independently of owner and resource counts.
+All rules and deviations retain fixed actual owners and their full real report
+boxes. We give complete proofs, distinguish mixed and pure ownership, and
+supply exact finite certificate checks. The arity-three gap to $3s^2$ remains
+open. The quantitative claims are submitted for specialist correctness and
+priority assessment; the underlying monotonicity axioms, semivalues and
+hypergraph ingredients have established antecedents.
+\end{abstract}
+\smallskip
+\noindent\textbf{Keywords:} coalition incentives; resource withholding;
+production games; subsidy; sparse activities; cost sharing.
+\clearpage
+\tableofcontents
+\newpage
+
+\section{Introduction and relation to prior work}\label{sec:intro}
+An efficient division can protect every coalition at one production profile
+and still fail when several owners withhold resources together. This paper
+studies the extra funding needed to choose payments consistently across all
+feasible reports. Owners may supply several inputs. Their identities,
+eligibility and endowment boxes remain fixed, and a protected coalition may
+include members whose reports do not change. Transfers inside the coalition
+make its total payment the relevant incentive quantity.
+
+Two parameters organize the results. Resource dimension $d$ measures the
+number of distinct inputs when every coalition is protected. Activity arity
+$r$ instead bounds the inputs used by one production activity, while both the
+number of resources and owners may grow; $s$ bounds only the size of coalitions
+receiving incentive protection. Static coverage remains unrestricted.
+A sponsor's factor $\kappa$ bounds total payments by $\kappa$ times realized
+production. The external supplement is therefore $(\kappa-1)$ times
+production, not $\kappa$ times production.
+
+The paper joins the sharp dimension frontiers with a new lower-bound
+construction for bounded-coalition protection. The dimension results include
+mixed-owner upper formulas and a reduction from arbitrary finite-owner rules
+for the matching outside-production lower. The sparse upper is a binomial
+marginal construction using bounded-rank positive supports. The arity-three
+lower uses a constant-size productive seed, lawful symmetry of a fixed
+institution, and a ladder of one-owner restorations accompanied by unchanged
+protected members. The construction proves a funding obstruction for arbitrary
+payment functions, rather than only for a prescribed family of mechanisms.
+Appendix~\ref{sec:arity} gives the higher-arity and pure-owner versions in the
+same paper. Section~\ref{graph:section} adds a constructive counterpart for a restricted
+class of unit-profit resource graphs. Its protected-leaf maximum-flow selector
+satisfies all-coalition outside protection with factor $1+1/\sqrt2$ on complete
+four-vertex-path blow-ups and disjoint unions, with arbitrary mixed ownership.
+This is a scoped graph construction, not an upper bound for arbitrary graphs
+or a claim of optimality on that class. The quantitative comparisons and proof
+dependencies are summarized in the separate specialist brief.
+
+\paragraph{Demand monotonicity and absence-proofness.}
+The aggregate-sum monotonicity used here has a close antecedent in strong group
+monotonicity of \citet{MoulinSprumont2004}. Their scalar integer-demand
+formulation permits passive members of the protected group. We do not claim
+that inequality as a new axiom. Their Proposition~2(ii), in the inspected 2004
+author version, also assumes additivity, separability and exact balance; its
+impossibility does not directly apply to our unrestricted overfunded rules.
+The production class matters as well. \citet{Dogan2013} studies
+absence-proofness with coalition outside worth in efficient subgame allocation
+schemes. That is a close conceptual comparison to full outside protection.
+Its inspected working-paper contract concerns binary absence and efficient
+subgames. Whether a published or related result implies a present quantitative
+bound is an explicit priority-review question.
+
+\paragraph{Cross-monotonic sharing.}
+\citet{ImmorlicaEtAl2008} give quantitative limitations of cross-monotonic
+cost and profit sharing. Their profit formulation has compatible overfunding
+and core signs. Its cross-monotonicity constrains each incumbent separately
+under participation changes, whereas our withholding condition constrains the
+sum for a coalition that can include a restoring owner. Their maximum-flow
+lower uses the individual constraints. It cannot be transferred solely from
+the theorem headline; an additional reduction would be needed. We make no
+claim that all related lower-bound techniques have been exhausted.
+
+\paragraph{Population-monotonic matching allocations.}
+\citet{XiaoFang2021} study efficient allocation schemes for induced-subgraph
+matching games whose players are vertices. Their population monotonicity
+requires each incumbent's share to increase when the population expands.
+The P4 property in their Lemma~3 rules out the unit-weight path under that
+contract. Our graph theorem instead permits subsidized payments, divisible
+resource reports and mixed ownership, and protects a deviating coalition's
+aggregate payment plus its outside production. It does not impose individual
+incumbent population monotonicity. Consequently that obstruction neither
+contradicts nor establishes priority for the construction below.
+
+\paragraph{Static subsidies and restricted coalitions.}
+The cost of stability of \citet{BachrachEtAl2009} concerns subsidies making a
+single cooperative game stable, and already includes projective geometry and
+square-root phenomena. Neither ingredient alone is new here. Every packing
+profile in this paper already has an efficient static cover by dual prices;
+the obstruction is consistency across reports.
+In \citet{MeirEtAl2011}, a coalition-size restriction removes static blocking
+constraints. Here all coalition coverage constraints are retained, and the
+size restriction applies only to incentive comparisons. The parameters cannot
+be identified without changing the problem.
+
+\paragraph{Positive supports and semivalues.}
+The hierarchy of positive hypergraph representations developed by
+\citet{FeigeEtAl2014}, and the bounded-rank loss inequalities in
+\citet{EzraEtAl2018}, are antecedents for the sparse upper.
+Binomial marginal values and their relation to collusion are also established;
+see, for example, \citet{Casajus2011}. We include a direct proof of the exact
+upper used here, including full outside protection and mixed ownership, rather
+than attributing novelty to the probabilistic value itself. The central-binomial
+identity in the lower-bound ladder is a separate arithmetic ingredient.
+
+\paragraph{Review status and scope.}
+The proposed contribution is the collection of quantitative funding bounds
+under the stated contracts, especially the arbitrary-rule projective ladder and the coupled graph selector.
+This draft is not a claim of verified historical priority. The review packet
+identifies original versions inspected, missing published-source comparisons,
+and additional cost-sharing leads. Internal AI-assisted audits and exact
+finite certificates do not replace specialist review of either correctness or
+novelty. No empirical pooling, power-reliability or opportunity-cost conclusion
+is included.
+
+\section{Model and funding frontiers}\label{sec:model}
+An institution fixes a finite set $N$ of actual owners and $d$ resource types.
+Owner $i$ has an endowment $\bar b_i\in\R_+^d$ and may report any
+$b_i\in[0,\bar b_i]$ coordinatewise. Zero endowment coordinates encode
+ineligibility. These owners, coordinates, boxes and the public technology
+remain fixed throughout every comparison. Write $b_C=\sum_{i\in C}b_i$,
+$B=b_N$, and $\mathcal B=\prod_{i\in N}[0,\bar b_i]$.
+Different institutions may have different, arbitrarily large finite owner and
+resource counts.
+
+The technology $F:\R_+^d\to\R_+$ is finite-valued, monotone, concave and
+homogeneous of degree one, with $F(0)=0$. These properties imply
+superadditivity:
+\begin{equation}\label{eq:superadditive}
+ F(x+y)=2F((x+y)/2)\ge F(x)+F(y).
+\end{equation}
+No closed-orthant continuity assumption is imposed on the general dimension
+class. In the sparse-production sections we specialize to a finite packing
+program
+\begin{equation}\label{eq:packing}
+ F(c)=\max\{\pi\cdot x: Ax\le c,\ x\ge0\},\qquad A\ge0,\quad\pi\ge0.
+\end{equation}
+Every positive-profit column consumes a positive amount of at least one
+resource. Zero-profit columns may be discarded. The optimum is finite and
+attained at finite capacities. Its \emph{activity arity} is the maximum number
+of positive entries in a positive-profit column. Arity three permits many
+resource rows; it does not mean three resources in total.
+
+A rule is an arbitrary map $y:\mathcal B\to\R_+^N$.
+It need not be continuous, anonymous, marginal, or linear. All requirements
+below concern the same rule at every real report profile. For
+$y_C(b)=\sum_{i\in C}y_i(b)$, \emph{coalition coverage} is
+\begin{equation}\label{eq:coverage}
+ y_C(b)\ge F(b_C)\qquad(C\subseteq N,\ b\in\mathcal B).
+\end{equation}
+Coverage is required for \emph{every} coalition, without a size restriction.
+A total-funding factor $\kappa$ means
+\begin{equation}\label{eq:funding}
+ \sum_{i\in N}y_i(b)\le\kappa F(B)\qquad(b\in\mathcal B).
+\end{equation}
+Thus the external subsidy is at most $(\kappa-1)F(B)$; $\kappa$ itself is a
+factor on total payments. When $F(B)=0$, nonnegativity and
+\eqref{eq:funding} force every payment to vanish. At a positive-production
+profile, an owner reporting zero is allowed to receive a positive payment.
+There is no deletion-marginal floor or separate dummy-zero axiom.
+
+\begin{definition}[Coalition withholding contracts]\label{def:contracts}
+Fix an integer $s\ge1$. For every $C\subseteq N$ with $|C|\le s$, let
+$\delta_i\in[0,b_i]$ for $i\in C$ and $\delta_i=0$ outside $C$.
+\emph{Transferable coalition withholding monotonicity} (TCWM) requires
+\begin{equation}\label{eq:tcwm}
+ y_C(b)-y_C(b-\delta)\ge0.
+\end{equation}
+\emph{Full outside-production protection} (full OUT) requires
+\begin{equation}\label{eq:out}
+ y_C(b)-y_C(b-\delta)\ge F(\delta_C).
+\end{equation}
+Protected coalitions may contain unchanged members: $\delta_i=0$ is allowed
+for any member of $C$. For unrestricted coalition protection, these
+inequalities are required for every $C\subseteq N$.
+\end{definition}
+
+Both contracts permit side payments within the protected coalition. TCWM
+uses payment-only utility; full OUT additionally allows the coalition to
+produce with its pooled withheld resources. Neither is a model of arbitrary
+misreports, private opportunity costs, or an endogenous change in the owner
+roster. Full OUT implies TCWM. A lower bound for TCWM therefore also applies
+to full OUT, whereas a TCWM construction need not satisfy full OUT.
+
+For an institution $I$, let $k_s(I)$ and $k_s^{\mathrm{OUT}}(I)$ be the
+infima of its feasible factors under these respective contracts and
+\eqref{eq:coverage}. Define
+\begin{equation}\label{eq:frontiers}
+ K_r(s)=\sup_{I:\,\text{arity}(I)\le r} k_s(I),\qquad
+ K_r^{\mathrm{OUT}}(s)=\sup_{I:\,\text{arity}(I)\le r}
+ k_s^{\mathrm{OUT}}(I).
+\end{equation}
+The supremum ranges over all finite packing institutions, including their
+actual eligibility and endowment boxes. A uniform upper constructs one rule
+for each entire institution; a lower constructs an institution on which
+\emph{every} rule has an expensive feasible report. The infimum convention
+does not assume optimal rules are attained. We use $D_d$ and
+$D_d^{\mathrm{OUT}}$ for the corresponding worst-instance factors for general
+$d$-resource technologies when \emph{every} coalition receives protection.
+
+\begin{remark}[Static feasibility versus cross-report incentives]\label{rem:static}
+For a packing technology, at each fixed profile an optimal nonnegative dual
+price $w$ gives payments $w\cdot b_i$. Dual feasibility implies
+$w\cdot b_C\ge F(b_C)$, and their sum is $F(B)$.
+Thus each individual report profile admits an efficient coalition cover.
+The funding problem concerns selecting payments consistently across profiles.
+Neither the static core nor an integrality-gap calculation by itself proves
+our cross-report lower bounds.
+\end{remark}
+
+
+\section{The universal resource-dimension frontier}
+\label{dim:section}
+
+Here the technology may be any finite-valued function
+$F:\R_+^d\to\R_+$ that is coordinatewise nondecreasing, concave, and
+positively homogeneous of degree one. In particular, $F(0)=0$.
+Continuity between different support faces is not assumed.
+The owners, their eligibility, and their finite coordinatewise endowment
+bounds are fixed throughout each mechanism. All real reports in those
+boxes, including zero reports, are in its domain.
+
+Write $D_d$ for the supremum, over these technologies and fixed finite
+owner models, of the infimal funding factor for nonnegative,
+coalition-covering TCWM payments. Define $D_d^{\mathrm{OUT}}$ in the same
+way with full coalition outside-production protection. Write $Y_S(b)=\sum_{i\in S}y_i(b)$. Thus coverage means
+$Y_S(b)\ge F(\sum_{i\in S}b_i)$ for every coalition, and full OUT means
+\begin{equation}\label{dim:out-contract}
+ Y_S(b)-Y_S(b-w_S)\ge
+ F\left(\sum_{i\in S}w_i\right),
+ \qquad 0\le w_i\le b_i\quad(i\in S).
+\end{equation}
+TCWM replaces the right-hand side by zero. A coalition may contain members
+whose reports do not change. A funding factor $K$ means
+$\sum_i y_i(b)\le K F(\sum_i b_i)$ at every report, including those with
+zero production. These definitions do not presume attainment of a
+particular model's infimal factor.
+
+\begin{theorem}[Sharp universal dimension factors]\label{dim:main}
+For every integer $d\ge1$,
+\begin{equation}\label{dim:frontiers}
+ D_d=\frac{d+1}{2},\qquad
+ D_d^{\mathrm{OUT}}=1+c(d-1),
+ \qquad c\bigl(2-e^{-1/c}\bigr)=1,
+\end{equation}
+where $c$ is the unique solution in $(1/2,1)$
+($c\simeq0.5430633898$).
+The upper bounds use explicit payment formulas for arbitrary fixed mixed
+owners. At a report with exactly $k\ge1$ active resource coordinates they
+give the stronger respective factors $(k+1)/2$ and $1+c(k-1)$; at the zero
+report they pay zero. The matching lower bounds already hold for
+$F(C)=\min_{1\le j\le d}C_j$ on fixed finite endowment boxes, uniformly
+over the number of actual owners.
+\end{theorem}
+
+The sharpness is a worst-case statement across finite owner models.
+It does not assert the same lower bound for every technology or every fixed
+owner count. The lower bounds impose no anonymity, continuity,
+measurability, homogeneity, or price representation on the original
+mechanisms. The proof below constructs regular prices only as a consequence
+of assuming a uniform bound for all finite owner models.
+
+\subsection{Payment-only upper bound and a finite-owner lower bound}
+
+For aggregate report $C=\sum_i b_i$, let $I=\{j:C_j>0\}$ and $k=|I|$.
+For $j\in I$ define the independent-uniform face average
+\begin{equation}\label{dim:uniform-rule}
+ A_j(C)=\int_{[0,1]^{I\setminus\{j\}}}
+ F\left(C_j e_j+\sum_{\ell\in I\setminus\{j\}}u_\ell C_\ell e_\ell\right)
+ \,du_{-j},\qquad
+ y_i(b)=\sum_{j\in I}\frac{b_{ij}}{C_j}A_j(C).
+\end{equation}
+An integral over an empty set of coordinates is its integrand; all payments
+are zero when $I$ is empty.
+
+\begin{proposition}\label{dim:uniform-upper}
+The rule \eqref{dim:uniform-rule} is nonnegative, covers every coalition,
+is TCWM at all real reports, and has total payment at most
+$(k+1)F(C)/2$ when $k\ge1$.
+\end{proposition}
+
+\begin{proof}
+For coalition aggregate $a$ and fixed outsider aggregate $o$, its
+coordinate-$j$ payment is
+\[
+ \frac{a_j}{a_j+o_j}A_j(a+o).
+\]
+Both nonnegative factors are nondecreasing under any coordinatewise
+increase of $a$. If a new coordinate becomes active, its own contribution
+is nonnegative. In each old face average, integrating over that newly
+active coordinate cannot lower the old integrand, whose coordinate was
+identically zero. This proves finite TCWM, including comparisons between
+different support faces.
+
+For coverage, work in the $k$-dimensional active face. A finite concave
+function is locally Lipschitz and differentiable almost everywhere on its
+relative interior. At such a point $x$, its gradient $g(x)$ is nonnegative,
+and homogeneity gives $g(x)\cdot x=F(x)$. Moreover
+\begin{equation}\label{dim:gradient-majorant}
+ g(x)\cdot z\ge F(z)
+ \quad\text{for every nonnegative $z$ supported on this face.}
+\end{equation}
+This includes boundary $z$: for $0<t<1$, apply the supporting inequality
+at $x$ to $(1-t)x+tz$, and combine it with concavity along the same segment.
+After subtracting $F(x)$ and dividing by $t$, Euler's identity gives
+\eqref{dim:gradient-majorant}, without taking a boundary-continuity limit.
+
+Let $U_j$ be independent uniform random variables. For almost every fixed
+$U_{-j}$, one-dimensional absolute continuity on $[\varepsilon,1]$ gives
+\[
+ C_j\int_\varepsilon^1
+ \partial_jF(u_jC_j,U_{-j}C_{-j})\,du_j
+ =F(C_j,U_{-j}C_{-j})-F(\varepsilon C_j,U_{-j}C_{-j})
+ \le F(C_j,U_{-j}C_{-j}).
+\]
+The derivatives are nonnegative. Letting $\varepsilon\downarrow0$ and
+using Tonelli therefore yields
+$\E g_j(U\mathbin{\odot}C)\le A_j(C)/C_j$.
+Averaging \eqref{dim:gradient-majorant} proves
+$\sum_jz_jA_j(C)/C_j\ge F(z)$. Taking $z$ to be the aggregate of any
+actual coalition proves coverage.
+
+Finally, two applications of concavity give
+\begin{align*}
+ \sum_{j\in I}A_j(C)
+ &\le\sum_{j\in I}
+ F\left(C_je_j+\tfrac12\sum_{\ell\in I\setminus\{j\}}C_\ell e_\ell\right)\\
+ &\le kF\left(\frac{k+1}{2k}C\right)
+ =\frac{k+1}{2}F(C).
+\end{align*}
+For $k=1$ the same formula pays exactly $F(C)$; the empty face is immediate.
+\end{proof}
+
+\begin{proposition}[A finite obstruction]\label{dim:finite-lower}
+Let $d\ge2$ and $s\ge2$ be integers. On $n=(d-1)s+1$ fixed owners,
+each eligible for every resource and each with endowment box $[0,1]^d$,
+the technology $F(C)=\min_jC_j$ forces every nonnegative,
+coalition-covering TCWM rule to have funding factor at least
+\begin{equation}\label{dim:finite-bound}
+ 1+\frac{(s-1)((d-1)s-1)}{2s^2+(d-3)s-1}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Suppose the factor is $\kappa$, and put $\delta=\kappa-1\ge0$.
+Average the rule over all permutations of the owner labels and resource
+labels. The fixed domain and technology are invariant under these finite
+groups. Nonnegativity, every coverage and TCWM inequality, and the funding
+bound are linear and hence are preserved. It suffices to consider this
+invariant rule; symmetry is not an assumption on the original mechanism.
+
+At profile $P_0$, put $s$ pure unit reporters in each resource group
+$1,\ldots,d-2$, one pure unit reporter in each of the last two groups,
+and leave the other $s-1$ actual owners at zero reports. Let the respective
+per-owner payments be $a,b,w$, where $w\ge0$. Selecting one owner from
+each resource group produces one, and grand production is one. Thus
+\[
+ (d-2)a+2b\ge1,\qquad
+ (d-2)sa+2b+(s-1)w\le\kappa.
+\]
+Subtracting gives $(d-2)(s-1)a+(s-1)w\le\delta$, whence
+\begin{equation}\label{dim:b-bound}
+ 2b\ge1-\frac{\delta}{s-1}.
+\end{equation}
+When $d=2$ the terms involving the absent first groups are zero.
+
+At $P_1$, the $s-1$ zero reporters restore a pure unit of resource $d-1$.
+TCWM applied to these owners together with the original resource-$(d-1)$
+owner shows that this group's new payment is at least $b+(s-1)w\ge b$.
+The first $d-1$ groups are now symmetric. If $S$ is their union, then
+$Y_S(P_1)\ge(d-1)b$.
+
+At $P_2$, every member of this same coalition $S$ restores its report to
+one in each of resources $1,\ldots,d-1$ and zero in resource $d$.
+These are feasible increases within the original unit boxes. Leave the
+last-resource owner unchanged. Write $m=(d-1)s$. All $m$ members of $S$
+now have the same payment $p$, and write $q$ for the last owner's payment.
+One member of $S$ together with that owner produces one, so
+$p+q\ge1$ while $mp+q\le\kappa$. Consequently
+\[
+ (d-1)b\le Y_S(P_1)\le Y_S(P_2)=mp
+ \le\frac{m}{m-1}\delta.
+\]
+Combining this with \eqref{dim:b-bound} and rearranging gives
+\eqref{dim:finite-bound}. All denominators are positive. All $n$ owners
+remain present throughout; in particular, the proof never assumes that a
+zero reporter receives zero at a positive-output profile.
+\end{proof}
+
+Letting $s\to\infty$ in \eqref{dim:finite-bound} and using
+Proposition~\ref{dim:uniform-upper} proves $D_d=(d+1)/2$ for $d\ge2$.
+For $d=1$, homogeneity makes $F$ linear on its ray; linear payments and
+grand-coalition coverage give $D_1=1$.
+
+\subsection{The logarithmic rule for full outside production}
+
+Put $t_0=1-e^{-1/c}$. The defining equation for $c$ gives
+$c(1+t_0)=1$. The function $h(x)=x(2-e^{-1/x})$ has
+\[
+ h'(x)=2-e^{-1/x}(1+1/x)>1\quad(x>0),
+\]
+and $h(1/2)<1<h(1)$, proving the asserted existence and uniqueness.
+Let $U$ have density
+\begin{equation}\label{dim:log-law}
+ f_U(u)=\frac{c}{1-u}\ind_{(0,t_0)}(u).
+\end{equation}
+It has mass $-c\log(1-t_0)=1$ and mean
+$c[-t_0-\log(1-t_0)]=c$.
+Use one common scalar within each face average:
+\begin{equation}\label{dim:log-rule}
+ H_j(C)=\E F\left(C_je_j+U\sum_{\ell\ne j}C_\ell e_\ell\right),
+ \qquad y_i(b)=\sum_{j:C_j>0}\frac{b_{ij}}{C_j}H_j(C).
+\end{equation}
+Absent-coordinate terms are zero. The independent-uniform and common-scalar
+averages are different rules.
+
+\begin{lemma}[Two scalar inequalities]\label{dim:scalar}
+For positive $x\in\R_{++}^k$, $k\ge2$,
+\begin{equation}\label{dim:ray-lemma}
+ \sum_{j=1}^k\frac{\E\min\{x_j,U\min_{\ell\ne j}x_\ell\}}{x_j}\ge1.
+\end{equation}
+If $H:[0,1]\to\R_+$ is nondecreasing and concave and $0\le t\le t_0$,
+then, with derivatives taken almost everywhere,
+\begin{equation}\label{dim:hinge-lemma}
+ \int_0^{t_0}[H(u)-uH'(u)]\,du
+ =2\int_0^{t_0}H(u)\,du-t_0H(t_0)
+ \ge t_0H(t)-tH(1).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For \eqref{dim:ray-lemma}, choose one smallest coordinate $m$, let $S$
+be the second-smallest coordinate, counting multiplicity, and put $t=m/S$.
+The smallest coordinate contributes
+\[
+ q(t)=\E\min\{1,U/t\}
+ =\begin{cases}
+ 1-c-c(1-t)\log(1-t)/t,&0<t\le t_0,\\
+ c/t,&t_0\le t\le1.
+ \end{cases}
+\]
+A second-smallest coordinate contributes $ct$, and all other terms are
+nonnegative. If $t\le t_0$, then
+$q(t)+ct-1=c(1-t)[-1-\log(1-t)/t]\ge0$.
+If $t\ge t_0$, then $q(t)+ct=c(t+t^{-1})\ge2c>1$.
+
+For \eqref{dim:hinge-lemma}, a possible downward jump at zero may be
+filled with the right limit. This does not change the integral and only
+strengthens the assertion when $t=0$. A finite nondecreasing concave
+function is continuous from the left at one: concavity applied to a segment
+ending at one proves this by letting the segment parameter tend to one.
+After filling zero, therefore, $H$ is continuous on $[0,1]$.
+The integral identity follows by integration by parts from a positive
+endpoint and then passage to zero; boundedness gives $uH(u)\to0$.
+
+A continuous piecewise-linear nondecreasing concave function is a
+nonnegative constant plus a nonnegative linear function and a positive
+linear combination of hinges $\min\{u,s\}$, $0<s\le1$.
+For a constant $A$, the residual left side minus right side of the
+inequality is $tA$; for $Bu$ it is $tB(1-t_0)$.
+For the hinge with parameter $s$, the residual is respectively
+\[
+ \begin{cases}
+ s(t-s),&s\le t,\\
+ (s-t)(t_0-s),&t<s<t_0,\\
+ t(s-t_0),&s\ge t_0.
+ \end{cases}
+\]
+Each is nonnegative. Linear interpolation on increasingly fine grids
+approximates a continuous concave function uniformly by such concave
+piecewise-linear functions. The integral identity, involving only values
+of $H$, passes the inequality to the limit.
+\end{proof}
+
+\begin{proposition}\label{dim:out-upper}
+The rule \eqref{dim:log-rule} satisfies full OUT and coalition coverage at
+every real report, and its total payment is at most
+$[1+c(k-1)]F(C)$ when $k\ge1$.
+\end{proposition}
+
+\begin{proof}
+Nonnegativity is immediate. As in the proof of
+Proposition~\ref{dim:uniform-upper}, the coalition's coordinate-$j$
+payment is the product of its nondecreasing share $a_j/(a_j+o_j)$ and
+the nondecreasing face value $H_j(a+o)$. The same formula also shows that
+an activated coordinate cannot lower any old contribution. Thus finite
+TCWM holds, including across support faces. Two Jensen inequalities give
+\[
+ \sum_jH_j(C)
+ \le\sum_jF\left(C_je_j+c\sum_{\ell\ne j}C_\ell e_\ell\right)
+ \le[1+c(k-1)]F(C).
+\]
+
+First suppose $F$ is smooth on the positive relative interior of every
+face. Fix a positive aggregate $C$ in its active face, coalition holdings
+$0\le a\le C$, and a nonnegative restoration direction $z$ on this face.
+Write $\alpha_j=a_j/C_j$ and
+$v_j(u)=C_je_j+u\sum_{\ell\ne j}C_\ell e_\ell$.
+Differentiating while both $a$ and $C$ increase in direction $z$ gives
+\begin{align}
+ D Y_S[z]&=\sum_j\{(1-\alpha_j)L_j(z)+\alpha_j M_j(z)\},
+ \label{dim:holding-derivative}\\
+ L_j(z)&=\frac{H_j(C)}{C_j}z_j,\nonumber\\
+ M_j(z)&=\E\left[U\nabla F(v_j(U))\cdot z
+ +(1-U)\partial_jF(v_j(U))z_j\right].\nonumber
+\end{align}
+The gradients are nonnegative and satisfy
+\eqref{dim:gradient-majorant}, so $L_j\ge0$ and $M_j\ge cF(z)$.
+The expression is affine in each holding fraction $\alpha_j$.
+It is therefore enough to prove $DY_S[z]\ge F(z)$ at every corner
+$\alpha\in\{0,1\}^k$.
+
+The result is immediate if $F(z)=0$. For $k=1$ the technology is linear
+on the active ray, and the assertion follows directly; assume $k\ge2$.
+Initially suppose $z$ is strictly
+positive on the active face. If at least two holding fractions are one,
+the derivative is at least $2cF(z)\ge F(z)$.
+If all are zero, put $x_j=C_j/z_j$. Monotonicity and homogeneity imply
+\[
+ \frac{F(v_j(u))}{F(z)}
+ \ge\min\{x_j,u\min_{\ell\ne j}x_\ell\}.
+\]
+Equation~\eqref{dim:ray-lemma} yields $\sum_jL_j(z)\ge F(z)$.
+
+It remains to consider a corner with only $\alpha_j=1$.
+Normalize $G(x)=F(z\mathbin{\odot}x)/F(z)$, so $G(\mathbf1)=1$.
+Common rescaling of $x=C/z$ leaves the normalized directional expressions
+in \eqref{dim:holding-derivative} unchanged. We may therefore arrange
+$\min_{\ell\ne j}x_\ell=1$. Put $t=x_j$ and $V=G(x)$.
+Every face vector is at least $u x$, so the other coordinate terms satisfy
+\[
+ \sum_{\ell\ne j}\frac{L_\ell(z)}{F(z)}
+ \ge cV\sum_{\ell\ne j}\frac1{x_\ell}\ge cV.
+\]
+The first part of $M_j/F(z)$ is at least $c$.
+If $V\ge t_0$, their sum is at least $c(1+t_0)=1$.
+If $t\ge1$, monotonicity gives $V\ge1$, so this case is already covered.
+The only remaining case is $0<t\le V<t_0$.
+
+Set $H(u)=G(te_j+u\sum_{\ell\ne j}x_\ell e_\ell)$.
+Then $H(t)\ge t$, $H(1)=V$, and Euler's identity gives
+\[
+ \partial_jG(te_j+u x_{-j})
+ =\frac{H(u)-uH'(u)}{t}.
+\]
+Because $(1-u)f_U(u)=c$ on $(0,t_0)$, the second part of $M_j/F(z)$
+is at least
+\[
+ \frac{c}{t}\int_0^{t_0}[H(u)-uH'(u)]\,du
+ \ge c(t_0-V)
+\]
+by \eqref{dim:hinge-lemma}. The singleton corner therefore contributes at
+least $c+c(t_0-V)+cV=1$. This completes every holding corner.
+
+Differentiation under the expectation is justified locally by Euler's
+identity and nonnegative gradients:
+\[
+ C_j\partial_jF(v_j(u))\le F(C),\qquad
+ uC_\ell\partial_\ell F(v_j(u))\le F(C)\quad(\ell\ne j).
+\]
+These bounds dominate the differentiated integrands on every compact
+positive capacity set, including as $u\downarrow0$.
+For directions with zero coordinates, apply the proved inequality to
+$z+\eta\mathbf1_I$ and let $\eta\downarrow0$. The derivative expression
+is a finite linear function of its direction, while monotonicity gives
+$F(z+\eta\mathbf1_I)\ge F(z)$. No continuity of $F$ across faces is used.
+
+For a finite restoration $z$, take $a(s)=a(0)+sz$ and
+$C(s)=o+a(s)$, $0\le s\le1$. For every $s>0$ its active face is the
+fixed face of $C(1)$. The derivative inequality integrates on
+$[\varepsilon,1]$ to
+$Y_S(1)-Y_S(\varepsilon)\ge(1-\varepsilon)F(z)$.
+Finite TCWM gives $Y_S(\varepsilon)\ge Y_S(0)$ even if the initial
+activation produces a payment jump. Letting $\varepsilon\downarrow0$
+proves full OUT for smooth $F$. A one-coordinate face is handled by its
+linear formula and the zero face is immediate.
+
+Finally, choose a smooth probability density for $Z$ supported in
+$[-1,1]^d$ and let
+\[
+ F_\varepsilon(x)=\E_Z
+ F\bigl(\operatorname{diag}(e^{\varepsilon Z_j})x\bigr).
+\]
+This preserves nonnegativity, monotonicity, concavity, and degree-one
+homogeneity. Convolution in logarithmic coordinates makes it smooth on
+every positive relative face. Monotonicity and homogeneity give the
+pointwise bounds
+\begin{equation}\label{dim:smoothing-bound}
+ e^{-\varepsilon}F(x)\le F_\varepsilon(x)
+ \le e^\varepsilon F(x)
+ \qquad\text{on every face.}
+\end{equation}
+The smooth finite OUT inequalities thus pass to the limit, since
+\eqref{dim:smoothing-bound} also bounds each face average and each
+nonnegative owner payment multiplicatively. This proves the claim for the
+entire stated class, including downward boundary jumps.
+Restoring a coalition's entire bundle from its zero report then proves
+coverage: its initial payment under \eqref{dim:log-rule} is zero.
+\end{proof}
+
+\subsection{Why arbitrary finite-owner rules satisfy the matching OUT lower bound}
+
+The remaining argument concerns only the continuous technology
+$F_r(C)=\min_{1\le j\le r}C_j$. Its continuity imposes no restriction on
+the broader class used for the upper bound. We give the reduction in full
+to distinguish a fixed finite-owner impossibility from a restriction to
+price mechanisms.
+
+\begin{lemma}[Prices forced by bounded finite-owner models]
+\label{dim:price-reduction}
+Fix $r\ge2$. Suppose that, for every $N$, the model with $N$ fixed
+pure-resource owners of each of the $r$ types, each with report interval
+$[0,1]$, admits a nonnegative, coalition-covering, full-OUT rule funded by
+$\kappa F_r$. Then there are nonnegative degree-zero homogeneous prices $p(C)$ on
+$\R_{++}^r$, locally Lipschitz there, such that
+\begin{align}
+ C\cdot p(C)&\le\kappa F_r(C),\label{dim:price-budget}\\
+ a\cdot p(C)&\ge F_r(a)\qquad(0\le a\le C),
+ \label{dim:price-coverage}\\
+ a\cdot p(C)&\ge(a-u)\cdot p(C-u)+F_r(u)
+ \qquad(0\le u\le a\le C).
+ \label{dim:price-out}
+\end{align}
+When an aggregate has a zero coordinate, all its prices may be set to
+zero and these statements still hold at every nonnegative real profile.
+The prices can also be chosen symmetric under resource permutations.
+\end{lemma}
+
+\begin{proof}
+For each $N$, average its rule over permutations within each resource
+type. At a binary profile with $m_j$ active unit reporters of type $j$,
+write $\pi_j^{(N)}(m)$ for an active owner's payment. For integer
+$0\le u\le a\le m$, coverage, budget, and the OUT comparison that
+turns $u_j$ coalition members of type $j$ completely off give
+\begin{align}
+ m\cdot\pi^{(N)}(m)&\le\kappa F_r(m),\nonumber\\
+ a\cdot\pi^{(N)}(m)&\ge F_r(a),\label{dim:count-array}\\
+ a\cdot\pi^{(N)}(m)&\ge
+ (a-u)\cdot\pi^{(N)}(m-u)+F_r(u).\nonumber
+\end{align}
+Inactive reporters may have positive payments. We have only dropped their
+nonnegative payments from the budget and from the right side of the last
+inequality. Set an unused coordinate $\pi_j(m)$ to zero when $m_j=0$.
+For $m_j>0$ the coordinate bound is
+$0\le\pi_j^{(N)}(m)\le\kappa F_r(m)/m_j$, independently of $N$.
+A diagonal subsequence as $N\to\infty$ therefore gives one array
+$\pi(m)$ satisfying \eqref{dim:count-array} for all integer count vectors.
+Every finite group of these constraints is available once $N$ exceeds
+its largest count. The set $\mathcal C$ of arrays obeying these constraints
+and coordinate bounds is nonempty, compact in the countable product
+topology, and convex.
+
+For a positive integer $h$ let $(T_h\pi)(m)=\pi(hm)$.
+Multiplying all counts in \eqref{dim:count-array} by $h$ and dividing by
+$h$ shows that $T_h$ preserves $\mathcal C$. These linear maps commute.
+For the first $L$ primes $\ell_1,\ldots,\ell_L$, average $T_h\pi$ over
+$h=\prod_{j=1}^L\ell_j^{e_j}$, $0\le e_j<L$.
+For a fixed prime $\ell_j$, shifting its exponent changes this average
+by at most $\kappa F_r(m)/(Lm_v)$ in coordinate $(m,v)$, by cancellation
+of the interior terms. A diagonal subsequential limit as $L\to\infty$
+is fixed by every prime dilation, hence by every positive integer dilation.
+
+For rational $C>0$ define $p(C)=\pi(LC)$, where $L$ clears the
+denominators. Integer-dilation invariance makes this independent of $L$
+and homogeneous under positive rational scaling. Clearing the
+denominators of $C,a,u$ in \eqref{dim:count-array} proves
+\eqref{dim:price-budget}--\eqref{dim:price-out} for rational data.
+
+Regularity follows from finite comparisons, rather than from any property
+of the original rules. For rational $C,C'>0$, put
+$\lambda=\min_j C_j/C'_j$ and $v=C-\lambda C'\ge0$.
+At aggregate $\lambda C'$, give a coalition all of resource $j$ and no
+other resource; then restore $v$ to that same coalition. TCWM, which is
+implied by OUT, and rational homogeneity yield
+\begin{equation}\label{dim:relative-comparison}
+ p_j(C')-p_j(C)
+ \le\frac{v\cdot p(C)}{\lambda C'_j}.
+\end{equation}
+On any compact box $[a,b]^r$ with $a>0$, the coordinate prices are bounded
+by $\kappa b/a$, the denominator is at least $a^2/b$, and
+\[
+ 0\le v_\ell\le\|C-C'\|_\infty(1+b/a).
+\]
+Interchanging $C,C'$ supplies the opposite inequality. Thus $p$ is
+Lipschitz on the rational points of each such box and has a unique locally
+Lipschitz extension to the positive orthant. Its inequalities and
+homogeneity pass to real data by continuity. If coalition holdings or
+withheld amounts have zero coordinates, approximate retained holdings $a-u$, withdrawals $u$, and outsider
+holdings $C-a$ separately by nonnegative rational vectors, retaining their zero
+patterns, and reconstruct $a,C$ by summation. This preserves
+$0\le u\le a\le C$; both positive aggregate totals remain positive.
+
+If $F_r(C)=0$, every subbundle of $C$ has zero worth, so zero prices give
+coverage and budget on that face. If $C>0$ but $F_r(C-u)=0$, the right
+payment in \eqref{dim:price-out} is zero, while coverage and monotonicity
+give $a\cdot p(C)\ge F_r(a)\ge F_r(u)$.
+These observations complete all boundary comparisons. Finally, average
+the constructed prices over the finite resource-permutation group.
+All the inequalities, homogeneity, and local Lipschitz continuity survive,
+and the resulting prices are resource-symmetric.
+\end{proof}
+
+\begin{lemma}[Removing abundant coordinates]\label{dim:pair-limit}
+Under the hypothesis of Lemma~\ref{dim:price-reduction}, there is a
+symmetric, homogeneous, locally Lipschitz price rule for $\min\{A,B\}$
+with nonnegative payments, coalition coverage, full OUT, finite funding
+factor $\kappa$, and the expenditure cap
+\begin{equation}\label{dim:pair-cap}
+ B P_2(A,B)\le D A\quad(B\ge A>0),
+ \qquad D=\frac{\kappa-1}{r-1},
+\end{equation}
+together with its symmetric counterpart.
+\end{lemma}
+
+\begin{proof}
+At $(A,M,\ldots,M)$, $0<A<M$, symmetry gives a short-resource price
+$q$ and common long-resource price $b$. Coverage of a bundle with $A$
+units of every resource and the budget yield
+\[
+ q+(r-1)b\ge1,\qquad Aq+(r-1)Mb\le\kappa A.
+\]
+Subtracting $A$ times the first inequality gives
+$Mb\le D A M/(M-A)$.
+At $(A,B,M,\ldots,M)$ with $A\le B\le M$, restore a coalition owning
+all $B$ units of the second resource to $M$ units. TCWM gives
+\begin{equation}\label{dim:prelimit-cap}
+ Bp_2(A,B,M,\ldots,M)\le D\frac{AM}{M-A}.
+\end{equation}
+For $r=2$, the left side is independent of $M$; letting $M\to\infty$
+already proves the lemma using the prices from
+Lemma~\ref{dim:price-reduction}. Suppose henceforth $r\ge3$.
+
+For each positive rational pair $(A,B)$, the first two prices at
+$(A,B,M,\ldots,M)$ lie in $[0,\kappa]$. A common diagonal subsequence
+$M\to\infty$ gives rational pair prices $P_1,P_2$.
+They inherit symmetry and pair budget at most $\kappa\min\{A,B\}$.
+Equation~\eqref{dim:prelimit-cap} gives \eqref{dim:pair-cap}.
+For coalition pair holdings $(a,b)\le(A,B)$, add $\min\{a,b\}$ units
+of every extra resource to this coalition. The added payment is at most
+\[
+ \min\{a,b\}\sum_{j\ge3}p_j(A,B,M,\ldots,M)
+ \le\frac{\kappa\min\{a,b\}\min\{A,B\}}{M},
+\]
+which vanishes. Its worth is $\min\{a,b\}$, so pair coverage survives.
+
+For OUT, it is essential to control the shifted extra totals in a
+deviation. For fixed $w\ge0$, compare
+$z=(A,B,M,\ldots,M)$ and $z'=(A,B,M-w,\ldots,M-w)$, where $M>w$.
+Equation~\eqref{dim:relative-comparison}, first in one orientation and
+then the other, gives for $j=1,2$
+\begin{align}
+ p_j(z')-p_j(z)&\le\frac{w\kappa\min\{A,B\}}{Mz_j},
+ \label{dim:shift-bound}\\
+ p_j(z)-p_j(z')&\le
+ \frac{w\kappa\min\{A,B\}}{(M-w)z_j}.\nonumber
+\end{align}
+Indeed, the forward residual consists only of $w$ units in each extra
+coordinate; the reverse scaling is $(M-w)/M$ and its residual lies in
+the first two coordinates. The budget bounds both residual expenditures.
+
+Fix rational pair holdings $(a,b)$ and withdrawals $(u,v)\le(a,b)$,
+and put $w=\min\{u,v\}$. Give that coalition $w$ units of every extra
+resource and withdraw all of them. Its full outside production is $w$.
+The high extra-coordinate payment vanishes as above, and its low retained
+extra holdings are zero. At the low pair $(A-u,B-v)$ with positive
+production, \eqref{dim:shift-bound} shows that the prices with extra totals
+$M-w$ have the same subsequential limit as those with extra totals $M$.
+If that low pair has zero production, its entire payment is zero by budget.
+The limiting inequality is therefore
+\begin{align*}
+ aP_1(A,B)+bP_2(A,B)
+ \ge{}&(a-u)P_1(A-u,B-v)\\
+ &+(b-v)P_2(A-u,B-v)+\min\{u,v\}.
+\end{align*}
+Set prices to zero at zero-production pairs. We have obtained a rational
+pair rule satisfying all required finite inequalities and the cap.
+
+This limit need not yet be homogeneous. Consider the compact convex set
+of rational pair-price arrays obeying these inequalities, symmetry, the
+budget, and \eqref{dim:pair-cap}. Each coordinate is bounded by
+$\kappa\min\{A,B\}/A$ or $\kappa\min\{A,B\}/B$.
+The operations $(T_hP)(A,B)=P(hA,hB)$ preserve the set. Repeat the
+prime-dilation averaging in Lemma~\ref{dim:price-reduction}; all its
+constraints are homogeneous and closed, so the resulting rational array
+is homogeneous and retains the cap. The finite comparison
+\eqref{dim:relative-comparison} now gives local Lipschitz continuity and
+extension to real positive pairs exactly as before. Coverage handles any
+zero-production low profile as in the last paragraph of that lemma.
+\end{proof}
+
+\begin{lemma}[The two-resource obstruction]\label{dim:pair-obstruction}
+Every pair-price rule with the properties of
+Lemma~\ref{dim:pair-limit} has $D\ge c$.
+\end{lemma}
+
+\begin{proof}
+For $A\ge B>0$ write $t=B/A$, $p(t)=P_1(A,B)$ and $q(t)=P_2(A,B)$.
+These are well defined by homogeneity, locally Lipschitz for $0<t\le1$,
+and $p(t)\le Dt$. Budget gives $q(t)\le\kappa$, while symmetry at the
+positive balanced profile gives $q(1)=p(1)\le D$.
+
+If a coalition owns all of the short resource and restores only that
+resource, TCWM implies that $z(t)=tq(t)$ is nondecreasing. To obtain the
+OUT constraint, start at aggregate $(A,B)$ with coalition holdings
+$(0,B)$ and restore $(h,h)$ to that same coalition. Its new holdings are
+$(h,B+h)$ and its new aggregate is $(A+h,B+h)$, with outsiders fixed.
+This is a feasible restoration from a zero holding, not a withdrawal
+from that zero holding. At almost every $t<1$, differentiating its finite
+OUT inequality at $h=0+$ gives
+\[
+ p(t)+q(t)+t(1-t)q'(t)\ge1.
+\]
+Using the cap, this yields
+\[
+ \left[\frac{tq(t)}{1-t}\right]'
+ =\frac{q(t)+t(1-t)q'(t)}{(1-t)^2}
+ \ge\frac{1-Dt}{(1-t)^2}.
+\]
+Integrate from $\varepsilon$ to $t$ and send $\varepsilon\downarrow0$.
+Boundedness of $q$ makes the lower endpoint vanish, and hence
+\[
+ z(t)\ge (1-D)t-D(1-t)\log(1-t).
+\]
+Since $z$ is nondecreasing and $z(1)=q(1)\le D$, the right side is at
+most $D$ for every $0<t<1$. If $D=0$, this is already a contradiction.
+For $D>0$, its maximum occurs at $t=1-e^{-1/D}$ and equals
+$1-D+De^{-1/D}$. Consequently
+$D(2-e^{-1/D})\ge1$. The strict monotonicity of $h$ proved above implies
+$D\ge c$.
+\end{proof}
+
+\begin{proof}[Completion of Theorem~\ref{dim:main}]
+The TCWM equality was proved after Proposition~\ref{dim:finite-lower}.
+Proposition~\ref{dim:out-upper} proves the OUT upper bound.
+For $d\ge2$, suppose a factor $\kappa<1+c(d-1)$ were feasible for
+every fixed finite pure-owner unit-box model of $F_d=\min_jC_j$.
+Lemmas~\ref{dim:price-reduction}--\ref{dim:pair-obstruction} would give
+$(\kappa-1)/(d-1)\ge c$, a contradiction. Therefore for each such
+$\kappa$ at least one finite, fixed, bounded owner model has no
+$\kappa$-funded rule. This is a compactness contrapositive over finite
+models, not a mechanism on an infinite owner population.
+If the supremum of their infimal feasible factors were smaller than the
+claimed constant, choosing $\kappa$ strictly between them would give just
+such a rule for every model. This also deals with possible nonattainment
+of individual infima. For $d=1$, linear payments satisfy full OUT with
+factor one and coverage forces that factor.
+\end{proof}
+
+\begin{remark}\label{dim:scope}
+These dimension frontiers concern protection of total coalition payments,
+with the full value of withheld production added only in the OUT contract.
+They do not settle a sharp frontier for individual payment monotonicity.
+The displayed integrals are mathematical payment formulas; no efficient
+evaluation guarantee for an arbitrary value oracle is asserted. Intermediate
+outside-protection parameters and extra deletion-marginal floors are not
+included in the present theorem.
+\end{remark}
+
+\section{Sparse production: a uniform coalition-size upper bound}\label{sec:upper}
+We first state the upper bound with which the new lower must be compared.
+The binomial semivalue and bounded-rank support inequalities are established
+ingredients \citep{FeigeEtAl2014,EzraEtAl2018,Casajus2011}. Their use here retains
+actual mixed owners, all-coalition coverage and the stronger full-OUT contract.
+The proof is included to expose the precise comparison class.
+
+\begin{theorem}[Sparse-production guarantee]\label{thm:sparse-upper}
+For every finite packing institution of activity arity at most $r\ge1$ and
+every integer $s\ge1$, there is an all-profile rule satisfying coalition
+coverage and full OUT for every coalition of size at most $s$, with
+\begin{equation}\label{eq:sparse-upper}
+ K_r(s)\le K_r^{\mathrm{OUT}}(s)\le r s^{r-1}.
+\end{equation}
+For $p=1/s$, one such rule is
+\begin{equation}\label{eq:semivalue}
+ m_i(p;b)=\mathbb E_{R\subseteq N\setminus\{i\}}
+       [F(b_i+b_R)-F(b_R)],\qquad y_i(b)=p^{1-r}m_i(p;b),
+\end{equation}
+where other owners are independently included in $R$ with probability $p$.
+For rational data the rule is a finite rational computation. No
+polynomial-time implementation or incentive guarantee for a sampled estimator
+is asserted.
+\end{theorem}
+
+\begin{lemma}[Owner support and thinning]\label{lem:owner-support}
+Fix a report profile and let $v(T)=F(b_T)$. For $i\in R$, set
+$U_i(R)=v(R)-v(R\setminus\{i\})$. Then
+\begin{align}
+ \sum_{i\in T}U_i(R)&\ge v(T) &&(T\subseteq R),\label{eq:dual-cover}\\
+ \sum_{i\in R}U_i(R)&\le r v(R),\label{eq:rank-loss}\\
+ \mathbb E v(S\cap R_p)&\ge p^r v(S),\label{eq:thinning}
+\end{align}
+where $R_p$ independently retains every owner with probability $p$.
+\end{lemma}
+\begin{proof}
+An optimal nonnegative dual price $w$ at $b_R$ satisfies
+$v(R)=w\cdot b_R$ and $v(R\setminus\{i\})\le w\cdot b_{R\setminus\{i\}}$.
+Thus $U_i(R)\ge w\cdot b_i$, and dual feasibility proves
+\eqref{eq:dual-cover}.
+
+For a fixed $S$, choose an optimal production plan $x$. For every used
+activity $e$ and each required row $a$, assign that row to an actual supplier
+$i\in S$ with probability $b_{ia}/(b_S)_a$, independently across required
+rows. The denominator is positive whenever $x_e>0$ and $A_{ae}>0$.
+Each assignment gives a nonnegative value piece, of weight
+$\pi_e x_e$ times its assignment probability, supported on at most $r$ owners.
+Let $h(T)$ be the total weight of pieces whose suppliers all belong to
+$T\subseteq S$. For activity $e$, its retained fraction is
+\[
+ \prod_{a:A_{ae}>0}\frac{(b_T)_a}{(b_S)_a},
+\]
+which is at most the fraction in each individual required row. The retained
+plan is therefore feasible for $b_T$. Consequently $h(T)\le v(T)$ and
+$h(S)=v(S)$. Applying this at $S=R$ gives
+\[
+ U_i(R)\le h(R)-h(R\setminus\{i\});
+\]
+summing counts each value piece at most $r$ times and proves
+\eqref{eq:rank-loss}. Under independent thinning, a piece supported on $k\le r$
+owners survives with probability $p^k\ge p^r$. Hence
+$\mathbb E v(S\cap R_p)\ge\mathbb E h(S\cap R_p)\ge p^r v(S)$.
+This decomposes a production plan, not the strategic owners.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:sparse-upper}]
+Let $R_p$ now thin all owners. Conditioning on whether $i\in R_p$ gives
+\[
+ p\sum_{i\in S}m_i(p;b)
+ =\mathbb E\sum_{i\in S\cap R_p}U_i(R_p)
+ \ge\mathbb E v(S\cap R_p)\ge p^r v(S).
+\]
+After multiplication by $p^{-r}$, this is coverage of every $S$, including
+$|S|>s$. Nonnegativity follows from monotonicity. Also
+\[
+ p\sum_i m_i(p;b)\le r\mathbb E F(b_{R_p})
+ \le rF(pB)=rpF(B),
+\]
+where the second inequality is concavity. This proves the funding bound.
+
+For $s\ge2$, fix a protected coalition $C$ and write $M_C=\sum_{i\in C}m_i$.
+Expanding the finite expectation yields
+\[
+ M_C(b)=\sum_{A\subseteq N}c_C(A)F(b_A),
+\]
+with, for $0<|A|<n$,
+\begin{equation}\label{eq:coefficient}
+ c_C(A)=p^{|A|-1}(1-p)^{n-|A|-1}(|A\cap C|-p|C|).
+\end{equation}
+The endpoints are $c_C(\varnothing)=-|C|(1-p)^{n-1}$ and
+$c_C(N)=|C|p^{n-1}$. Since $p|C|\le1$, every coefficient of a value affected
+by $C$'s report is nonnegative. For a withdrawal $\delta$ supported on $C$,
+superadditivity gives
+$F(b_A)-F(b_A-\delta_A)\ge F(\delta_A)$.
+For $A\cap C=\varnothing$, both this difference and $F(\delta_A)$ vanish.
+Therefore
+\[
+ M_C(b)-M_C(b-\delta)\ge\sum_A c_C(A)F(\delta_A)=M_C(\delta).
+\]
+The profile $\delta$ lies in the same endowment boxes, with the same owners
+and the same rule. Coverage at that profile gives
+$p^{1-r}M_C(\delta)\ge F(\delta_C)$, proving full OUT.
+
+At $s=1$, $p=1$ and $m_i=F(B)-F(B-b_i)$. The second term is fixed under
+$i$'s withdrawal, so superadditivity proves full OUT directly; the first two
+inequalities of Lemma~\ref{lem:owner-support} give coverage and factor $r$.
+If no positive-profit activity exists, the zero rule suffices. Empty
+coalitions and the empty owner set are immediate.
+\end{proof}
+
+\section{A square-root lower bound for arity three}\label{sec:lower}
+The following lower applies to arbitrary rules under the full report-domain
+contract. It does not impose a marginal formula, an efficient-price floor,
+anonymity, or a zero payment to inactive owners.
+
+\begin{theorem}[Projective cap exchange]\label{thm:projective}
+For each integer $M\ge1$, there is a unit-profit packing technology of arity
+three on $d=2^{M+1}-1$ resources, with $n=2M+1$ fixed fully eligible owners,
+for which every coalition-covering rule satisfying TCWM for coalitions of
+size at most $2M-1$ has funding factor at least
+\begin{equation}\label{eq:projective-finite}
+ \max\left\{\frac23 Q_M,\ 1+\frac{2(M-1)}{3M}Q_M\right\},
+ \qquad Q_M=\prod_{m=2}^M\frac{2m}{2m-1}
+             =\frac{4^M}{2\binom{2M}{M}}.
+\end{equation}
+Every owner's report domain is the full real unit cube. Consequently, for
+every integer $s\ge1$,
+\begin{equation}\label{eq:main-interval}
+ \sqrt{s/6}\le K_3(s)\le K_3^{\mathrm{OUT}}(s)\le3s^2.
+\end{equation}
+\end{theorem}
+
+\subsection{Technology, legal symmetry and productive profiles}
+Let $V=\mathbb F_2^{M+1}$ have basis $v,e_1,\ldots,e_M$.
+Resources are the nonzero vectors of $V$. For every unordered triple
+$\{a,b,a+b\}$ of distinct nonzero vectors, include one activity consuming one
+unit of each row and yielding one unit of output. Duplicate triples are
+identified. All activities have exactly three inputs.
+
+There are actual owners $p,h_1,\ell_1,\ldots,h_M,\ell_M$, each endowed with
+the all-ones vector. Every report in $[0,1]^d$ is legal for every owner.
+The product of owner permutations and invertible binary linear maps acts on
+this institution: the latter permute resources and activities, while owner
+permutations preserve the identical report domains.
+
+\begin{lemma}[Finite averaging]\label{lem:average}
+If a rule on this institution satisfies coverage, size-$s$ TCWM (or full OUT)
+and factor $\kappa$, then its finite group average satisfies the same
+constraints and factor, and is equivariant. A lower on total payment of the
+average at a profile of production one is a lower on the original rule at
+some profile in that profile's finite symmetry orbit.
+\end{lemma}
+\begin{proof}
+For a group element $g$ with owner permutation $\sigma_g$, define the
+conjugate rule by $y^g(b)=\sigma_g^{-1}y(gb)$. Resource and owner maps preserve
+coordinate order, report feasibility, coalition values, coalition sizes,
+and the production value of a withheld bundle. Each contract inequality
+therefore holds for every conjugate. All constraints are linear in payment
+values, so their finite average also satisfies them. A change of variable
+in the group sum proves equivariance. Finally, its total payment at $b$ is
+the average of original total payments at the legal profiles $gb$, which
+all have production $F(B)$. At least one is at least that average. This is a
+proof transformation of rules; no strategic comparison changes an owner.
+\end{proof}
+
+For $m=1,\ldots,M$, define profile $C_m$ as follows. Owner $p$ reports the
+unit vector in row $v$; each $h_j$ reports the unit vector in row $e_j$;
+$\ell_j$ reports the unit vector in row $v+e_j$ if $j\le m$, and zero
+otherwise. Every unmentioned resource coordinate is zero. In particular,
+\emph{dormant high owners still report $e_j$} when $j>m$.
+
+\begin{lemma}[Exact support and value]\label{lem:star-support}
+The only activities supported at $C_m$ are the $m$ triples
+$\{v,e_j,v+e_j\}$ with $j\le m$, and $F(C_m)=1$.
+\end{lemma}
+\begin{proof}
+In the possible row set
+$\{v\}\cup\{e_j,v+e_j:1\le j\le M\}$, the sum of private rows from
+ distinct indices has two nonzero $e$ coordinates and leaves the set. The
+sum of the private pair at index $j$ is $v$, and adding $v$ exchanges those
+two rows. Thus every supported triple is precisely a complete active branch.
+Every branch consumes the reported unit of $v$, giving the upper bound one;
+one branch attains it. Equivalently, the full packing dual prices $v$ and
+all zero-capacity rows at one and all other rows at zero. Supported columns
+contain $v$ and unsupported columns contain a zero-capacity row, so this is
+a feasible dual of value one for the full technology.
+\end{proof}
+
+\subsection{A constant seed and a fixed-owner payment ladder}
+Work with the averaged rule of Lemma~\ref{lem:average}. At $C_1$, the linear
+map exchanging $v$ and $e_1$ and fixing $e_j$ for $j>1$, together with the
+owner swap $(p,h_1)$, preserves the whole profile. So does the invertible map
+$v\mapsto v+e_1$, fixing every $e_j$, together with the swap $(p,\ell_1)$.
+These maps fix the dormant high reports. Hence the three productive owners
+receive a common payment $a$. Their coalition produces one, and coverage
+requires $3a\ge1$. This uses static coverage for a three-member coalition,
+not a three-member incentive constraint.
+
+At $C_m$, permuting active indices and independently replacing
+$e_j$ by $e_j+v$ for active $j$ preserves the entire profile after the matching
+owner swaps. These invertible maps fix $v$ and all inactive high rows.
+They act transitively on the $2m$ active private owners. Let $q_m$ be their
+common payment and put $T_m=2m q_m$. The seed is
+\begin{equation}\label{eq:seed}
+ q_1\ge\frac13,\qquad T_1\ge\frac23.
+\end{equation}
+
+The transition $C_{m-1}\to C_m$ restores only the actual owner $\ell_m$.
+Protect the coalition consisting of $\ell_m$ and the $2m-2$ old active
+private owners. Its cardinality is $2m-1$, and every old member's report
+is unchanged. At the old profile its payment is at least $T_{m-1}$:
+$y_{\ell_m}(C_{m-1})$ is nonnegative, and is \emph{not} assumed to be zero.
+At the new profile the protected sum is $(2m-1)q_m$. Therefore TCWM gives
+\begin{equation}\label{eq:ladder}
+ (2m-1)q_m\ge2(m-1)q_{m-1},\qquad
+ T_m\ge\frac{2m}{2m-1}T_{m-1}.
+\end{equation}
+The unchanged new high owner $h_m$ and the cap owner $p$ are not in this
+protected coalition. No owner is split, cloned, added, or removed.
+Iterating \eqref{eq:ladder} proves $T_M\ge2Q_M/3$. Since production is one,
+nonnegativity and funding imply $\kappa\ge2Q_M/3$.
+
+Let $z=y_p(C_M)$. Terminal branch coverage gives $z+2q_M\ge1$, and total
+payment is at least $z+2M q_M$. Hence
+\[
+ \kappa\ge z+2M q_M\ge1+2(M-1)q_M
+ \ge1+\frac{2(M-1)}{3M}Q_M.
+\]
+This remains valid even if $2q_M>1$; it does not set $z=1-2q_M$.
+For an asymmetric original rule, Lemma~\ref{lem:average} locates the costly
+profile somewhere in the orbit, not necessarily at the displayed $C_M$.
+This proves the finite assertion of Theorem~\ref{thm:projective}.
+
+\subsection{The uniform exponent and an optimized tail}
+The elementary estimate
+\begin{equation}\label{eq:central-bound}
+ Q_M\ge\frac12\sqrt{3M+1}
+\end{equation}
+follows by induction. The base $M=1$ is equality; after squaring, the step
+reduces to
+$4(M+1)^2(3M+1)-(2M+1)^2(3M+4)=M\ge0$.
+For $M=\lfloor(s+1)/2\rfloor$, all incentive coalitions used have size at
+most $s$, and $M\ge s/2$. Thus
+$K_3(s)\ge2Q_M/3\ge\sqrt{3M+1}/3\ge\sqrt{s/6}$.
+Combining this with Theorem~\ref{thm:sparse-upper} proves
+\eqref{eq:main-interval}, including $s=1$.
+
+\begin{corollary}[Optimized ladder certificate]\label{cor:tail}
+Set $B_1=1$. For $s\ge2$, let $h=\lceil s/2\rceil$ and
+\begin{equation}\label{eq:Bs}
+ B_s=1+\frac{2(s-1)Q_h}{3h}
+            \left(\frac{s-1}{s}\right)^{s-h}.
+\end{equation}
+Then $K_3(s)\ge B_s$, and
+\begin{equation}\label{eq:tail-asymptotic}
+ \lim_{s\to\infty}\frac{B_s}{\sqrt s}
+   =\frac{\sqrt{2\pi}}{3\sqrt e}.
+\end{equation}
+The witness may use $2s+1$ fully eligible owners and $2^{s+1}-1$ resource
+rows. In particular $B_6=493/243>2$, with 13 owners and 127 rows.
+The optimization is of this ladder certificate, not of the unrestricted
+funding frontier.
+\end{corollary}
+\begin{proof}
+Keep $s$ fixed and permit arbitrary ladder length $M$. At stage $m$ protect
+$\ell_m$ and any $k_m=\min\{s-1,2m-2\}$ old active private owners. Whole
+pairs are unnecessary; all selected old owners have payments $q_{m-1}$ and
+$q_m$ at the respective profiles. TCWM and nonnegativity imply
+\[
+ (k_m+1)q_m\ge k_m q_{m-1},\qquad
+ q_M\ge\tfrac13 P_{M,s},\qquad
+ P_{M,s}=\prod_{m=2}^M\frac{k_m}{k_m+1}.
+\]
+Terminal coverage therefore gives
+$\kappa\ge1+2(M-1)P_{M,s}/3$.
+Up to $h$ the uncapped recurrence gives $P_{h,s}=Q_h/h$; afterwards every
+factor is $\alpha=(s-1)/s$. For $M\ge h$ and $M>1$, the consecutive ratio
+of $(M-1)P_{M,s}$ is $M\alpha/(M-1)$, which is greater than one for $M<s$,
+equal to one for $M=s$, and less than one for $M>s$.
+Before the cap the increment increases; its $M=1$ value is zero and is
+handled separately. Thus the equal maxima occur at $M=s,s+1$, proving
+\eqref{eq:Bs}. The central-binomial asymptotic
+$Q_h\sim\sqrt{\pi h}/2$, together with $h\sim s/2$ and
+$\alpha^{s-h}\to e^{-1/2}$, proves \eqref{eq:tail-asymptotic}.
+Finally $Q_3=8/5$ gives $B_6=493/243$.
+\end{proof}
+
+\subsection{Exact certificate form and what computation verifies}
+The displayed argument has nonnegative rational multipliers. For fixed $M,s$,
+use the rows
+\[
+ 3q_1\ge1,\qquad (k_m+1)q_m-k_mq_{m-1}\ge0,
+ \qquad z+2q_M\ge1,\qquad \kappa-z-2M q_M\ge0.
+\]
+Give the two final rows weight one. Starting with residual coefficient
+$2(M-1)$ at $q_M$, eliminate backwards: weight the row at $m$ by the
+residual divided by $k_m+1$, then replace the residual by that weight times
+$k_m$. Weight the seed by the final residual divided by three.
+All coefficients of $q_m$ and $z$ cancel, leaving
+$\kappa\ge1+2(M-1)P_{M,s}/3$. At $M=1$ only the final rows are needed.
+A lifted certificate can expand averaging back into the original
+owner/profile variables; it retains the nonnegativity rows for dormant
+payments rather than replacing those payments by zero.
+
+The accompanying standard-library checks verify small full projective
+technologies, the required linear maps, exact finite coefficient cancellation,
+and the optimized scalar tail. A selected original-variable lift additionally
+checks 34,440 inequalities cancelling 26,040 payment coordinates. These are
+reproducible finite certificates supporting the written argument. The universal
+group averaging and all-size geometry are conventional proofs, not statements
+proved merely by the finite tests.
+
+
+\section{Full outside protection on a four-vertex path}
+\label{graph:section}
+
+This section gives a structured unit-profit graph guarantee. For a finite
+resource graph $G$, let
+\begin{equation}\label{graph:production}
+ F_G(c)=\max\left\{\sum_{e\in E(G)}x_e:
+ x_e\ge0,\quad\sum_{e\ni v}x_e\le c_v\ (v\in V(G))\right\}.
+\end{equation}
+Every edge consumes one unit of each endpoint resource and produces one
+unit of output. Owners and their finite coordinatewise endowment boxes
+remain fixed; all real reports in those boxes are allowed. Owners may
+hold arbitrary mixtures of resources, and every coalition, including its
+unchanged members, receives coverage and full outside-production protection.
+
+\begin{theorem}[Protected-leaf path rule]\label{graph:theorem}
+For the path $B-A-D-C$, there is an explicit nonnegative payment rule that
+satisfies coalition coverage and full OUT for every coalition at every
+real report, with
+\begin{equation}\label{graph:funding-bound}
+ \sum_i y_i(b)\le(1+1/\sqrt2)F_G\left(\sum_i b_i\right).
+\end{equation}
+The same guarantee holds for complete blow-ups of this path, their finite
+disjoint unions, and additional isolated resources, with the same fixed
+mixed owners. Thus the total-funding factor is $1+1/\sqrt2$, and the
+extra subsidy is at most $F_G(\sum_i b_i)/\sqrt2$.
+\end{theorem}
+
+A complete blow-up replaces each of the four vertices by a nonempty
+independent group, includes every edge between groups corresponding to a
+path edge, and includes no other edges. The theorem is restricted to unit
+profits and these graph classes. It asserts neither an all-graph bound
+below two nor optimality among payment rules on the path.
+
+\subsection{The selected flow and its payment rule}
+
+Write the path capacities as $c=(A,B,C,D)$, using a vertex label also for
+its capacity, and put
+\[
+ \alpha=\frac1{\sqrt2},\qquad \beta=\alpha^2=\frac12.
+\]
+These are the constants of this section. For the path,
+\begin{equation}\label{graph:path-value}
+ F_G(c)=\min\{A+C,B+D,A+D\}.
+\end{equation}
+Indeed, each expression is a vertex-cover capacity and hence an upper
+bound. If $P$ is their minimum, the edge quantities
+\[
+ x_{AB}=(P-D)_+,\qquad x_{DC}=(P-A)_+,\qquad
+ x_{AD}=P-(P-D)_+-(P-A)_+
+\]
+are feasible and sum to $P$. Here $t_+=\max\{t,0\}$;
+nonnegativity of $x_{AD}$ follows from $P\le A+D$, and the other capacity
+constraints follow from $P\le A+C$ and $P\le B+D$.
+
+Form a directed bipartite double cover: a left copy of each vertex has
+capacity $c_v$, a right copy has capacity $\alpha c_v$, and an edge $uv$
+gives arcs $u_Lv_R$ and $v_Lu_R$. Its two components have maximum values
+\begin{equation}\label{graph:oriented-values}
+ V=\min\{A+C,\alpha(B+D),A+\alpha D\},\qquad
+ V'=\min\{B+D,\alpha(A+C),D+\alpha A\}.
+\end{equation}
+We require a particular choice of left uses, rather than an arbitrary
+maximum flow.
+
+\begin{lemma}[All maximum-flow left uses]\label{graph:flow-interval}
+In the component $\{A_L,C_L\}\to\{B_R,D_R\}$, the possible left uses
+of a maximum flow are exactly
+\begin{equation}\label{graph:first-interval}
+ w_A+w_C=V,\qquad
+ \max\{0,V-A\}\le w_C\le\min\{C,\alpha D,V\}.
+\end{equation}
+In the other component they are exactly
+\begin{equation}\label{graph:second-interval}
+ w_B+w_D=V',\qquad
+ \max\{0,V'-D\}\le w_B\le\min\{B,\alpha A,V'\}.
+\end{equation}
+Both intervals are nonempty, including at zero capacities.
+\end{lemma}
+\begin{proof}
+The three bounds defining $V$ are the total left capacity, total right
+capacity, and the combined capacity of $A_L,D_R$. They upper-bound every
+flow. For any value-$V$ flow, $w_C\le C$, $w_C\le\alpha D$ because
+$C_L$ can only send to $D_R$, and $0\le w_C\le V$.
+The bound $w_A\le A$ gives the lower endpoint in
+\eqref{graph:first-interval}. The interval is nonempty because
+$V\le A+C$, $V\le A+\alpha D$, and all capacities are nonnegative.
+
+Conversely, for any $z$ in this interval, take
+\[
+ f_{A_LB_R}=(V-\alpha D)_+,\qquad
+ f_{A_LD_R}=V-z-(V-\alpha D)_+,\qquad f_{C_LD_R}=z.
+\]
+These quantities are nonnegative: if $V>\alpha D$, use $z\le\alpha D$;
+otherwise use $z\le V$. The $B_R$ use is at most $\alpha B$ since
+$V\le\alpha(B+D)$, and the $D_R$ use is
+$V-(V-\alpha D)_+\le\alpha D$. Their left uses are $V-z\le A$ and
+$z\le C$. This realizes every point of the interval and proves that $V$
+is the maximum. Reflecting the path, that is, exchanging $A$ with $D$ and
+$B$ with $C$, proves the second assertion. Explicitly, with $z=w_B$ its
+flows are $(V'-\alpha A)_+$ on $D_LC_R$, $V'-z-(V'-\alpha A)_+$ on
+$D_LA_R$, and $z$ on $B_LA_R$.
+\end{proof}
+
+Define $\operatorname{clamp}(x;\ell,h)=\min\{h,\max\{\ell,x\}\}$ and
+select
+\begin{align}
+ w_C&=\operatorname{clamp}\bigl(\beta C;
+             \max\{0,V-A\},\min\{C,\alpha D,V\}\bigr),
+ &w_A&=V-w_C,\label{graph:selector}\\
+ w_B&=\operatorname{clamp}\bigl(\beta B;
+             \max\{0,V'-D\},\min\{B,\alpha A,V'\}\bigr),
+ &w_D&=V'-w_B.\nonumber
+\end{align}
+The vector $w$ is continuous, nonnegative, homogeneous, and piecewise
+linear, with $0\le w_v\le c_v$. The following equivalent formulas expose
+its linear cells:
+\begin{align}
+ w_A&=\min\{A,\alpha B+(\alpha D-\beta C)_+\},
+ &w_D&=\min\{D,\alpha C+(\alpha A-\beta B)_+\},\label{graph:explicit-uses}\\
+ w_C&=\min\{C,\alpha D,\max\{\beta C,\alpha(B+D)-A\}\},
+ &w_B&=\min\{B,\alpha A,\max\{\beta B,\alpha(A+C)-D\}\}.\nonumber
+\end{align}
+To verify the first orientation algebraically, put
+$U=\min\{C,\alpha D\}$, $T=\alpha(B+D)$, $t=\beta C$, and
+$m=\min\{U,t\}=\min\{\alpha D,\beta C\}$.
+Then $T\ge U$ and $V=\min\{T,A+U\}\ge U$, so the upper endpoint is
+$U$. Since $V-A\le U$, the clamp equals
+\[
+ w_C=\min\{U,\max\{t,V-A\}\}
+     =\max\{m,V-A\}
+     =\min\{U,\max\{t,T-A\}\}.
+\]
+Consequently
+$w_A=\min\{A,V-m\}=\min\{A,T-m\}$, giving
+\eqref{graph:explicit-uses}. Reflection gives the other two formulas.
+
+Set
+\begin{equation}\label{graph:prices}
+ p_v(c)=\begin{cases}w_v(c)/c_v,&c_v>0,\\0,&c_v=0,\end{cases}
+ \qquad y_i(b)=\sum_{v\in\{A,B,C,D\}}b_{iv}p_v\left(\sum_j b_j\right).
+\end{equation}
+Prices lie in $[0,1]$. The price chosen at an absent coordinate has no
+effect on any payment.
+
+The selected left uses are realized by the flows in
+Lemma~\ref{graph:flow-interval}. Collapse both directed copies of each
+path edge into one edge flow. At vertex $v$, its incident use is at most
+$c_v+\alpha c_v$, from the left and right copies respectively. Dividing
+by $1+\alpha$ yields a feasible original packing. Therefore
+\begin{equation}\label{graph:flow-funding}
+ \sum_i y_i(b)=\sum_v w_v(c)=V+V'\le(1+\alpha)F_G(c).
+\end{equation}
+This argument uses fractional flows and no integrality assumption.
+
+\subsection{The restoration inequalities on every smooth cell}
+
+At a strictly positive aggregate $c$, let $a$ be a coalition's current
+aggregate holding, with $0\le a\le c$, and write
+$\theta_v=a_v/c_v\in[0,1]$. On a smooth cell define
+\begin{equation}\label{graph:restoration-coefficients}
+ g_v=p_v+\sum_j a_j\partial_v p_j.
+\end{equation}
+This differentiates the coalition's total payment when its holding and
+the aggregate capacity are restored together, while outsiders stay fixed.
+We prove
+\begin{equation}\label{graph:cover-certificate}
+ g_v\ge0\quad\text{for every vertex},\qquad
+ g_A+g_B\ge1,\quad g_A+g_D\ge1,\quad g_D+g_C\ge1.
+\end{equation}
+Ties and zero capacities will be handled by direct integration below.
+
+First record the single-edge calculation used in the first cells. For
+edge capacities $X\ge Y>0$, put $t=Y/X$ and take
+$w_X=\alpha Y$, $w_Y=\min\{Y,\alpha X\}$.
+When $t\le\alpha$, the restoration coefficients are
+\[
+ g_X=\alpha t(1-\theta_X),\qquad g_Y=1+\alpha\theta_X.
+\]
+They are nonnegative and their sum is
+$1+\alpha t+\alpha(1-t)\theta_X\ge1$.
+When $t\ge\alpha$, they are
+\[
+ g_X=\alpha t(1-\theta_X)+\alpha\theta_Y,\qquad
+ g_Y=(\alpha/t)(1-\theta_Y)+\alpha\theta_X.
+\]
+They are nonnegative. Minimizing their sum over the holding fractions gives
+$\alpha(1+t)\ge\alpha(1+\alpha)>1$: the coefficient of $\theta_X$ in
+the sum is nonnegative, and that of $\theta_Y$ is nonpositive.
+Swapping $X,Y$ handles the other capacity ordering.
+
+For the path put
+\[
+ u=A-\alpha B,\qquad v=D-\alpha C.
+\]
+The following cases exhaust the smooth cells; the displayed weak
+inequalities describe their closures.
+
+\paragraph{A nonpositive difference.}
+If $u\le0$, formula \eqref{graph:explicit-uses} reduces to
+\[
+ w_A=A,\quad w_B=\alpha A,\quad
+ w_C=\min\{C,\alpha D\},\quad w_D=\min\{D,\alpha C\}.
+\]
+For the first pair,
+\[
+ g_A=1+\alpha\theta_B\ge1,\qquad
+ g_B=(\alpha A/B)(1-\theta_B)\ge0.
+\]
+The other pair satisfies the single-edge calculation, so $g_C,g_D\ge0$
+and $g_C+g_D\ge1$. The cross edge is covered by $g_A\ge1$.
+If $v\le0$, reflection gives the same conclusions with $g_D\ge1$.
+
+For the remaining cells $u,v>0$, and the common formulas are
+\begin{align*}
+ w_A&=\alpha B+\min\{u,\alpha v\},&
+ w_D&=\alpha C+\min\{v,\alpha u\},\\
+ w_B&=\min\{B,\beta B+(\alpha u-v)_+\},&
+ w_C&=\min\{C,\beta C+(\alpha v-u)_+\}.
+\end{align*}
+Since $\alpha<1$, at most one of $\alpha u-v$ and $\alpha v-u$ is
+positive.
+
+\paragraph{The middle cone: $\alpha v\le u$ and $\alpha u\le v$.}
+Here
+\[
+ w_B=\beta B,\quad w_C=\beta C,\quad
+ w_A=\alpha(B+D)-\beta C,\quad w_D=\alpha(A+C)-\beta B.
+\]
+Moreover $p_A,p_D\ge\beta$. For example,
+$\alpha u\le v$ gives
+$w_A=\alpha B+\alpha v\ge\beta(\alpha B+u)=\beta A$;
+the other inequality follows by reflection. Direct differentiation yields
+\begin{align*}
+ g_A&=p_A(1-\theta_A)+\alpha\theta_D,&
+ g_D&=p_D(1-\theta_D)+\alpha\theta_A,\\
+ g_B&=\beta+\alpha\theta_A-\beta\theta_D,&
+ g_C&=\beta+\alpha\theta_D-\beta\theta_A.
+\end{align*}
+All are nonnegative. Their edge-sum minima over $\theta\in[0,1]^4$ are
+\[
+ \min(g_A+g_B)=\beta+\min\{p_A,\alpha\},\qquad
+ \min(g_D+g_C)=\beta+\min\{p_D,\alpha\},
+\]
+and
+\[
+ \min(g_A+g_D)=\min\{p_A,\alpha\}+\min\{p_D,\alpha\}.
+\]
+Every displayed value is at least $2\beta=1$.
+
+\paragraph{An outer cone: $u\le\alpha v$.}
+The opposite outer cone is its reflection. In this cone
+\[
+ w_A=A,\quad w_B=\beta B,\quad
+ w_D=\alpha(A+C)-\beta B,\quad
+ w_C=\min\{C,\alpha(B+D)-A\}.
+\]
+If $w_C<C$, then $p_C\ge\beta$ because $\alpha v-u\ge0$.
+The unsaturated condition gives
+$\alpha v-u\le(1-\beta)C$. Multiplying by $\alpha$ and using
+$\beta=\alpha^2$ gives
+\[
+ \beta v\le\alpha u+\alpha(1-\beta)C,
+ \qquad \beta D\le\alpha u+\alpha C=w_D.
+\]
+Thus $p_D\ge\beta$ as well. The coefficients are
+\begin{align*}
+ g_A&=1-\theta_C+\alpha\theta_D,&
+ g_B&=\beta+\alpha\theta_C-\beta\theta_D,\\
+ g_C&=p_C(1-\theta_C)+\alpha\theta_D,&
+ g_D&=p_D(1-\theta_D)+\alpha\theta_C.
+\end{align*}
+They are nonnegative. Direct affine minimization gives
+\begin{align*}
+ \min(g_A+g_B)&=\alpha+\beta\ge1,\\
+ \min(g_C+g_D)&=\min\{p_C,\alpha\}+\min\{p_D,\alpha\}\ge2\beta=1,\\
+ \min(g_A+g_D)&=\alpha+\min\{p_D,\alpha\}\ge\alpha+\beta\ge1.
+\end{align*}
+For example the first sum is
+$1+\beta+(\alpha-1)\theta_C+(\alpha-\beta)\theta_D$, whose minimum
+is $\alpha+\beta$.
+
+If instead $w_C=C$ on a smooth saturated cell, the coefficients are
+\[
+ g_A=1+\alpha\theta_D,\qquad g_C=1+\alpha\theta_D,
+ \qquad g_B=\beta(1-\theta_D),\qquad
+ g_D=p_D(1-\theta_D).
+\]
+They are nonnegative; $g_A\ge1$ covers $AB$ and $AD$, and $g_C\ge1$
+covers $CD$. This completes \eqref{graph:cover-certificate} on every
+smooth cell for every holding fraction, without restricting mixed ownership.
+
+\subsection{Finite restorations, ties, and zero reports}
+
+For outsider aggregate $o\ge0$ and coalition aggregate $a\ge0$, define
+\[
+ H(o,a)=\sum_v a_v p_v(o+a).
+\]
+This function is jointly continuous on its entire nonnegative domain.
+At a coordinate whose aggregate tends to zero, its contribution lies
+between zero and $a_v$ and hence tends to zero; at a positive aggregate
+coordinate, continuity follows from that of $w$. Also $H(o,0)=0$.
+
+Fix $0\le a'\le a$ and put $d=a-a'$. The finitely many polyhedral cells
+of $w$ have boundaries contained in finitely many proper hyperplanes.
+Choose a strictly positive vector $z$ having nonzero inner product with
+each of their nonzero normals. Such a vector exists because a finite union
+of proper hyperplanes cannot cover the positive orthant. Choose
+$\varepsilon\downarrow0$ omitting the finitely many positive values for
+which the segment
+\[
+ c(t)=o+\varepsilon z+a'+td,\qquad 0\le t\le1,
+\]
+is contained in any boundary hyperplane. Indeed, containment requires the
+hyperplane to be parallel to $d$ and imposes one linear equation in
+$\varepsilon$ with a nonzero coefficient. All other boundary intersections
+occur at at most one parameter value per hyperplane.
+
+The segment is strictly positive. Its coalition payment
+$H(o+\varepsilon z,a'+td)$ is continuous and piecewise continuously
+differentiable, with only finitely many breakpoints. Away from them its
+derivative is $g\cdot d$, and its holding fractions are
+$(a'_v+td_v)/c_v(t)\in[0,1]$. The verified inequalities therefore apply.
+For any edge packing $x$ feasible at $d$, they imply
+\[
+ \sum_e x_e\le\sum_{e=uv}(g_u+g_v)x_e
+ =\sum_v g_v\sum_{e\ni v}x_e\le\sum_v g_vd_v.
+\]
+Taking the maximum gives $g\cdot d\ge F_G(d)$. Integrating on the
+finitely many pieces, using continuity at their endpoints, yields
+\[
+ H(o+\varepsilon z,a)-H(o+\varepsilon z,a')\ge F_G(d).
+\]
+Joint continuity as $\varepsilon\downarrow0$ proves
+\begin{equation}\label{graph:finite-out}
+ H(o,a)-H(o,a')\ge F_G(a-a')
+ \qquad(o\ge0,\ 0\le a'\le a).
+\end{equation}
+The perturbation is an analytic approximation to the globally defined
+formula $H$; no perturbed owner profile is required to fit the fixed boxes,
+and no owner is added or reassigned in the asserted mechanism.
+
+For an actual coalition $T$, take $o=\sum_{i\notin T}b_i$,
+$a=\sum_{i\in T}b_i$, and $a'=\sum_{i\in T}b'_i$ for its binding
+underreports. Its aggregate payment is exactly $H(o,a)$, so
+\eqref{graph:finite-out} is full OUT for the original owners, including
+passive members. It includes segments on ties, zero capacities, the
+all-zero profile, and the grand coalition. Taking $a'=0$ proves coverage.
+Together with \eqref{graph:flow-funding}, this proves
+Theorem~\ref{graph:theorem} for the path.
+
+\subsection{Complete blow-ups and disjoint unions}
+
+Let $X\in\{A,B,C,D\}$ now denote one of four independent vertex groups,
+and aggregate capacities as $c_X=\sum_{v\in X}c_v$. The production value
+of a complete blow-up equals the path value at these four aggregates.
+Aggregating any original packing proves one inequality. To prove the
+other, let $f_{XY}$ be a feasible aggregate path packing. For $c_X>0$ assign
+the incidence of this group-pair flow to $v\in X$ by
+\[
+ r_{v,XY}=\frac{c_v f_{XY}}{c_X}.
+\]
+The sum over incident group pairs is at most $c_v$, and
+$\sum_{v\in X}r_{v,XY}=f_{XY}$. If $f_{XY}>0$, both group capacities
+are positive and we may put
+\[
+ x_{vw}=\frac{r_{v,XY}r_{w,XY}}{f_{XY}}
+ \qquad(v\in X,\ w\in Y)
+\]
+on every edge of that complete bipartite pair. Its two marginals are the
+assigned incidences, and its total is $f_{XY}$. Zero-flow pairs receive
+zero flow. Zero-capacity groups have no positive incident aggregate flow,
+so no division by zero is used. This constructs an original feasible
+packing of exactly the aggregate objective.
+
+Apply the four path prices to every resource in its corresponding group.
+Each actual owner's payment equals the path-rule payment on its own
+aggregated report. Every actual withholding maps to a coordinatewise
+withholding of that same owner's aggregate, and the equality of production
+values holds for all coalition and withheld bundles. Thus funding,
+coverage, and full OUT transfer exactly, retaining the original mixed
+owners and their fixed endowment boxes.
+
+For a finite disjoint union, sum the component payments. Both production
+and withheld production are additive across components, so summing their
+OUT, coverage, and funding inequalities preserves the constant $1+\alpha$.
+An owner may hold resources in several components. Isolated resources
+contribute no production and may receive zero payment. This completes
+Theorem~\ref{graph:theorem}.
+
+\begin{remark}[Scope of the funding number]\label{graph:scope}
+At $(A,B,C,D)=(4,1,1,1)$, the path value is two and
+$(V,V')=(2\alpha,2)$, so this particular rule attains the ratio
+$1+\alpha$. This is not a lower bound for arbitrary mechanisms on the
+path. The proof does not extend the guarantee to arbitrary edge profits
+or to incomplete connections between the four groups, and makes no
+claim of historical novelty.
+\end{remark}
+
+
+\subsection{An obstruction to a direct leaf-layer recursion}
+The path theorem does not license independent leaf reservations throughout a
+tree. The following obstruction concerns a specified selection procedure;
+it is not a lower bound for arbitrary mechanisms on trees.
+
+Fix $0<\alpha<1$ and $0\le\beta<1$. In each orientation of the scaled
+bipartite double cover, process left vertices in a leaf-layer order of the
+original tree: all original leaves precede newly exposed leaves, and each
+successive layer is exhausted before the next. Among maximum flows consistent
+with previous choices, clamp each current left use to $\beta c_v$ within its
+feasible interval. Pay owners by their resource fractions of these left uses,
+as in \eqref{graph:prices}. On P4, $\alpha=1/\sqrt2$ and $\beta=1/2$
+recover \eqref{graph:selector}. The collapsed-flow funding argument still
+applies on every tree, but incentives need not.
+
+\begin{proposition}[Failure of fixed leaf reserves]\label{graph:recursion-failure}
+For every $0<\alpha<1$ and $0\le\beta<1$, this leaf-layer selector fails
+full OUT on P6, already for a singleton coalition consisting of one mixed owner.
+The failure is independent of tie-breaking within the first leaf layer and
+of every selection choice after the first leaf in each orientation is fixed.
+\end{proposition}
+\begin{proof}
+Use the path $0-1-2-3-4-5$, choose
+\[
+ 0<q<\min\{1-\beta,\alpha^{-2}-1,1\},
+ \qquad c(q)=(1,\alpha^{-1},q,q,\alpha^{-1},1).
+\]
+One fixed owner holds all resources at $0,2,3,5$; two outsiders hold resources
+$1,4$ respectively. The first owner alone reduces both middle reports from
+$q$ to $q/2$, leaving its two endpoint reports unchanged. Its withheld bundle
+has production $q/2$ on edge $2-3$.
+
+Consider the orientation with left vertices $\{0,2,4\}$. The flows
+\[
+ f_{0_L1_R}=1-q,\quad f_{2_L1_R}=q,\quad
+ f_{4_L3_R}=\alpha q,\quad f_{4_L5_R}=\alpha
+\]
+are feasible: in particular $\alpha(1+q)<\alpha^{-1}$.
+They saturate every right capacity, so their value $1+\alpha(1+q)$ is
+maximum. Every maximum flow saturates $1_R$, whose only incoming sources
+are $0_L,2_L$. Since the latter has capacity $q$, its original leaf satisfies
+$w_0\ge1-q$. The displayed flow attains this lower endpoint. As
+$1-q>\beta c_0=\beta$, the first leaf clamp fixes $w_0=1-q$.
+Saturating $1_R$ then forces source $2_L$ to spend its entire $q$ there;
+all other right use must come from $4_L$. Thus every remaining left use
+is forced. Reflection proves the same statement for the other orientation,
+whose first original leaf is $5_L$. Hence
+\[
+ w(q)=(1-q,\alpha(1+q),q,q,\alpha(1+q),1-q).
+\]
+The same argument applies at $q/2$, since all strict inequalities persist.
+The deviating owner's total payment is
+\[
+ (1-q)+q+q+(1-q)=2
+\]
+at both reports. Its payment loss is zero, contradicting the required
+outside-production compensation $q/2>0$.
+\end{proof}
+
+For the theorem's constants, $q=1/4$ gives the concrete capacities
+$(1,\sqrt2,1/4,1/4,\sqrt2,1)$ and a productive withdrawal of $1/8$
+at each middle vertex. Retuning a fixed fraction below one or taking
+$\alpha$ closer to one cannot repair this leaf-layer architecture. The
+proposition does not cover reserve fraction one, report-dependent reserves,
+other global selectors, or orders that process a newly exposed vertex before
+an original leaf in its orientation. In particular it establishes no
+impossibility for arbitrary full-OUT tree mechanisms. A viable recursion
+must retain additional information about the simultaneous payment response
+across the central edge.
+
+\section{Interpretation, scope and remaining questions}\label{sec:discussion}
+The two parameters answer different questions. The dimension frontier allows
+arbitrary technologies on $d$ resources and protects every coalition. The
+sparse frontier limits each activity to $r$ resources, allows $d$ to grow,
+and protects coalitions of at most $s$ owners while retaining coverage for all
+coalitions. A resource-dimension upper cannot be substituted for an
+owner-independent bound depending only on $r,s$.
+
+At arity three, the square-root-to-quadratic gap remains open. The lower uses
+exponentially many resource rows. Pure ownership is possible, but requires
+more owners than the fully eligible construction; Appendix~\ref{sec:arity}
+keeps the counts separate. Neither the exponent nor its sharper constant
+claims minimal witness size. The simple binomial upper evaluates finitely
+many coalition production programs, potentially exponentially many. Efficient
+approximate evaluation requires separate incentive and coverage analysis.
+
+The graph construction in Section~\ref{graph:section} protects every coalition
+while allowing the number of resources to grow within complete P4 blow-ups and
+disjoint unions. Its factor is uniform in those counts, but its interaction
+structure is restricted. Extending the selector to arbitrary trees or graphs,
+and determining the optimal factor even on P4, remain open within this program.
+The extra funding is $F/\sqrt2$, not $(1+1/\sqrt2)F$ in addition to output.
+
+The proposed contribution is the quantitative link between fixed-owner
+coalition withholding and funding, particularly the projective cap exchange
+that supplies a constant seed without a dummy-zero assumption. Projective
+geometry, positive hypergraph supports, semivalues, and coalition monotonicity
+are established ingredients. A specialist must assess whether a prior theorem,
+possibly under different terminology or normalization, already implies the
+present bounds. The accompanying priority matrix records inspected versions
+and unresolved original-source comparisons. Internal model reviews and exact
+certificates are not a historical-novelty certificate or human peer review.
+
+A conditional infrastructure interpretation would give each owner genuine
+rights over compute inputs and firm power capacity, with physically feasible
+partial withdrawals and a sponsor who benefits from the stronger contract.
+Public telemetry does not establish those rights. The earlier bounded
+feasibility check supplied no compatible held-out outcome panel or sponsor
+surplus estimate. Moreover, a Gaussian reserve model is not automatically an
+arity-three packing technology. We therefore make no measured pooling,
+reliability, energy-saving or net-value claim here.
+
+This manuscript concerns coordinated withholding. It does not settle the
+separate owner-count/resource-dimension gap for individual incentives in the
+companion truthful-production project. Optional floor parameters, structured
+production refinements beyond the explicitly proved graph class, and application
+measurement studies are not separate new claims of this draft. The immediate questions are correctness of the
+fixed-institution reductions, priority of the quantitative bounds, and whether
+these results form a useful unit of publication.
+
+\appendix
+\section{Fixed arity and pure ownership}
+\label{sec:arity}
+\label{arity:appendix}
+
+The projective construction of Theorem~\ref{thm:projective} extends to every
+fixed arity $r\geq 3$ by
+replacing binary triples with binary circuits of size $r$.  This appendix
+gives the additional geometry and records the exact finite bounds.  It also
+gives a separate realization with one pure owner per resource.  The resource
+count is exponential in the length of the construction in both realizations;
+the pure realization has exponentially many owners as well.
+
+Throughout, payments are arbitrary nonnegative functions on the entire fixed
+real report domain.  For a report profile $b=(b_i)_{i\in N}$, write
+$b_C=\sum_{i\in C}b_i$.  The hypotheses used below are coalition coverage and
+a uniform funding bound,
+\begin{equation}
+  \sum_{i\in C}y_i(b)\geq F(b_C)\quad(C\subseteq N),
+  \qquad
+  \sum_{i\in N}y_i(b)\leq\kappa F(b_N),
+  \label{arity:contract}
+\end{equation}
+at every feasible profile, together with size-$s$ coalition withholding
+monotonicity: if $|C|\leq s$, $b'_i\geq b_i$ coordinatewise for $i\in C$,
+and $b'_i=b_i$ for $i\notin C$, then
+\begin{equation}
+  \sum_{i\in C}y_i(b')\geq\sum_{i\in C}y_i(b).
+  \label{arity:tcwm}
+\end{equation}
+Members of $C$ may have unchanged reports.  Coverage in
+\eqref{arity:contract} is required for \emph{every} coalition, including
+coalitions larger than $s$.  No continuity, formula for payments, anonymity,
+or zero payment to a zero reporter is assumed.  Since full OUT implies
+\eqref{arity:tcwm}, every lower bound below also applies under full OUT.
+
+\subsection{The binary-circuit construction}
+\label{arity:construction-section}
+
+Fix integers $k\geq2$ and $M\geq1$, and put $r=k+1$.  Let
+\[
+  V=\mathbb F_2^{\,1+(k-1)M}
+\]
+have the specified basis
+\[
+  v,\qquad e_{j,\ell}\quad
+  (1\leq j\leq M,\ 1\leq\ell\leq k-1).
+\]
+Resource rows are indexed by $V\setminus\{0\}$, so their number is
+\begin{equation}
+  d=2^{1+(k-1)M}-1.
+  \label{arity:row-count}
+\end{equation}
+A binary circuit means a nonempty set of distinct rows whose sum over
+$\mathbb F_2$ is zero and none of whose proper nonempty subsets has sum zero.
+The activities are all binary circuits of cardinality $k+1$.  Each activity
+has profit one and consumes one unit of each of its $k+1$ rows.  Thus, with
+$\mathcal A$ denoting the set of activities, the full technology is
+\begin{equation}
+  F(c)=\max\left\{
+    \sum_{A\in\mathcal A}x_A:
+    x_A\geq0,\quad
+    \sum_{\substack{A\in\mathcal A\\u\in A}}x_A\leq c_u
+       \text{ for every }u\in V\setminus\{0\}
+  \right\}.
+  \label{arity:technology}
+\end{equation}
+Every activity has arity exactly $r$, and every $g\in\operatorname{GL}(V)$
+permutes the resources and the activities of this finite technology.
+
+For the first realization take the fixed actual owner set
+\[
+  N=\{p\}\ \cup\
+  \{h_{j,\ell}:1\leq j\leq M,\ 1\leq\ell\leq k-1\}
+  \ \cup\ \{\ell_j:1\leq j\leq M\}.
+\]
+There are $n=1+kM$ owners.  Every owner has the all-ones endowment and the
+same fixed report cube $[0,1]^d$.  Let $\delta_u\in\R^d$ denote one unit of
+resource $u$, to distinguish real resource quantities from the binary
+vectors that index resources.  Set
+\[
+  w_j=v+\sum_{\ell=1}^{k-1}e_{j,\ell}\quad\text{in }V.
+\]
+Basis independence makes all displayed root, high and low rows nonzero and
+pairwise distinct.
+For $1\leq m\leq M$, define a feasible profile $C_m$ by
+\begin{equation}
+  b_p=\delta_v,\qquad
+  b_{h_{j,\ell}}=\delta_{e_{j,\ell}},\qquad
+  b_{\ell_j}=
+  \begin{cases}
+    \delta_{w_j},&j\leq m,\\
+    0,&j>m.
+  \end{cases}
+  \label{arity:profiles}
+\end{equation}
+All actual owners and all their report domains remain fixed as $m$ changes.
+In particular, the high owners of inactive branches already report their
+basis rows.
+
+\begin{lemma}[Supported activities]
+\label{arity:supported}
+At $C_m$, the only activities whose rows all have positive capacity are
+\[
+  A_j=\{v,e_{j,1},\ldots,e_{j,k-1},w_j\},
+  \qquad 1\leq j\leq m.
+\]
+Consequently $F(b_N(C_m))=1$.
+\end{lemma}
+
+\begin{proof}
+Consider a nonempty zero-sum subset of the larger set
+\[
+  S=\{v\}\cup\{e_{j,\ell}:j,\ell\}\cup\{w_j:1\leq j\leq M\}.
+\]
+Let $J$ be its set of selected low-row indices and put $t=|J|$.  The basis
+coordinate $e_{j,\ell}$ occurs in only two members of $S$: the row
+$e_{j,\ell}$ itself and the row $w_j$.  Cancellation therefore requires all
+$k-1$ high rows of every branch in $J$, and no high rows of any other branch.
+Cancellation of the $v$ coordinate requires the root row precisely when $t$
+is odd.  If $t=0$, these conditions give the empty subset.  Every nonempty
+zero-sum subset thus has cardinality
+\begin{equation}
+  kt+(t\bmod 2).
+  \label{arity:dependency-cardinality}
+\end{equation}
+For $k\geq2$, this cardinality equals $k+1$ precisely when $t=1$: if $t\geq2$
+it is at least $2k>k+1$.  The corresponding set is $A_j$, and it is minimal
+because its $k$ rows $v,e_{j,1},\ldots,e_{j,k-1}$ are independent and $w_j$
+is their sum.  At $C_m$ its low row has positive capacity exactly when
+$j\leq m$, which proves the classification.
+
+Running any one active branch at level one is feasible.  Every supported
+activity consumes the root row, whose capacity is one, so production cannot
+exceed one.  Equivalently, a dual certificate for the \emph{full} technology
+assigns price one to $v$ and to every zero-capacity row, and price zero to
+the other rows.  A supported activity contains $v$; every other activity
+contains a zero-capacity row.  Each dual constraint is therefore satisfied,
+and the dual objective is one.
+\end{proof}
+
+\begin{lemma}[Seed and private-owner orbits]
+\label{arity:orbits}
+After lawful finite averaging over resource automorphisms and owner
+permutations, the owners of the first branch at $C_1$ have a common payment
+$q_1\geq1/(k+1)$.  At $C_m$, all $km$ active private owners
+\[
+  \{h_{j,\ell}:j\leq m,\ 1\leq\ell\leq k-1\}
+  \cup\{\ell_j:j\leq m\}
+\]
+have a common payment $q_m$.
+\end{lemma}
+
+\begin{proof}
+The finite averaging argument of Lemma~\ref{lem:average} applies to
+$\operatorname{GL}(V)\times\mathfrak S_N$.  A binary linear automorphism
+acts on a real report by \emph{permuting its resource coordinates}; it does
+not take binary linear combinations of real capacities.  These resource
+permutations preserve \eqref{arity:technology}, the real report cubes and
+coordinatewise order.  Owner permutations preserve the common fixed report
+domains, coalition sizes and the coverage and comparison inequalities.
+Consequently conjugating a rule and averaging preserves nonnegativity,
+\eqref{arity:contract}, \eqref{arity:tcwm}, and its funding factor.  It
+suffices to prove the lower bound for this equivariant averaged rule.
+
+At $C_1$, any permutation of the $k$ basis vectors
+$v,e_{1,1},\ldots,e_{1,k-1}$ fixes their sum $w_1$ and fixes every high
+basis row of an inactive branch.  Also the map
+\[
+  v\longmapsto w_1,\qquad e_{j,\ell}\longmapsto e_{j,\ell}
+       \quad\text{for all }j,\ell
+\]
+is invertible: the coefficient of $v$ in the replacement for $v$ is one.
+It exchanges $v$ and $w_1$.  These maps preserve the entire multiset of
+reported rows at $C_1$, including the inactive high reports and zero low
+reports.  Combined with the matching owner permutations, they stabilize
+$C_1$ and act transitively on its $k+1$ first-branch owners.  Their coalition
+can run $A_1$ at level one, so coverage gives $(k+1)q_1\geq1$.  This use of
+coverage does not require $k+1\leq s$.
+
+At $C_m$, permute the active branch blocks, or permute the high basis vectors
+within one active branch, fixing $v$ and the inactive basis vectors.
+Additionally, for each $j\leq m$ the basis replacement
+\[
+  e_{j,1}\longmapsto w_j
+\]
+with every other basis vector fixed is invertible, since the coefficient of
+$e_{j,1}$ in $w_j$ is one.  It fixes $v$, exchanges $e_{j,1}$ with $w_j$,
+and fixes all other displayed rows except these two.  Within-branch
+permutations and this exchange connect all $k$ private rows of a branch;
+active branch permutations connect the branches.  They preserve the entire
+profile, so the induced stabilizers are transitive on all $km$ active
+private owners.  Equivariance gives their common payment $q_m$.
+\end{proof}
+
+\begin{theorem}[Finite fixed-arity lower bound]
+\label{arity:finite-bound}
+Fix integers $k\geq2$, $s\geq2$ and $M\geq1$.  There is a finite institution
+of arity exactly $k+1$, with $1+kM$ fixed fully eligible owners and
+$2^{1+(k-1)M}-1$ resource rows, for which every payment rule satisfying
+\eqref{arity:contract}--\eqref{arity:tcwm} has funding factor at least
+\begin{equation}
+  L_{k,M,s}
+  :=1+\frac{k(M-1)}{k+1}P_{k,M,s},\qquad
+  P_{k,M,s}:=\prod_{m=2}^{M}\frac{a_m}{a_m+1},\qquad
+  a_m:=\min\{s-1,k(m-1)\}.
+  \label{arity:finite-tail}
+\end{equation}
+Empty products are one.  If $s\geq k(M-1)+1$, including $s=1,M=1$, the
+same construction gives
+\begin{equation}
+  \kappa\geq\frac{k}{k+1}Q_{k,M},\qquad
+  \kappa\geq1+\frac{k(M-1)}{(k+1)M}Q_{k,M},\qquad
+  Q_{k,M}:=\prod_{m=2}^{M}\frac{km}{k(m-1)+1}.
+  \label{arity:untruncated}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Use \eqref{arity:profiles} and the averaged rule from
+Lemma~\ref{arity:orbits}.  In the transition from $C_{m-1}$ to $C_m$, only
+the same actual owner $\ell_m$ changes its report, from $0$ to $\delta_{w_m}$.
+Select any $a_m$ of the $k(m-1)$ old active private owners and protect them
+together with $\ell_m$.  This fixed coalition has $a_m+1\leq s$ members.
+All selected old members keep their reports unchanged.  At the old profile
+their total payment is $a_mq_{m-1}$, and the restoring owner's old payment
+is nonnegative.  At the new profile all selected members, including the
+restorer, receive $q_m$.  Hence \eqref{arity:tcwm} implies the exact recurrence
+\begin{equation}
+  (a_m+1)q_m\geq a_mq_{m-1},\qquad 2\leq m\leq M.
+  \label{arity:recurrence}
+\end{equation}
+The selected old owners need not comprise whole branches.  Iterating
+\eqref{arity:recurrence} from $(k+1)q_1\geq1$ gives
+\begin{equation}
+  q_M\geq\frac{P_{k,M,s}}{k+1}.
+  \label{arity:terminal-q}
+\end{equation}
+
+Write $z$ for the root owner's payment at $C_M$.  Coverage for the actual
+owners of any complete branch and the budget at $C_M$ give respectively
+\[
+  z+kq_M\geq1,\qquad
+  \kappa\geq z+kMq_M.
+\]
+The second inequality uses Lemma~\ref{arity:supported} and discards every
+other owner's payment only by nonnegativity.  Combining them yields
+$\kappa\geq1+k(M-1)q_M$, proving \eqref{arity:finite-tail}.  This includes
+$M=1$, when terminal coverage alone gives $\kappa\geq1$.
+
+If $s\geq k(M-1)+1$, protect \emph{all} old active private owners at every
+transition.  The recurrence becomes
+\[
+  [k(m-1)+1]q_m\geq k(m-1)q_{m-1}.
+\]
+Writing $T_m=kmq_m$ gives
+\[
+  T_1\geq\frac{k}{k+1},\qquad
+  T_m\geq\frac{km}{k(m-1)+1}T_{m-1}.
+\]
+Thus $T_M\geq kQ_{k,M}/(k+1)$, and the budget proves the first bound in
+\eqref{arity:untruncated}.  Since
+$q_M\geq Q_{k,M}/[(k+1)M]$, terminal branch coverage proves the second.
+When $M=1$ there are no comparisons, so this argument also applies at $s=1$.
+
+All comparisons just used occur inside the one original fixed institution.
+Symmetry is a proof reduction, not a restriction on admissible payment
+rules.  If the original rule is asymmetric, an expensive profile may be an
+image of $C_M$ under the finite symmetry group, rather than $C_M$ itself.
+The same lower bound on its worst-case funding factor follows.
+\end{proof}
+
+The finite bound also has a direct nonnegative rational certificate.
+Put $c=k(M-1)$ and $P=P_{k,M,s}$.  Give the terminal coverage inequality
+$z+kq_M\geq1$ and the budget inequality
+$\kappa-z-kMq_M\geq0$ weight one each.  Give the seed inequality
+$(k+1)q_1\geq1$ weight $cP/(k+1)$, and give recurrence $m$ weight
+\begin{equation}
+  \lambda_m=\frac{c}{a_m+1}
+    \prod_{j=m+1}^{M}\frac{a_j}{a_j+1}.
+  \label{arity:certificate-weights}
+\end{equation}
+For $M\geq2$, the coefficient of $q_M$ from the final two inequalities is
+$-c$, canceled by $\lambda_M(a_M+1)$.  For $2\leq m<M$,
+$\lambda_m(a_m+1)=\lambda_{m+1}a_{m+1}$, and
+$\lambda_2a_2=cP$ cancels the seed term.  The $z$ coefficients also cancel,
+leaving exactly $\kappa\geq1+cP/(k+1)$.  At $M=1$, $c=0$ and terminal
+coverage plus budget already give the conclusion.  These are consequences
+for arbitrary payment variables; no marginal-payment representation is used.
+
+\subsection{Length optimization and the fixed-arity exponent}
+\label{arity:rate-section}
+
+\begin{corollary}[Optimized length within the construction]
+\label{arity:optimized}
+For fixed integers $k\geq2$ and $s\geq2$, set
+\[
+  h=\left\lceil\frac{s}{k}\right\rceil,
+  \qquad \rho=\frac{s-1}{s}.
+\]
+The largest value of $L_{k,M,s}$ over positive integer lengths $M$ is
+attained exactly at $M=s$ and $M=s+1$, with common value
+\begin{equation}
+  B_{k,s}
+  =1+\frac{k(s-1)}{(k+1)h}Q_{k,h}\rho^{\,s-h}.
+  \label{arity:optimized-bound}
+\end{equation}
+The length $M=s$ realizes this bound with
+$n=1+ks$ fully eligible owners and $d=2^{1+(k-1)s}-1$ rows.  For fixed $k$,
+\begin{equation}
+  B_{k,s}-1\sim
+  \frac{k}{k+1}\Gamma\!\left(1+\frac1k\right)
+       k^{1/k}\exp\!\left(-\frac{k-1}{k}\right)
+       s^{(k-1)/k}
+       \qquad(s\longrightarrow\infty).
+  \label{arity:asymptotic}
+\end{equation}
+This optimizes the displayed certificate over its length; it does not
+identify the optimal funding factor among all mechanisms.
+\end{corollary}
+
+\begin{proof}
+The cutoff satisfies $k(h-1)\leq s-1$ and $kh\geq s$.  Through $m=h$ the
+recurrence is untruncated, and for $m\geq h+1$ its factor is $\rho$.
+Telescoping the factors $(m-1)/m$ therefore gives
+\[
+  P_{k,h,s}=\frac{Q_{k,h}}{h},\qquad
+  P_{k,M,s}=\frac{Q_{k,h}}{h}\rho^{M-h}\quad(M\geq h).
+\]
+Let $I_M=(M-1)P_{k,M,s}$.  We have $I_1=0<I_2$.  If $1<M<h$,
+\[
+  \frac{I_{M+1}}{I_M}
+  =\frac{kM^2}{(M-1)(kM+1)}>1,
+\]
+because the numerator minus the denominator is $(k-1)M+1>0$.  If
+$M\geq h$ and $M>1$, the ratio is
+\[
+  \frac{I_{M+1}}{I_M}=\frac{M\rho}{M-1},
+\]
+which exceeds one for $M<s$, equals one for $M=s$, and is less than one
+for $M>s$.  As $h\leq s$, this proves the two asserted maximizers, including
+the boundary case $h=1$.  Substituting $M=s$ proves
+\eqref{arity:optimized-bound}.
+
+The gamma functional equation gives the exact identity
+\[
+  Q_{k,h}
+  =\frac{\Gamma(h+1)\Gamma(1+1/k)}{\Gamma(h+1/k)}.
+\]
+Stirling's formula yields
+$Q_{k,h}\sim\Gamma(1+1/k)h^{(k-1)/k}$.  Moreover $h\sim s/k$ and
+$\rho^{s-h}\longrightarrow\exp(-(k-1)/k)$.
+Inserting these limits into \eqref{arity:optimized-bound} proves
+\eqref{arity:asymptotic}.
+\end{proof}
+
+\begin{corollary}[An all-$s$ bound]
+\label{arity:all-s}
+For every fixed integer $r\geq3$ and every integer $s\geq1$, writing
+$k=r-1$, the unrestricted worst-case optimal funding factor satisfies
+\begin{equation}
+  K_r(s)\geq
+  \frac{k}{k+1}\left(\frac{s}{2k}\right)^{(k-1)/k}.
+  \label{arity:elementary-rate}
+\end{equation}
+In particular,
+$K_r(s)=\Omega_r(s^{(r-2)/(r-1)})$.
+\end{corollary}
+
+\begin{proof}
+Put $\beta=(k-1)/k$.  For $m\geq2$, concavity of $x^\beta$ gives
+\[
+  \frac{km}{k(m-1)+1}
+    =\frac{m}{m-\beta}
+    \geq1+\frac{\beta}{m}
+    \geq\left(1+\frac1m\right)^\beta.
+\]
+Consequently $Q_{k,M}\geq((M+1)/2)^\beta$, also at $M=1$.
+Choose $M=\lceil s/k\rceil$.  Then
+$k(M-1)+1\leq s$ and $M\geq s/k$, so the first bound in
+\eqref{arity:untruncated} implies \eqref{arity:elementary-rate}.
+The finite institution is admissible for the worst-case class defining
+$K_r(s)$.
+\end{proof}
+
+\subsection{A separate realization with pure owners}
+\label{arity:pure-section}
+
+\begin{corollary}[Fixed pure-owner realization]
+\label{arity:pure}
+All the lower bounds above also hold for institutions with one fixed pure
+unit owner per resource row.  For the length-$M$ instance, this realization
+has
+\begin{equation}
+  n=d=2^{1+(k-1)M}-1,
+  \label{arity:pure-counts}
+\end{equation}
+and every owner's fixed report domain is the full real interval along its
+own resource coordinate.  It does not have the fully eligible realization's
+owner count $1+kM$.
+\end{corollary}
+
+\begin{proof}
+Keep the technology \eqref{arity:technology}.  For each row
+$u\in V\setminus\{0\}$ introduce the actual owner $i_u$ with fixed
+endowment $\delta_u$ and report domain
+\[
+  \{t_u\delta_u:0\leq t_u\leq1\}.
+\]
+All these owners exist at every profile.  A resource automorphism $g$ acts
+\emph{jointly} on resource rows and owner labels, sending owner $i_u$ to
+owner $i_{g(u)}$.  On scalar reports the action is
+\[
+  (g\cdot t)_{g(u)}=t_u.
+\]
+This preserves the fixed institution: the transformed owner still reports
+only its own resource.  The associated owner bijection takes a coalition
+to another coalition of the same size, maps its total resource report by
+the same technology automorphism, preserves coordinatewise restoration,
+and leaves all outsiders unchanged in a comparison.  Conjugation therefore
+preserves every coverage, funding and incentive inequality.  Averaging over
+this finite joint $\operatorname{GL}(V)$ action is lawful.  No independent
+owner permutation is required or used.
+
+At the pure-owner version of $C_m$, set $t_u=1$ exactly for
+\[
+  S_m=\{v\}\cup\{e_{j,\ell}:j,\ell\}
+                 \cup\{w_j:j\leq m\},
+\]
+and set $t_u=0$ for every other row.  Its aggregate capacities coincide with
+those of \eqref{arity:profiles}, so Lemma~\ref{arity:supported}, including
+the full-technology dual, applies without change.  Each seed or private
+stabilizer described in Lemma~\ref{arity:orbits} preserves $S_m$ as a set.
+Being a permutation of all nonzero rows, it also preserves its complement.
+Its joint action thus fixes the entire report profile, including every
+additional zero-report owner.  The same seed and private orbits give
+$(k+1)q_1\geq1$ and a common payment $q_m$ for the $km$ active private owners.
+
+In the transition from $C_{m-1}$ to $C_m$, only the same actual pure owner
+$i_{w_m}$ restores its report from zero to one.  Protect this owner together
+with the specified old active pure owners.  Their labels, eligibility and
+reports remain fixed throughout the comparison.  Equation
+\eqref{arity:recurrence} follows exactly as before, by discarding only the
+restorer's nonnegative old payment.  Terminal branch coverage involves
+the $k+1$ actual pure owners of that branch.  All omitted owners, including
+additional zero reporters, have nonnegative payments, so the terminal
+budget argument is unchanged.  This proves the finite bounds and all their
+stated consequences with the counts \eqref{arity:pure-counts}.
+\end{proof}
+
+For example, $k=2$ specializes to the arity-three construction.  Its optimized
+length-$s$ bound has coefficient
+$\sqrt{2\pi}/(3\sqrt e)$ in front of $\sqrt s$, and $B_{2,6}=493/243$.
+The length-six witness uses $127$ resource rows in either realization,
+with $13$ fully eligible owners or $127$ pure owners.  Neither the
+fixed-arity extension nor the change of ownership realization gives a
+bound with a fixed resource dimension.
+
+\begin{thebibliography}{99}
+\bibitem[Bachrach et~al.(2009)]{BachrachEtAl2009}
+Y. Bachrach, E. Elkind, R. Meir, D. Pasechnik, M. Zuckerman, J. Rothe,
+and J. S. Rosenschein (2009).
+The cost of stability in coalitional games.
+\emph{SAGT 2009}, LNCS 5814, 122--134.
+Inspected preprint: \url{https://arxiv.org/abs/0907.4385}.
+
+\bibitem[Casajus(2011)]{Casajus2011}
+A. Casajus (2011).
+Collusion, symmetry, and the Banzhaf value.
+Author manuscript, 31 August 2011.
+\url{https://home.uni-leipzig.de/casajus/texts/colluba.pdf}.
+
+\bibitem[Do\u{g}an(2013)]{Dogan2013}
+E. Do\u{g}an (2013).
+Absence-proofness: A new cooperative stability concept.
+Working paper, 11 September 2013, inspected in the source audit.
+Published as \emph{Absence-proofness: Group stability beyond the core}.
+Published article: \emph{International Journal of Game Theory} 45, 601--616
+(issue 2016; online publication 2015),
+\url{https://doi.org/10.1007/s00182-015-0472-z}.
+The published text has not been verified against the inspected version.
+
+\bibitem[Ezra et~al.(2018)]{EzraEtAl2018}
+T. Ezra, M. Feldman, E. Neyman, I. Talgam-Cohen and S. M. Weinberg (2018).
+Complement-free couples must communicate: A hardness result for two-player
+combinatorial auctions. \url{https://arxiv.org/abs/1811.09871}.
+
+\bibitem[Feige et~al.(2014)]{FeigeEtAl2014}
+U. Feige, M. Feldman, N. Immorlica, R. Izsak, B. Lucier and V. Syrgkanis (2014).
+A unifying hierarchy of valuations with complements and substitutes.
+\url{https://arxiv.org/abs/1408.1211}.
+
+\bibitem[Immorlica et~al.(2008)]{ImmorlicaEtAl2008}
+N. Immorlica, M. Mahdian and V. S. Mirrokni (2008).
+Limitations of cross-monotonic cost-sharing schemes.
+\emph{ACM Transactions on Algorithms} 4(2).
+Inspected author full version: \url{https://immorlica.com/pubs/costshare.pdf}.
+
+\bibitem[Meir et~al.(2011)]{MeirEtAl2011}
+R. Meir, J. S. Rosenschein and E. Malizia (2011).
+Subsidies, stability, and restricted cooperation in coalitional games.
+\emph{IJCAI 2011}, 301--306.
+\url{https://www.ijcai.org/Proceedings/11/Papers/060.pdf}.
+
+\bibitem[Moulin and Sprumont(2004)]{MoulinSprumont2004}
+H. Moulin and Y. Sprumont (2004).
+On demand responsiveness in additive cost sharing.
+Author version, 24 May 2004.
+\url{https://www.ruf.rice.edu/~econ/papers/2004papers/dmdrespr41.pdf}.
+Published in \emph{Journal of Economic Theory} 125(1), 1--35 (2005),
+\url{https://doi.org/10.1016/j.jet.2004.05.003}.
+Cited proposition numbering refers to the inspected author version.
+\bibitem[Xiao and Fang(2021)]{XiaoFang2021}
+H. Xiao and Q. Fang (2021).
+Population monotonicity in matching games.
+Inspected original: arXiv:2105.00621v1, especially Section~2 and Lemma~3.
+\url{https://arxiv.org/abs/2105.00621}.
+
+\end{thebibliography}
+
+\end{document}

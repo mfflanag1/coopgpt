@@ -1,0 +1,219 @@
+BOUNDED COALITIONS: A FINITE FUNDING GUARANTEE FOR SPARSE PRODUCTION
+17 October 2026. Internally accepted after root rederivation, exact replay and
+independent Fable review023829. Original-source novelty remains unconfirmed.
+
+1. MODEL AND THEOREM
+
+There are n fixed actual owners with nonnegative divisible resource bundles
+b_i in fixed eligibility sets. Reports are binding coordinatewise underreports.
+Production is the optimum of one fixed finite packing LP
+
+ F(c)=max{pi.x: x>=0, A x<=c},  A>=0, pi>=0,
+
+with no positive-profit zero-resource activity. Every positive-profit activity
+uses at most r resource rows. All constrained resources, including any power
+cap, are owned and additive across coalitions. Thus coalition S can produce
+F(b_S), b_S=sum_{i in S}b_i. Public coefficients and profits are fixed; private
+costs and unverifiable overreports are not modeled.
+
+Fix an integer s>=1. The incentive requirement concerns EVERY actual coalition
+S with |S|<=s, but coverage concerns ALL coalitions of every size. Put p=1/s.
+Define the established p-binomial semivalue / probabilistic Banzhaf ingredient
+
+ m_i(p;b)= E_R [F(b_i+b_R)-F(b_R)],                         (1)
+
+where each other owner independently belongs to R with probability p. Set
+
+                   y_i(b)=p^(1-r) m_i(p;b).               (2)
+
+Then, for every real report profile:
+
+ (a) y_i>=0;
+ (b) sum_{i in S} y_i >= F(b_S) for EVERY coalition S;
+ (c) sum_i y_i <= r*s^(r-1) F(b_N);
+ (d) for EVERY S with |S|<=s and simultaneous withdrawals 0<=d_i<=b_i,
+
+     sum_{i in S}[y_i(b)-y_i(b-d)] >= F(sum_{i in S}d_i).   (3)
+
+Here d_i=0 outside S. Thus even the coalition's production from its pooled
+withheld resources cannot offset its lost payments. Equation(3) implies TCWM
+for these coalitions and ordinary individual underreport monotonicity.
+Owners and resources may both grow without limit while r and s remain fixed.
+
+For example, r=3 and s=2 gives factor12, independent of the number of owners
+and pods. This is an existence bound, not a sharp constant. For r=2 stronger
+unrestricted-coalition graph theorems are already available in this campaign.
+The new candidate statement is the combination of full coverage, bounded-
+coalition outside-production protection, and a uniform sparse-production bound;
+the binomial semivalue itself and the arity inequality are established tools.
+
+2. TWO ESTABLISHED PACKING INGREDIENTS, WITH PROOFS
+
+For a coalition R, write v(R)=F(b_R) and U_i(R)=v(R)-v(R\{i}) for i in R.
+An optimal nonnegative dual resource price w has w.b_R=v(R), and
+v(R\{i})<=w.b_(R\{i}). Hence U_i(R)>=w.b_i. Dual feasibility gives
+
+ sum_{i in T} U_i(R) >= v(T) for every T subset R.         (4)
+
+Also the standard bounded-arity grand-marginal inequality gives
+
+                  sum_{i in R} U_i(R) <= r v(R).          (5)
+
+One direct proof fixes an optimal production plan and divides each activity's
+resource usage among actual suppliers. Couple its supplier assignments across
+its at most r required rows. This decomposes its value into nonnegative pieces,
+each supplied by at most r actual owners. Removing all pieces involving i leaves
+a feasible plan without i, so U_i is at most their total value. Summing counts
+each piece at most r times. This is an analytic allocation of usage, not a change
+to strategic owner identities. The existing sparse-production note connects
+(5) to the established MPH-r inequality of Ezra et al., arXiv:1811.09871,
+Lemma6.2. These ingredients are not claimed as new here.
+
+For any fixed coalition S and independent p-thinning R, one furthermore has
+
+                     E v(S intersect R) >= p^r v(S).      (6)
+
+To verify(6), choose an optimal plan x for S. For each used activity e, assign
+its required row v to a supplier i in S with probability b_iv/(b_S)_v,
+independently across required rows. All denominators are positive for a used
+activity. Each assignment creates a positive hyperedge supported on at most r
+distinct ACTUAL owners, of weight pi_e*x_e times its assignment probability.
+Let h(T) be the sum of weights supported inside T. For any T subset S, its
+activity-e weight equals pi_e*x_e times the product of its row fractions.
+This product is at most each individual row fraction, so those scaled activities
+are feasible using b_T. Thus h(T)<=v(T), whereas h(S)=v(S). Under p-thinning,
+an owner-supported hyperedge of size k<=r survives with probability p^k>=p^r.
+Taking expectations proves(6). Ezra et al., arXiv:1811.09871, Lemma6.4 states
+the more general established MPH-r sampling inequality: if every subset of at
+most r members survives with probability at least q, expected value is at least
+q times the original value. Equation(6) is its Bernoulli specialization. The
+positive-hypergraph support representation of sparse packing is proved above
+for completeness, and is not asserted historically new.
+
+3. COVERAGE AND BUDGET
+
+Now R denotes a p-thinning of ALL n owners. Inclusion/exclusion conditioning
+in(1) gives, for every S,
+
+ p sum_{i in S}m_i = E sum_{i in S intersect R} U_i(R)
+                  >= E v(S intersect R) >= p^r v(S).
+
+Multiplication by p^(1-r) proves coverage of every S, including those larger
+than s. For the total, (5), Jensen concavity, and homogeneity give
+
+ p sum_i m_i <= r E F(b_R) <= r F(p b_N)=r p F(b_N).
+
+Therefore sum_i y_i <= r p^(1-r) F(b_N), proving(c). All inequalities apply
+also when production is zero. Nonnegativity follows directly from monotonic F.
+
+4. FINITE COEFFICIENT PROOF OF OUTSIDE-PRODUCTION PROTECTION
+
+Assume s>=2, so 0<p<1. For a fixed coalition S write M_S=sum_{i in S}m_i.
+Expand the finite expectation as a linear functional of coalition values:
+
+ M_S(b)=sum_{A subset N} c_S(A) F(b_A),
+
+where, for 0<|A|<n,
+
+ c_S(A)=p^(|A|-1)(1-p)^(n-|A|-1)[|A intersect S|-p|S|].   (7)
+
+At the endpoints the same expansion gives explicitly
+
+ c_S(empty)=-|S|(1-p)^(n-1),    c_S(N)=|S|p^(n-1).
+
+These follow by counting the positive occurrence of F(b_A) for i in A intersect S
+and the negative occurrence for i in S\A in(1). For |S|<=s=1/p, whenever
+A intersects S, one has |A intersect S|-p|S|>=1-p|S|>=0.
+Thus every coefficient of a coalition value affected by S's reports is
+nonnegative. Coefficients for A disjoint from S can be negative, but those
+coalition values do not change during S's withdrawal.
+
+Concavity and degree-one homogeneity imply superadditivity of F. Therefore
+
+ F(b_A)-F(b_A-d_A) >= F(d_A),  d_A=sum_{i in A}d_i.
+
+Multiplying this by the nonnegative affected coefficients and summing gives
+
+ M_S(b)-M_S(b-d) >= sum_A c_S(A)F(d_A)=M_S(d).
+
+For A disjoint from S, both the actual value difference and F(d_A)=F(0) vanish,
+so their negative coefficients create no issue. The last expression uses the
+SAME n fixed owners and the SAME mechanism, evaluated at the report profile
+consisting of the withheld bundles and zero bundles outside S. Applying the
+already proved full coverage at that profile gives
+
+ p^(1-r) M_S(d) >= F(d_S).
+
+This proves(3) directly for arbitrary simultaneous coalition withdrawals.
+There is no derivative, genericity, positive-stock, boundary-continuity,
+zero-owner-payment, or price-field assumption in this argument.
+
+For s=1, p=1 and(1) is exactly U_i(N)=F(b_N)-F(b_(N\{i})). Its excluded term
+is fixed when i withdraws, and superadditivity gives
+U_i(b)-U_i(b-d_i)>=F(d_i). Equations(4)--(5) prove coverage and factor r.
+This handles the endpoint without interpreting singular coefficient powers.
+If there are no positive-profit activities, F and all payments are zero;
+the arity-zero case uses this zero rule. Empty owner/coalition cases are also zero.
+
+5. THE BINOMIAL PARAMETER THRESHOLD IS SHARP FOR THIS ARCHITECTURE
+
+Assume the production class permits activity arity at least2. For integer s>=2
+and p>1/s with p<1, the unscaled rule(1) fails TCWM already
+on a unit star. There is one center resource owner with capacity1 and s leaf
+resource owners, with production
+
+                  F(c,h)=min(c, sum_{j=1}^s h_j).
+
+Each activity uses two resources. Set all leaf capacities to1 except leaf i,
+which increases from0 to1. Let S be the coalition of all s leaves, excluding
+the center. Before the increase, each of the s-1 positive leaves receives
+p(1-p)^(s-2); after it, each of the s leaves receives p(1-p)^(s-1). Consequently
+
+ M_S(high)-M_S(low)=p(1-p)^(s-2)(1-sp)<0.                 (8)
+
+Any fixed positive scaling preserves this violation. For p=1, use a two-leaf
+star: before restoring the missing leaf the existing leaf's grand marginal is1;
+afterwards both leaf marginals are0. This coalition has size2<=s. Thus choosing
+p>1/s cannot repair the constant in(c) while keeping this binomial architecture
+valid for every coalition of size at most s. This is a RULE-SPECIFIC obstruction,
+not a lower bound of r*s^(r-1) for arbitrary mechanisms.
+For activity arity1, production is additive across resource rows and owners,
+so the binomial payment is independent of p and this threshold obstruction
+does not apply.
+
+6. COMPUTATION, ECONOMIC SCOPE, AND PRIORITY
+
+For rational p,A,pi,b, every expectation is a finite rational sum of exact LP
+values. Enumerating the 2^n coalition values suffices; one can then evaluate all
+payments by finite sums. This is an exact deterministic all-profile rule. No
+polynomial-time algorithm, efficient sampling guarantee, or FPTAS is claimed.
+Approximate Monte Carlo payments would require separate coverage and incentive
+analysis; replacing this formula by a numerical estimator does not inherit(3).
+
+A GPU/memory/power model could have r=3 if each activity truly uses only those
+three owned resource rows. Multiple sites, time slots, network links and other
+constraints can increase r and must be counted. The guarantee concerns all
+groups of at most s fixed actual owners; it does not protect larger colluding
+groups. Nevertheless every large coalition still receives at least its feasible
+standalone production. Public net values/costs may be included in LP profits,
+but private opportunity-cost reports and measured serving gains are absent.
+
+The contrast with the common-cap rank-three obstruction is precise: unlimited
+TCWM coalitions force unbounded funding as owner count grows; bounding the
+incentive coalition size gives a uniform finite bound, even while preserving
+full outside-production protection for every permitted coalition. The external
+funding above production is at most [r*s^(r-1)-1]F, so the existence theorem is
+not a claim that the current constant is economically attractive.
+
+Established ingredients include p-binomial/Banzhaf semivalues, LP core prices,
+MPH-r support, and the bounded-arity grand-marginal inequality. The proposed
+contribution, pending original-source comparison, is their all-profile synthesis
+in(2)--(3), together with the bounded-versus-unbounded coalition consequence.
+The original-source priority check is tracked by root; novelty remains open.
+For the pair case, classical Banzhaf 2-efficiency / proxy neutrality is already
+documented in Casajus's 2011 original (citing Lehrer1988 and Haller1994), freely
+available at https://home.uni-leipzig.de/casajus/texts/colluba.pdf . Its pair-sum
+identity is an antecedent of the coefficient mechanism in Section4. MPH-r
+definitions and positive lower envelopes are established in the original
+https://arxiv.org/pdf/1408.1211 ; the precise inequalities used here are in
+https://arxiv.org/pdf/1811.09871 , Lemmas6.2 and6.4.
