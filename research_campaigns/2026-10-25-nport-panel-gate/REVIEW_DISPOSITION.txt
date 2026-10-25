@@ -1,0 +1,21 @@
+INDEPENDENT REVIEW: ROOT ADJUDICATION
+Fable5.1 completed a snapshot review without tools. Its comments do not establish source facts or executed tests. Root verified actionable findings before changing code. Final code was checked locally; no second-model approval of the revised version is claimed.
+
+1. TSV quoting — partial acceptance, blanket QUOTE_NONE recommendation rejected.
+The inspected metadata declares tab separation and omits quoteChar. W3C CSVW2015, section5.9, defaults quoteChar to double quote; SEC's readme cites this standard. The reviewer could not verify its assertion that all SEC N-PORT TSVs are unquoted. We now read the archive's declared quoteChar, supporting null and the CSVW double-quote default, enforce supported dialect/header/date conventions, and use strict CSV parsing. Added round-trip tests preserving literal quoted names with either declared dialect and a quoted note containing tabs/newlines. No silent inference of actual-source compliance; any discrepancy must be resolved against source bytes before analysis.
+Source: https://www.w3.org/TR/2015/REC-tabular-metadata-20151217/#dialect-descriptions
+
+2. NAV precision — interpretation clarified; arbitrary tolerance rejected.
+Schema NUMBER(36,12) describes storage and is not documented internal rounding precision. Using it to claim valuation/filing precision would repeat the earlier rejected inference. Exact mismatches remain quarantined for source review; we added an explicit NOT_EVALUATED protocol-scale status. Candidate counts are preliminary, and low counts must not trigger a scientific scale-gate failure before source precision/format resolution. No sample threshold or economic estimand changed.
+
+3. Structural failures — fail closed retained, status distinguished.
+An orphan join or missing target fund row can invalidate amendment grouping. We retain a technical stop until repaired and now return STOP_PREFLIGHT_VALIDATION, explicitly with no research-gate conclusion. This is separate from the current access outcome STOP_DATA_INSUFFICIENT, which follows from having no verified complete archive. Added a missing-fund-row test. There is no evidence of such anomalies in an actual panel; the panel was not loaded.
+
+4. Decimal lexical format — limitation retained and explicit.
+The preflight accepts ordinary finite decimal strings, rejects unsupported representations and reports affected rows. They require schema/source reconciliation before any scale decision. We do not normalize scientific notation, whitespace or separators after seeing outcomes. No assertion that such formats occur or never occur in the official batch.
+
+5. Runtime and corruption tests — accepted.
+Replaced Python3.11-only file_digest with a streamed SHA256 implementation. Added malformed metadata shape and genuine ZIP CRC-damage tests. Truncation is tested separately. Metadata remains development-only, extracted from a partial candidate without verified quarter provenance.
+
+FINAL LOCAL EVIDENCE
+18 synthetic contract tests pass, including CRC corruption, truncated ZIP, partial extension, malformed metadata, duplicate keys/USD, orphan join, missing fund row, latest-invalid-amendment no-fallback, missing-vs-zero, nonfinite values, fixed dates, currency restriction, NAV quarantine and quoted text preservation. Output in test_results.txt. No empirical metrics or new fund observations were analyzed. The access stop and unchanged frozen protocol are independently checked by root; review supports the scope, not the economics.
