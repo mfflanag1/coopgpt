@@ -1,0 +1,162 @@
+IRREVERSIBLE COMPENSATION FAILS ON A TWO-OWNER MINIMUM GAME
+25 October 2026 — conventional proof; computational replay is supplementary.
+No novelty, general frontier improvement, or specialist approval is claimed.
+
+1. Frozen model and the candidate
+
+Two actual owners have fixed endowments bar b_1=(2,0), bar b_2=(0,2).
+Their full original report box is (a,b) in [0,2]^2; reports are vectors (a,0),
+(0,b). One activity consumes one of each resource, earns one, and has value
+F(a,b)=min(a,b). This is arity two and thus within the arity-at-most-three class.
+
+For every profile choose any efficient nonnegative feasible dual price p:
+p_1+p_2 >= 1 and a p_1+b p_2=F(a,b). Let u=(a p_1,b p_2).
+An efficient-price-floor rule has y_i=u_i+rho_i, rho_i>=0.
+It covers all coalitions: u(S)=p dot b_S >= F(b_S), by weak duality.
+Funding factor K means y_1+y_2 <= K F at every profile, equivalently
+R=rho_1+rho_2 <= (K-1)F. This factor counts TOTAL payments, not just reserve.
+Individual incentives mean y_i cannot fall when only owner i restores resources.
+FullOUT additionally requires y_C(h)-y_C(l)>=F(B_h-B_l) for every legal C;
+our negative result already follows from the weaker individual condition.
+
+The attempted irreversible rule keeps each owner's reserve nondecreasing when
+ANY owner restores resources. This is an extra design restriction, NOT part of
+the research problem. In particular it forbids releasing a passive owner's
+reserve to compensate the owner whose efficient charge just fell.
+
+A precise candidate is the path envelope
+  R_i^*(b) = sup over finite coordinatewise increasing single-owner paths
+             from 0 to b of sum over own-i edges (u_i(low)-u_i(high))_+.
+Every edge may change any subset of the restoring owner's coordinates.
+If finite, R_i^* is nonnegative and nondecreasing in every report coordinate.
+Appending an own-i edge yields
+  R_i^*(h)-R_i^*(l) >= (u_i(l)-u_i(h))_+,
+so u_i+R_i^* is individually truthful. It is the least nonnegative reserve
+satisfying both these conditions: along any such path every eligible reserve
+must accumulate every displayed positive own-charge loss. Conversely the
+supremum satisfies the difference inequalities when finite.
+Coalition truthfulness has NOT been proved for this formula. It fails the
+necessary finite-budget gate first: R_i^*(2,2)=infinity for both owners.
+Prices at zero and equal-resource profiles can be chosen arbitrarily; the
+witness below only uses strictly positive off-diagonal profiles.
+
+2. Exact staircase witness
+
+For any integer L>=1 put delta=1/(L+2). Define L+1 profiles q_0,...,q_L:
+  q_(2j)   = (1+2j delta,     1+(2j+1)delta),
+  q_(2j+1) = (1+(2j+2)delta, 1+(2j+1)delta).
+Only indices at most L are used. Every coordinate lies strictly between 0 and 2.
+The step q_(k-1)->q_k restores owner 1 if k is odd and owner 2 if k is even.
+It restores exactly 2 delta of that owner's resource; all outsiders are fixed.
+Both owners and their endowment boxes are the same for every L.
+
+Write F_k=1+k delta. At q_k the smaller resource is unique. Efficient prices
+are consequently unique: (1,0) if a<b and (0,1) if b<a. The restoring owner
+has charge F_(k-1) before the step and zero afterwards. Individual incentives
+therefore FORCE
+  rho_i(q_k)-rho_i(q_(k-1)) >= F_(k-1)                 (1)
+for the restoring owner i. Under irreversibility, the other reserve cannot fall.
+Summing (1) gives
+  R(q_L) >= R(q_0)+W_L >= W_L,
+  W_L = sum_(k=1)^L F_(k-1) = L + delta L(L-1)/2.
+The funding bound then implies
+  K >= 1 + W_L/F_L.
+For delta=1/(L+2), this quantity is
+  1 + 3L(L+1)/[4(L+1)] = 1 + 3L/4.
+Thus no finite K works on the single original [0,2]^2 box. This is not an
+owner-count lower bound: both the technology and the TWO owners stay fixed.
+There are arbitrarily many legal report changes inside that one box.
+
+The claimed simplification uses W_L=3L(L+1)/(2(L+2)) and
+F_L=2(L+1)/(L+2). Check these identities exactly in the replay.
+
+This also proves divergence of the attempted path envelope. Start at zero,
+reach q_0 using two single-owner steps, follow the staircase, then restore to
+(2,2). Initial and final path costs are nonnegative. Each owner incurs at least
+floor(L/2) units of its own positive losses. Taking L unbounded gives infinity.
+This is a supremum defining a static payment rule, not an assumption that
+owners actually traverse these reports over time.
+
+3. Finite-chain bound is attained within the restricted class
+
+On Q_L={q_0,...,q_L}, set rho(q_0)=0. At step k add F_(k-1) to the restoring
+owner's reserve and change no other reserve. Set y=u+rho. All reserves are
+nonnegative and nondecreasing along Q_L. On an adjacent step the restoring
+owner's y is unchanged; the passive owner's y increases from rho_j to
+rho_j+F_k. Nonadjacent pairs change both owners. All single-owner comparisons
+on Q_L are thus adjacent, and whole-pair fullOUT holds because
+  y_N(q_k)-y_N(q_j) = F_k-F_j + W_k-W_j >= F(q_k-q_j).
+Here F_k-F_j>=F(q_k-q_j) follows directly from superadditivity of min.
+Singleton coalition values are zero; grand coverage holds.
+For prefixes W_k=sum_(t=0)^(k-1)F_t, the ratios 1+W_k/F_k increase with k:
+  W_(k+1)F_k-W_k F_(k+1)=F_k^2-delta W_k>0,
+since W_k<=k F_k and F_k-k delta=1. Therefore the exact minimum funding factor
+under the irreversible reserve restriction on this finite profile system is
+  K_L=1+3L/4.
+This finite attainment is NOT an extension theorem to the full report box.
+
+4. Quantitative reserve release is unavoidable
+
+Now DROP irreversibility. Assume only rho>=0, efficient prices, individual
+truthfulness and some finite budget factor K. On the same staircase define
+  V^+ = sum_(k,i) max(rho_i(q_k)-rho_i(q_(k-1)),0),
+  V^- = sum_(k,i) max(rho_i(q_(k-1))-rho_i(q_k),0).
+Equation (1) still holds, so V^+>=W_L. The telescoping identity
+V^+-V^-=R(q_L)-R(q_0), together with R(q_L)<=(K-1)F_L and R(q_0)>=0,
+gives
+  V^- >= max(0, W_L-(K-1)F_L).                       (2)
+All negative increments must be on the passive owner, because (1) forces a
+positive increment on the restoring owner. Hence bounded funding requires
+arbitrarily large cumulative RELEASE of passive-owner reserves along these
+monotone paths, even though F stays below 2 and total coordinate change is below 2.
+No uniform finite bound on this negative variation, or bound of the form
+V^-<=M times total output growth, is possible for the whole box.
+This does not require discontinuous payments. The instability is in the
+selected efficient charges and their offsetting reserve, as the next example shows.
+
+5. The game itself is easy: exact benchmark comparisons
+
+(a) Without a price floor, y=(F,0) has factor 1 on the ENTIRE [0,2]^2 box.
+Singleton coalition production is zero. Grand coverage is equality. Restoring
+owner 1 cannot lower F; restoring owner 2 leaves its payment zero. For the pair,
+F(h)-F(l)>=F(h-l) by superadditivity. Thus fullOUT holds for every allowable
+coalition, including a passive member. Grand coverage also proves factor 1 optimal.
+
+(b) With the efficient-price floor but allowing reserve releases, y=(F,F)
+has factor 2, full coverage and fullOUT on the entire box. Each efficient charge
+lies in [0,F], so rho_i=F-u_i>=0. For a singleton, the withheld-resource output
+is zero and own payment F is monotone. For the pair, 2(F(h)-F(l))>=F(h-l).
+At each strict staircase step the restoring owner's reserve rises from zero to
+F_k while the passive owner's reserve falls from F_(k-1) to zero. Total reserve
+is just F. Payments are continuous although reserves switch as prices switch.
+For this rule V^-=W_L exactly; replay verifies the formula.
+
+Factor 2 is optimal under the efficient-price floor and individual incentives,
+without assuming continuity. At (1,1), owner 1's payment must be >=y_1(t,1)>=t
+for every t<1 (the latter price is uniquely (1,0)); hence y_1(1,1)>=1.
+Similarly y_2(1,1)>=1. Budget at (1,1) gives K>=2, irrespective of the
+price choice at the tie. This is an elementary calibration, not a novelty claim.
+
+(c) With the further irreversible-reserve restriction, no finite K exists.
+The exact hierarchy on this fixed game is therefore 1, 2, infinity.
+It separates restrictions on proof/design architectures, not general mechanisms.
+
+6. Decision
+
+The concrete carry-forward formula is blocked at its individual-incentive/budget
+gate. It never reaches the harder crossing-coalition gate. The existing CEA rule
+for one minimum technology is separately replayed on that four-owner fixture;
+that is prior positive calibration, not a new general construction.
+
+A remaining direct rule would need reserve releases and the full inequalities
+  Delta rho_C >= -Delta u_C + F(Delta B)
+for EVERY eligible C, along with a bounded TOTAL reserve. Controlling only
+positive deficits, changed-owner terms, or total variation cannot do that.
+These are necessary design lessons, not a constructed solution or a theorem
+improving sqrt(s/6) <= K_3(s) <= K_3^OUT(s) <= 3s^2.
+
+Stop this candidate. Do not launch another unrestricted campaign merely because
+a reserve-recycling inequality can be restated. A next mathematical gate needs
+an explicit simultaneous release/compensation formula with a new proved bound,
+or a different direct-payment architecture. Specialist review of the existing
+paper remains the higher-confidence next program action.
