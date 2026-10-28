@@ -1,0 +1,15 @@
+# Repository synchronization — 28 October 2026
+
+This import preserves the existing Git commits, including the three local paper-preparation commits and the published coalition packet. A normal merge joins the diverged branches; no old commit is rewritten and no force push is used.
+
+New archival commits use the **recorded local work day as author date**. For consistency, their clock is normalized to noon EDT; this clock is not claimed to be an observed completion time. `HISTORY_PLAN.json` states the work range and supporting evidence. **Committer dates remain the actual synchronization time on 28 October.** New synchronization documentation is dated 28 October in both fields. An imported directory may contain earlier ingredients; its assigned day is the latest supported work day of that group, not a claim that all files were created then. Final snapshots do not reconstruct unavailable intermediate edits.
+
+Two directory labels needed corrections: the power-state gate finished on 21 October, and the current P1/P7/P8 prepared packages finished on 19 October. The historic owner handoff points to earlier source-checked packages; the current publication links in the repository README point to the later local-improvements versions.
+
+`IMPORTED_FILES.json` records source paths, SHA-256 hashes and destination paths. Filesystem mtimes are preserved as secondary evidence, not used alone to establish a work date. `LOCAL_ONLY_FILES.json` lists excluded downloaded originals, raw external datasets, duplicate exports and build caches. These remain at their original local paths. Source comparisons, acquisition records, project code, proofs, certificates and retained observations are included. Exclusion does not mean a failed gate disappeared. Historical manifests may refer to deliberately local-only inputs; use the exclusion inventory to distinguish these from missing project evidence.
+
+The archived HTML handoffs preserve their original local navigation and source references. Some links require the original Mac layout. The portable current entry points are the repository README, handoffs/README.md, the prepared publication packages, and the 25 October coalition packet. Paths embedded in old reports and receipts are historical provenance; they are not rewritten inside sealed records.
+
+This is an archival and repository update, not a new mathematical review, a confirmation of novelty, an empirical rerun, a journal submission or human outreach.
+
+Verification on 28 October: all 123 checksums in the current coalition packet match and all six focused exact replay suites pass. All 35 imported ZIP files pass CRC checks. The broad historical-manifest audit finds 170 entries already absent in the original intermediate directories and 11 stale checksum entries in the old tree-extension integration workspace. These are pre-existing archival inconsistencies, not import corruption; they are preserved and enumerated in MANIFEST_CHECK.json. The current portable packet has none of these failures. No universal theorem or historical priority is newly certified by these checks.

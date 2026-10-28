@@ -1,6 +1,9 @@
 # CoopGPT paper index
 
-Updated 18 October 2026. Nine focused manuscript candidates are listed below.
+**Current editions:** use the [current prepared-edition table](README.md) for P1/P7/P8 and the [25 October P9 packet](research_campaigns/2026-10-25-specialist-packet/packet/README.txt). Those exports supersede earlier links in this historical catalogue. P9 additionally contains the 24 October full-outside graph construction with factor $1+1/\sqrt{2}$ for the specified unit-profit four-resource path, complete blow-ups, disjoint unions and isolates. It is not a theorem for arbitrary trees or profits. The separate [baseline-preserving envelope candidate](research_campaigns/2026-10-24-envelope-consolidation/README.txt) remains a research draft, with historical priority unresolved.
+
+
+Catalogue updated 28 October 2026. Nine focused manuscript candidates are listed below.
 The current LaTeX sources are authoritative; some PDF exports are historical. A completed draft does not imply
 publication, confirmed novelty, or independent human endorsement. The current
 structural paper replaces the earlier chain-cycle manuscript in this list.
