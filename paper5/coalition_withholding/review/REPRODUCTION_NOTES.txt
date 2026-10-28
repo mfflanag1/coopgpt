@@ -1,0 +1,122 @@
+FOCUSED PORTABLE REPLAY — ACTUAL RESULTS AND COMMANDS
+18 October 2026
+
+From the root of this paper package, run:
+
+    python3 reproduce.py
+
+This creates a new temporary output directory and prints its location. To
+choose a destination, give a directory that does not already exist:
+
+    python3 reproduce.py --out ./verification/replay/my-new-run
+
+Requirements: Python 3 and its standard library only. All six selected jobs
+run by default. No SciPy/NumPy option, installs, network access, or external
+source-tree access is required. Do not use -O/-OO; unset PYTHONOPTIMIZE for
+ordinary launches. The runner refuses an optimized interpreter before
+creating output, and removes inherited PYTHONOPTIMIZE from checker processes.
+
+Package layout
+  reproduce.py
+    A focused adaptation of the hardened campaign reproduce_campaign.py.
+    Retains isolated job directories, unchanged input copies and hash checks,
+    per-job stdout/stderr, explicit parsed PASS verdicts, and failure exits.
+    Adds a recorded child-process assertion-mode check, input-manifest
+    verification, and a final check that packaged scientific inputs are
+    unchanged. The original basic/extended split was removed because every
+    selected checker is standard-library compatible.
+  evidence/checks/MANIFEST.json
+    Original campaign-relative paths, byte sizes, and SHA-256 hashes for all
+    nine preserved scientific checker/fixture files. It also records the hash
+    of the source campaign runner, which was adapted rather than copied as a
+    scientific checker. The historical absolute source path is provenance
+    metadata only; the portable runner reads its package-relative files.
+  verification/replay/FRESH_COPY_MANIFEST.json
+    Hashes for the fresh package copy used in the actual run.
+  verification/replay/fresh_package/
+    A separate copy of reproduce.py and the complete selected evidence tree.
+  verification/replay/fresh_results/REPLAY_REPORT.json
+    Actual successful report, with input hashes, commands, durations, parsed
+    verdicts, generated-file hashes, and paths to every stdout/stderr log.
+  verification/replay/guard_checks/GUARD_RESULTS.json
+    Negative checks for -O, -OO, and an already-existing output directory.
+  verification/replay/VALIDATION.json
+    Final copy, assertion-mode, verdict, and campaign-source byte checks.
+
+Actual fresh-copy execution
+  Working directory: verification/replay/fresh_package
+  Command:
+
+    env PYTHONOPTIMIZE=1 python3 -E reproduce.py --out ../fresh_results
+
+  This intentionally starts an unoptimized parent using -E while leaving
+  PYTHONOPTIMIZE in the inherited environment. The child-mode probe recorded
+  optimize=0 and assertions_enabled=true, and the report records that the
+  inherited flag was removed. Thus the run tests the exact inherited-flag
+  failure mode the hardened runner is intended to prevent.
+
+  Runtime used here: /opt/homebrew/opt/python@3.15/bin/python3.15.
+  All six jobs returned exit code 0 and an explicit PASS verdict.
+  Aggregate checker time was approximately 28.0 seconds on this machine.
+  This is a measured local duration, not a runtime guarantee.
+
+Actual scope and results
+  projective_geometry_and_scalar: PASS
+    Unchanged lower/projective_cube_root_check.py.
+    Geometry M=1..8 with R=1,2,3: 24 geometry instances, through 511 rows.
+    Scalar certificate checks M=1..256; exact polynomial identities and
+    integer/Fraction arithmetic. Explicit runner parameters retain this scope.
+
+  bounded_coalition_tail: PASS
+    Unchanged checks/projective_bounded_tail.py.
+    6,300 exact scalar certificates, 424,494 inequality rows, 63 exact peak
+    checks for s=2..64; includes the exact 493/243 value at s=M=6.
+
+  general_arity_geometry_and_scalar: PASS
+    Unchanged lower/general_arity_circuit_check.py.
+    20 geometry instances: k=2..6, M=1..4. The checker enumerates full
+    technology columns only when the ambient binary dimension is at most 5;
+    larger cases check supported-row combinatorics and explicit symmetries.
+    Scalar checks cover k=2..32 and M=1..128 with exact Fraction arithmetic.
+    Do not describe the large formal resource counts as full enumeration.
+
+  general_arity_tail: PASS
+    Unchanged checks/general_arity_tail_exact.py.
+    64,260 exact certificates, 2,970,450 derived rows, 945 exact peak checks;
+    k=2..16, s=2..64. This checks scalar tail cancellation and maxima, not
+    the separate asymptotic gamma analysis.
+
+  pure_owner_institution: PASS
+    Unchanged checks/projective_pure_owner_check.py.
+    36 pure-owner profiles, 220 full-institution stabilizer actions,
+    28 actual-owner transitions, 36 three-owner terminal-coverage checks.
+    Zero-report owners remain present in the checked institution.
+
+  actual_variable_lift: PASS
+    Unchanged reviews/projective_dual_lift/verify_lifted_certificate.py.
+    The three unchanged fixtures are PROFILE_TABLE.json, ACTION_GROUPS.json,
+    and LIFTED_CERTIFICATE_ROWS.jsonl.gz in that same directory.
+    Replayed 34,440 serialized inequality rows on 5,880 profiles; reconstructed
+    all 20,160 group actions; cancelled 26,040 payment coordinates; final
+    factor coefficient 1 and right side 4/3. The 3,360 negative coordinates
+    before the nonnegative-payment rows belong to zero reporters; their use
+    is a nonnegativity inequality, not a zero-payment assumption.
+
+Guard and integrity results
+  - python -O and python -OO were refused, with no output directory created.
+  - A pre-existing output directory was refused and its marker preserved.
+  - All nine packaged checker/fixture files matched their original campaign
+    bytes and recorded hashes before copying and again after the replay.
+  - The fresh runner copy matched the delivered runner after completion.
+  - No campaign source, sealed fixture, or archived output was modified.
+  - No external delegation, install, or data acquisition was performed.
+
+Exact source campaign
+  /Users/maxf/.codex/visualizations/2026/09/04/01a06e8a-dcbb-7c81-9929-e72831a14ac8/research-campaigns/2026-10-18-coalition-size
+
+Interpretation
+  These are focused exact finite checks of the selected geometry, algebra,
+  and serialized certificates. They supplement the manuscript's proofs.
+  They do not certify the all-size or arbitrary-real symmetrization arguments,
+  the universal dimension-frontier analysis, historical novelty, application
+  validity, or results from unrelated CEA/polyhedral/application branches.

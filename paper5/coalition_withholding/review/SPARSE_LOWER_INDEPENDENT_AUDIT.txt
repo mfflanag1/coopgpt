@@ -1,0 +1,158 @@
+BOUNDED INDEPENDENT AUDIT OF THE SPARSE UPPER AND PROJECTIVE LOWER
+18 October 2026
+
+Scope and verdict
+  Read source/core.tex from its exact model definitions through the sparse
+  upper, projective lower, optimized tail, and certificate discussion.
+  No fatal logical gap or false theorem quantifier was identified in those
+  sections. No manuscript edits are requested by this audit.
+  This conclusion comes from the rederivations below, not from archived
+  acceptance records, earlier replay results, or the separate cross-model
+  review. I wrote the dimension/replay fragments but not these core proofs.
+
+Reviewed source
+  source/core.tex
+  SHA-256 at audit completion:
+  a507b0489c2befc8d3a9a7927720722df4f8f90c052c5f2c42805f96b28d0a8c
+
+Sparse upper: rederived details
+  1. Packing duality has the required orientation. At coalition R, an optimal
+     nonnegative dual w has v(R)=w.b_R and v(R-i)<=w.b_(R-i); therefore
+     U_i(R)>=w.b_i. Summing over T subset R and using dual feasibility gives
+     sum_(i in T) U_i(R)>=v(T). A static supporting dual is being used only
+     inside the proof; no regularity of a selected dual across reports is
+     presumed.
+
+  2. The support construction is feasible row by row. For an optimal plan x
+     on S, put t_a=(b_T)_a/(b_S)_a on every row actually used by an activity.
+     Its retained activity fraction is product_(a in supp(e)) t_a, which is
+     at most t_a for each required row. Hence total retained consumption of
+     row a is at most t_a sum_e A_ae x_e <= t_a (b_S)_a=(b_T)_a.
+     A zero denominator cannot occur in a used positive-consumption row;
+     unused rows consume zero. Thus h(T)<=v(T) and h(S)=v(S).
+     Repeated assignments of different rows to the same actual owner only
+     reduce a piece's distinct-owner support, so its support size is at most
+     r even for mixed owners. No strategic owner splitting is involved.
+
+  3. With S=R, v(R)-v(R-i)<=h(R)-h(R-i). Each nonnegative piece appears
+     in at most r deletion sums, yielding sum_i U_i(R)<=r v(R).
+     Independent owner thinning retains a piece supported on k<=r owners
+     with probability p^k>=p^r, giving the stated thinning inequality.
+
+  4. Conditioning on i in the random set yields
+       p sum_(i in S) m_i = E sum_(i in S intersect R_p) U_i(R_p).
+     The support/dual-cover arguments then give coverage for EVERY S,
+     including coalitions larger than s. Funding follows from
+       p sum_i m_i <= r E F(b_Rp) <= r F(pB)=rpF(B).
+     Scaling by p^(1-r) gives r s^(r-1), with no owner-count dependence.
+
+  5. Independently expanded the semivalue coefficients. For a=|A| between
+     1 and n-1, the positive terms are
+       |A intersect C| p^(a-1)(1-p)^(n-a),
+     and the negative terms are
+       (|C|-|A intersect C|)p^a(1-p)^(n-a-1).
+     Their difference is exactly the displayed coefficient. The empty and
+     full endpoints are -|C|(1-p)^(n-1) and |C|p^(n-1), respectively.
+     When p=1/s and |C|<=s, every coefficient with A intersect C nonempty
+     is nonnegative. Subsets disjoint from C have both zero withdrawal
+     difference and F(delta_A)=0, so their possibly negative coefficients
+     cause no reversal of the superadditivity inequality.
+
+  6. The identity sum_A c_C(A)F(delta_A)=M_C(delta) uses the SAME rule and
+     fixed owner boxes; delta is a legal profile, with outsiders at zero.
+     Coverage there supplies full OUT after scaling. The n=1 endpoints
+     remain correct; empty coalitions and the empty institution are trivial.
+     The p=1, s=1 case is separately and correctly handled by the grand
+     deletion marginal: F(B-b_i) does not change when owner i withholds.
+     Thus no p=1 expression with a negative exponent is needed.
+
+Projective lower: rederived details
+  7. The full technology consists of all binary projective triples and is
+     invariant under GL(M+1,2). The all-ones endowments give identical full
+     real unit-cube domains, invariant under both resource and owner
+     permutations. Conjugating a rule preserves feasible coordinatewise
+     comparisons, coalition sizes, coverage, and outside worth. Finite
+     averaging requires no original-rule continuity or measurability.
+     A high total payment of the averaged rule implies a high original
+     total on some legal orbit profile; it does not assert that the original
+     rule is symmetric or that its displayed canonical profile is costly.
+
+  8. At C_m, a sum of private rows from distinct indices has two nonzero
+     e-coordinates and lies outside the possible reported row set. The only
+     supported triples are consequently the complete active branches.
+     They all use the single unit of v, and one attains output one.
+     The displayed dual covers the entire technology: unsupported columns
+     meet a zero-capacity row, and supported ones contain v.
+
+  9. Both seed maps preserve dormant high reports. The swap v<->e_1 fixes
+     e_j for j>1 and v+e_1; the transvection v->v+e_1 fixes every e_j and
+     exchanges v with v+e_1. Pairing them with the stated owner swaps fixes
+     C_1, including all zero reporters. The three productive owners therefore
+     have equal averaged payments, and their coverage gives q_1>=1/3.
+     This remains valid when only singleton incentive constraints are imposed,
+     because coverage itself has no coalition-size restriction.
+
+  10. At C_m, active-index permutations and the individual transvections
+      e_j->e_j+v act transitively on the 2m active private owners. They fix
+      v, all inactive high rows, and the zero reports. Thus one common q_m
+      is legitimate without equating dormant and active owners.
+
+  11. Each ladder transition restores only the fixed actual owner ell_m
+      from zero to one legal resource report. The protected coalition is
+      ell_m plus unchanged old active private owners; h_m and p are excluded.
+      Its old zero-reporter payment is retained as a nonnegative term before
+      dropping it. This gives (2m-1)q_m>=2(m-1)q_(m-1), with the claimed
+      coalition size and no dummy-zero assumption.
+      Terminal branch coverage and budget give
+        kappa >= (z+2q_M)+2(M-1)q_M >= 1+2(M-1)q_M.
+      This argument does not set z to a possibly negative value.
+
+  12. The product identity Q_M=4^M/[2 binom(2M,M)] has the correct M=1
+      endpoint. The induction polynomial for Q_M^2>=(3M+1)/4 has residual
+      exactly M. Taking M=floor((s+1)/2) gives 2M-1<=s and M>=s/2.
+      Rules satisfying the stronger size-s contract obey all used comparisons,
+      so the passage to the supremum frontier K_3(s) has the correct direction.
+      M=1 needs no ladder transitions; terminal coverage supplies factor one.
+
+Capped tail and exact arithmetic
+  13. Any k_m=min(s-1,2m-2) old active private owners may be selected; their
+      individual payments are equal at both relevant profiles. Complete
+      private pairs are unnecessary. Including ell_m gives at most s owners,
+      and nonnegativity yields (k_m+1)q_m>=k_m q_(m-1).
+      With h=ceil(s/2), the uncapped factors run through h and their product
+      is Q_h/h; subsequent factors are alpha=(s-1)/s.
+
+  14. For A_M=(M-1)P_(M,s), the uncapped consecutive ratio for M>1 is
+        2M^2/[(M-1)(2M+1)] > 1.
+      In the capped phase it is M alpha/(M-1), greater/equal/less than one
+      precisely as M<s, M=s, M>s. The M=1 value is zero, with a positive
+      next value. This includes s=2, h=1. Thus the two equal maxima occur
+      exactly at M=s and M=s+1. Choosing M=s gives the stated 2s+1 owners
+      and 2^(s+1)-1 rows; no claim of globally minimal witness size follows.
+
+  15. Q_3=8/5 and B_6=1+(16/9)(125/216)=493/243; its excess over two is
+      7/243. The 13-owner, 127-row counts are correct. The asymptotic constant
+      follows from Q_h~sqrt(pi h)/2, h~s/2, and alpha^(s-h)->exp(-1/2),
+      giving sqrt(2 pi)/(3 sqrt(e)) after division by sqrt(s).
+
+  16. The backwards positive row combination cancels q_M with weight
+      residual/(k_m+1), passes residual*k_m/(k_m+1) to q_(m-1), and cancels
+      q_1 with the seed weight residual/3. It leaves exactly
+      kappa>=1+2(M-1)P_(M,s)/3. At M=1 the two final rows alone give kappa>=1.
+
+Additional arithmetic diagnostics performed for this audit
+  A fresh inline Fraction calculation, independent of the packaged checkers,
+  checked 20,488 coefficient/endpoint instances for n=1..8 and s=2..8,
+  including all subset masks and allowed coalition cardinalities. It checked
+  99 exact capped-tail peak cases s=2..100, and B_6=493/243 with excess 7/243.
+  All passed. These finite checks corroborate the analytic rederivations;
+  they are not the proof of the universal quantifiers.
+
+Uncertainty and exclusions
+  No mathematical gap was found within the assigned sections, but this is an
+  internal bounded audit, not formal proof verification or human peer review.
+  Standard finite LP duality and the central-binomial asymptotic are used as
+  mathematical background. Historical priority, bibliography accuracy, the
+  general-arity appendix, the dimension section, and application claims were
+  not independently audited in this task. No new research or delegates were
+  launched, and no manuscript or other owner's files were edited.
